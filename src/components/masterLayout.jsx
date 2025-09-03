@@ -1,11 +1,10 @@
-// src/components/MasterLayout.jsx
 import React, { Fragment } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar, Container, Nav, NavDropdown, Badge, Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { AiOutlineMenu, AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
 import { BsCartPlus, BsHeart } from "react-icons/bs";
-import logo from '../../public/fulkopi.svg';
+import logo from '../assets/fulkopi.svg';
 import { getUserDetails, removeSessions } from '../helper/sessionHelper';
 
 /**
@@ -53,18 +52,19 @@ const MasterLayout = ({ children }) => {
         // optionally dispatch logout redux action here if you have one
         navigate("/login");
     };
-
+    const x=2;
     return (
         <Fragment>
             <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="px-3">
                 <Container fluid>
                     <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
                         <Image src={logo} alt="Logo" height={36} className="me-2" />
-                        <span className="fw-bold">MyShop</span>
+                        <span className="fw-bold">Fulkopi</span>
                     </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="main-nav" />
                     <Navbar.Collapse id="main-nav">
+                        {/* Left side links */}
                         <Nav className="me-auto">
                             <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
                             <Nav.Link as={NavLink} to="/products">Products</Nav.Link>
@@ -72,26 +72,31 @@ const MasterLayout = ({ children }) => {
                             <Nav.Link as={NavLink} to="/categories">Categories</Nav.Link>
                         </Nav>
 
-                        <Nav className="ms-auto align-items-center">
-                            <Nav.Link as={NavLink} to="/wishlist" className="position-relative">
-                                <BsHeart size={20} />
-                                {wishCount > 0 && (
-                                    <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
-                                        {wishCount}
-                                    </Badge>
-                                )}
-                            </Nav.Link>
+                        {/* Right side links */}
+                        <Nav className="ms-auto d-flex flex-column flex-lg-row align-items-start align-lg-items-center mt-2 mt-lg-0">
+                            {userDetails?.email && (
+                                <>
+                                    <Nav.Link as={NavLink} to="/wishlist" className="position-relative mb-2 mb-lg-0">
+                                        <BsHeart size={20} />
+                                        {wishCount > 0 && (
+                                            <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                {wishCount}
+                                            </Badge>
+                                        )}
+                                    </Nav.Link>
 
-                            <Nav.Link as={NavLink} to="/cart" className="position-relative ms-2">
-                                <BsCartPlus size={20} />
-                                {cartCount > 0 && (
-                                    <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
-                                        {cartCount}
-                                    </Badge>
-                                )}
-                            </Nav.Link>
+                                    <Nav.Link as={NavLink} to="/cart" className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
+                                        <BsCartPlus size={20} />
+                                        {cartCount > 0 && (
+                                            <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                {cartCount}
+                                            </Badge>
+                                        )}
+                                    </Nav.Link>
+                                </>
+                            )}
 
-                            {userDetails && userDetails.email ? (
+                            {userDetails?.email ? (
                                 <NavDropdown
                                     title={
                                         <span className="d-inline-flex align-items-center">
@@ -105,6 +110,7 @@ const MasterLayout = ({ children }) => {
                                     }
                                     id="user-nav-dropdown"
                                     align="end"
+                                    className="mb-2 mb-lg-0"
                                 >
                                     <NavDropdown.Item as={NavLink} to="/profile">Profile</NavDropdown.Item>
                                     <NavDropdown.Divider />
@@ -115,8 +121,8 @@ const MasterLayout = ({ children }) => {
                                 </NavDropdown>
                             ) : (
                                 <>
-                                    <Nav.Link as={NavLink} to="/login" className="ms-2">Login</Nav.Link>
-                                    <Nav.Link as={NavLink} to="/register" className="ms-2">Register</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/login" className="mb-2 mb-lg-0">Login</Nav.Link>
+                                    <Nav.Link as={NavLink} to="/register" className="mb-2 mb-lg-0 ms-0 ms-lg-2">Register</Nav.Link>
                                 </>
                             )}
                         </Nav>
