@@ -1,0 +1,151 @@
+// src/components/MasterLayout.jsx
+import React, { Fragment } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Navbar, Container, Nav, NavDropdown, Badge, Image, Row, Col } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
+import { BsCartPlus, BsHeart } from "react-icons/bs";
+import logo from '../../assets/fulkopi.svg';
+import { getUserDetails, removeSessions } from '../../helper/sessionHelper.js';
+
+/**
+ * MasterLayout
+ * - Wraps app in a full-height flex column so footer sticks to bottom
+ * - Fixed-top navbar (uses spacer div to avoid overlap)
+ * - Responsive: right-side nav stacks on small screens
+ * - Cart & Wishlist links shown only when user logged in
+ */
+
+const MasterLayout = ({ children }) => {
+    const navigate = useNavigate();
+
+    // Safe get user details
+    let userDetails = {};
+    try {
+        userDetails = getUserDetails() || {};
+    } catch (err) {
+        console.error("Error parsing user details:", err);
+        userDetails = {};
+    }
+
+    // Redux selectors for cart & wishlist counts (adjust slice names if needed)
+    const cartCount = useSelector((state) => {
+        const items = state.cart?.items ?? state.cartList ?? [];
+        return Array.isArray(items) ? items.length : 0;
+    });
+
+    const wishCount = useSelector((state) => {
+        const items = state.wishlist?.items ?? state.wishList ?? [];
+        return Array.isArray(items) ? items.length : 0;
+    });
+
+    const onLogout = () => {
+        removeSessions();
+        // optionally dispatch a redux logout action here if you have one
+        navigate("/login");
+    };
+
+    return (
+        <Fragment>
+            {/* full-height flex column wrapper */}
+            <div className="d-flex flex-column min-vh-100">
+                {/* Navbar (fixed) */}
+                <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="px-3">
+                    <Container fluid>
+                        <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
+                            <Image src={logo} alt="Logo" height={36} className="me-2" />
+                            <span className="fw-bold">Fulkopi</span>
+                        </Navbar.Brand>
+
+                        <Navbar.Toggle aria-controls="main-nav" />
+                        <Navbar.Collapse id="main-nav">
+                            {/* Left side links */}
+                            <Nav className="me-auto">
+                                <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
+                                <Nav.Link as={NavLink} to="/products">Products</Nav.Link>
+                                <Nav.Link as={NavLink} to="/brands">Brands</Nav.Link>
+                                <Nav.Link as={NavLink} to="/categories">Categories</Nav.Link>
+                            </Nav>
+
+                            {/* Right side links - stacked on mobile */}
+                            <Nav className="ms-auto d-flex flex-column flex-lg-row align-items-start align-lg-items-center mt-2 mt-lg-0">
+                                {userDetails?.email && (
+                                    <>
+                                        <Nav.Link as={NavLink} to="/wish" className="position-relative mb-2 mb-lg-0">
+                                            <BsHeart size={20} />
+                                            {wishCount > 0 && (
+                                                <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                    {wishCount}
+                                                </Badge>
+                                            )}
+                                        </Nav.Link>
+
+                                        <Nav.Link as={NavLink} to="/cart" className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
+                                            <BsCartPlus size={20} />
+                                            {cartCount > 0 && (
+                                                <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                    {cartCount}
+                                                </Badge>
+                                            )}
+                                        </Nav.Link>
+                                    </>
+                                )}
+
+                                {userDetails?.email ? (
+                                    <NavDropdown
+                                        title={
+                                            <span className="d-inline-flex align-items-center">
+                        {userDetails.photo ? (
+                            <img src={userDetails.photo} alt="user" className="rounded-circle" style={{ width: 28, height: 28, objectFit: 'cover' }} />
+                        ) : (
+                            <AiOutlineUser size={20} />
+                        )}
+                                                <span className="ms-2 d-none d-lg-inline">{userDetails.firstName || userDetails.email}</span>
+                      </span>
+                                        }
+                                        id="user-nav-dropdown"
+                                        align="end"
+                                        className="mb-2 mb-lg-0"
+                                    >
+                                        <NavDropdown.Item as={NavLink} to="/profile">Profile</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item onClick={onLogout} className="text-danger">
+                                            <AiOutlineLogout className="me-2" />
+                                            Logout
+                                        </NavDropdown.Item>
+                                    </NavDropdown>
+                                ) : (
+                                    <>
+                                        <Nav.Link as={NavLink} to="/login" className="mb-2 mb-lg-0">Login</Nav.Link>
+                                        <Nav.Link as={NavLink} to="/register" className="mb-2 mb-lg-0 ms-0 ms-lg-2">Register</Nav.Link>
+                                    </>
+                                )}
+                            </Nav>
+                        </Navbar.Collapse>
+                    </Container>
+                </Navbar>
+
+                {/* spacer for fixed-top navbar */}
+                <div style={{ height: 70 }} />
+
+                {/* Main content area: flex-grow so footer stays at bottom */}
+                <main className="container-fluid px-3 flex-grow-1">
+                    {children}
+                </main>
+
+                {/* Footer: mt-auto will push it to the bottom inside the flex column */}
+                <footer className="bg-dark text-white py-3 mt-auto">
+                    <Container>
+                        <Row>
+                            <Col className="text-center">
+                                <p className="mb-0">© {new Date().getFullYear()} Fulkopi. All rights reserved.</p>
+                            </Col>
+                        </Row>
+                    </Container>
+                </footer>
+            </div>
+        </Fragment>
+    );
+};
+
+export default MasterLayout;
