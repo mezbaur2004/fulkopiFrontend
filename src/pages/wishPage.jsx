@@ -3,7 +3,7 @@ import MasterLayout from "../components/layout&loaders/masterLayout.jsx";
 import LazyLoader from "../components/layout&loaders/lazyLoader.jsx"
 const Wish=lazy(()=>import("../components/wish.jsx"));
 
-const HomePage = () => {
+const WishPage = () => {
     return (
         <Fragment>
             <MasterLayout>
@@ -15,4 +15,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default WishPage;

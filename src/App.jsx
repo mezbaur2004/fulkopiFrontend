@@ -10,6 +10,7 @@ import WishPage from "./pages/wishPage.jsx";
 import LoginPage from "./pages/loginPage.jsx";
 import RegisterPage from "./pages/registerPage.jsx";
 import ProfilePage from "./pages/profilePage.jsx";
+import {Toaster} from "react-hot-toast";
 
 const App = () => {
     return (
@@ -18,7 +19,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/products" element={<ProductsPage/>} />
-                <Route path="/productdetails" element={<ProductDetailsPage/>} />
+                <Route path="/productdetails/:id" element={<ProductDetailsPage/>} />
                 <Route path="/brands" element={<BrandsPage/>} />
                 <Route path="/categories" element={<CategoriesPage/>} />
                 <Route path="/cart" element={<CartPage/>} />
@@ -29,6 +30,7 @@ const App = () => {
             </Routes>
         </BrowserRouter>
             <FullScreenLoader/>
+            <Toaster/>
         </>
     );
 };

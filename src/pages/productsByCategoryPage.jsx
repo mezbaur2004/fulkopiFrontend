@@ -1,18 +1,18 @@
 import {Fragment,lazy,Suspense} from "react";
 import MasterLayout from "../components/layout&loaders/masterLayout.jsx";
 import LazyLoader from "../components/layout&loaders/lazyLoader.jsx"
-const ProductDetails=lazy(()=>import("../components/productDetails.jsx"));
+const ProductsByCategory=lazy(()=>import("../components/./productsByCategory"));
 
-const ProductDetailsPage = () => {
+const ProductsByCategoryPage = () => {
     return (
         <Fragment>
             <MasterLayout>
                 <Suspense fallback={<LazyLoader />}>
-                    <ProductDetails />
+                    <ProductsByCategory />
                 </Suspense>
             </MasterLayout>
         </Fragment>
     );
 };
 
-export default ProductDetailsPage;
+export default ProductsByCategoryPage;
