@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {productList} from "../APIRequest/productAPIRequest.js";
 import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const Products = () => {
 
@@ -14,9 +14,20 @@ const Products = () => {
     }, []);
 
     let ProductList=useSelector((state)=>(state.products.List))
+    console.log(ProductList)
     return (
         <>
         <div className="container mt-4 mb-2">
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb bg-transparent px-0">
+                    <li className="breadcrumb-item">
+                        <Link to="/" className="text-decoration-none text-muted">
+                            Home
+                        </Link>
+                    </li>
+                    <li className="breadcrumb-item text-muted">Products</li>
+                </ol>
+            </nav>
             <div className="row g-3">
                 {ProductList.map((product, index) => (
                     <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>

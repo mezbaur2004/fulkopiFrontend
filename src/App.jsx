@@ -11,6 +11,11 @@ import LoginPage from "./pages/loginPage.jsx";
 import RegisterPage from "./pages/registerPage.jsx";
 import ProfilePage from "./pages/profilePage.jsx";
 import {Toaster} from "react-hot-toast";
+import ProductsByBrandPage from "./pages/productsByBrandPage.jsx";
+import ProductsByCategoryPage from "./pages/productsByCategoryPage.jsx";
+import ProductsByKeywordPage from "./pages/productsByKeywordPage.jsx";
+import ProductsByRemarksPage from "./pages/productsByRemarksPage.jsx";
+import LazyLoader from "./components/layout&loaders/lazyLoader.jsx";
 
 const App = () => {
     return (
@@ -22,6 +27,12 @@ const App = () => {
                 <Route path="/productdetails/:id" element={<ProductDetailsPage/>} />
                 <Route path="/brands" element={<BrandsPage/>} />
                 <Route path="/categories" element={<CategoriesPage/>} />
+
+                <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
+                <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
+                <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
+                <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
+
                 <Route path="/cart" element={<CartPage/>} />
                 <Route path="/wish" element={<WishPage/>} />
                 <Route path="/login" element={<LoginPage/>} />

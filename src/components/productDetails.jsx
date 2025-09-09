@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import { productDetail } from "../APIRequest/productAPIRequest.js";
 import { useSelector } from "react-redux";
 
@@ -41,10 +41,10 @@ const ProductDetails = () => {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb bg-transparent px-0">
                     <li className="breadcrumb-item">
-                        <a href="/">Home</a>
+                        <a href="/" className="text-decoration-none text-muted">Home</a>
                     </li>
                     <li className="breadcrumb-item">
-                        <a href={`/category/${product.category?.categoryName?.toLowerCase()}`}>
+                        <a href={`/category/${product.category?.categoryName?.toLowerCase()}`} className="text-decoration-none text-muted">
                             {product.category?.categoryName || "Category"}
                         </a>
                     </li>
@@ -109,7 +109,6 @@ const ProductDetails = () => {
                 <div className="col-12 col-md-6 d-flex flex-column">
                     <div className="card card-lg p-4 mb-3 shadow-sm d-flex flex-column h-100">
                         <h2 className="mb-1">{product.title}</h2>
-                        <p className="text-muted mb-3">{product.des}</p>
 
                         {/* Price and stock */}
                         <div className="d-flex align-items-center gap-3 mb-3">
@@ -130,7 +129,15 @@ const ProductDetails = () => {
                         </div>
 
                         {/* Remarks */}
-                        {product.remarks && <span className="badge bg-secondary mb-3">{product.remarks}</span>}
+                        {product.remarks && (
+                            <Link
+                                to={`/productbyremarks/${product.remarks}`}
+                                className="btn btn-secondary mb-3"
+                            >
+                                {product.remarks}
+                            </Link>
+                        )}
+
 
                         {/* Quantity + CTA buttons */}
                         <div className="d-flex align-items-center gap-3 mb-3">

@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import store from './redux/store/store.js'
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./assets/style.css"
+
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 

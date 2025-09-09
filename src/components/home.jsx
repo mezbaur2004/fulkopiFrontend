@@ -55,7 +55,7 @@ const Home = () => {
                 loop={true}
                 grabCursor={true}
                 autoplay={{
-                    delay: 2500,       // 2.5 seconds between slides
+                    delay: 1500,       // 2.5 seconds between slides
                     disableOnInteraction: false, // keeps autoplay after user swipes
                 }}
                 allowTouchMove={true}
@@ -80,7 +80,23 @@ const Home = () => {
                             />
                             <div className="card-body text-center">
                                 <h5 className="card-title">{product.title}</h5>
-                                <p className="card-text">Price: {product.price} tk</p>
+                                {product.discount ? (
+                                    <div className="d-flex justify-content-evenly align-items-center mb-2">
+                                        <p className="card-text fw-semibold mb-0">
+                                            Offer Price: {product.discountPrice || "N/A"}tk
+                                        </p>
+                                        <p className="card-text text-muted text-decoration-line-through mb-0">
+                                            Price: {product.price || "N/A"}tk
+                                        </p>
+                                    </div>
+
+                                ) : (
+                                    <>
+                                        <p className="card-text mb-2 fw-semibold">
+                                            Price: {product.price || "N/A"}tk
+                                        </p>
+                                    </>
+                                )}
                                 <button onClick={() => navigate(`/productdetails/${product._id}`)} className="btn btn-secondary">View Product</button>
                             </div>
                         </div>

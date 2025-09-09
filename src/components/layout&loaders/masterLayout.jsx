@@ -1,7 +1,18 @@
 // src/components/MasterLayout.jsx
-import React, { Fragment } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { Navbar, Container, Nav, NavDropdown, Badge, Image, Row, Col } from "react-bootstrap";
+import React, { Fragment, useEffect, useState } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import {
+    Navbar,
+    Container,
+    Nav,
+    NavDropdown,
+    Badge,
+    Image,
+    Row,
+    Col,
+    Form,
+    Button,
+} from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
 import { BsCartPlus, BsHeart } from "react-icons/bs";
@@ -10,14 +21,39 @@ import { getUserDetails, removeSessions } from '../../helper/sessionHelper.js';
 
 /**
  * MasterLayout
- * - Wraps app in a full-height flex column so footer sticks to bottom
- * - Fixed-top navbar (uses spacer div to avoid overlap)
- * - Responsive: right-side nav stacks on small screens
- * - Cart & Wishlist links shown only when user logged in
+ * - Navbar fixed-top
+ * - Search moved to after user/cart/wish/logout group (end of navbar)
+ * - Clear button removed
+ * - Responsive: search stacks in collapse (mobile) and is inline on md+
  */
 
 const MasterLayout = ({ children }) => {
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const [keyword, setKeyword] = useState("");
+
+    // prefill search if URL is /productbykeyword/:keyword
+    useEffect(() => {
+        const match = location.pathname.match(/^\/productbykeyword\/(.+)$/);
+        if (match && match[1]) {
+            try {
+                setKeyword(decodeURIComponent(match[1]));
+            } catch {
+                setKeyword(match[1]);
+            }
+        }
+    }, [location.pathname]);
+
+    const onSearchSubmit = (e) => {
+        e.preventDefault();
+        const q = String(keyword || "").trim();
+        if (!q) {
+            navigate("/products");
+            return;
+        }
+        navigate(`/productbykeyword/${encodeURIComponent(q)}`);
+    };
 
     // Safe get user details
     let userDetails = {};
@@ -25,7 +61,6 @@ const MasterLayout = ({ children }) => {
         userDetails = getUserDetails() || {};
     } catch (err) {
         console.error("Error parsing user details:", err);
-        userDetails = {};
     }
 
     // Redux selectors for cart & wishlist counts (adjust slice names if needed)
@@ -41,13 +76,11 @@ const MasterLayout = ({ children }) => {
 
     const onLogout = () => {
         removeSessions();
-        // optionally dispatch a redux logout action here if you have one
         navigate("/login");
     };
 
     return (
         <Fragment>
-            {/* full-height flex column wrapper */}
             <div className="d-flex flex-column min-vh-100">
                 {/* Navbar (fixed) */}
                 <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="px-3">
@@ -59,7 +92,7 @@ const MasterLayout = ({ children }) => {
 
                         <Navbar.Toggle aria-controls="main-nav" />
                         <Navbar.Collapse id="main-nav">
-                            {/* Left side links */}
+                            {/* Left nav links */}
                             <Nav className="me-auto">
                                 <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
                                 <Nav.Link as={NavLink} to="/products">Products</Nav.Link>
@@ -67,8 +100,11 @@ const MasterLayout = ({ children }) => {
                                 <Nav.Link as={NavLink} to="/categories">Categories</Nav.Link>
                             </Nav>
 
-                            {/* Right side links - stacked on mobile */}
-                            <Nav className="ms-auto d-flex flex-column flex-lg-row align-items-start align-lg-items-center mt-2 mt-lg-0">
+                            {/* spacer pushes the following groups to the right on wide screens */}
+                            <div className="flex-grow-1" />
+
+                            {/* Right-side links (user / cart / wishlist) */}
+                            <Nav className="d-flex flex-column flex-lg-row align-items-start align-lg-items-center me-lg-2">
                                 {userDetails?.email && (
                                     <>
                                         <Nav.Link as={NavLink} to="/wish" className="position-relative mb-2 mb-lg-0">
@@ -121,6 +157,30 @@ const MasterLayout = ({ children }) => {
                                     </>
                                 )}
                             </Nav>
+
+                            {/* SEARCH - now placed AFTER the right-side links */}
+                            <Form
+                                onSubmit={onSearchSubmit}
+                                className="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center my-2 my-lg-0"
+                                role="search"
+                                style={{ minWidth: 160, maxWidth: 520 }}
+                            >
+                                <Form.Control
+                                    type="search"
+                                    placeholder="Search products..."
+                                    aria-label="Search products"
+                                    value={keyword}
+                                    onChange={(e) => setKeyword(e.target.value)}
+                                    className="mb-2 mb-lg-0"
+                                    style={{ minWidth: 0, flex: "1 1 auto" }}
+                                />
+                                <div className="d-flex ms-lg-2">
+                                    <Button variant="warning" type="submit" className="fw-semibold">
+                                        Search
+                                    </Button>
+                                </div>
+                            </Form>
+
                         </Navbar.Collapse>
                     </Container>
                 </Navbar>
@@ -128,12 +188,12 @@ const MasterLayout = ({ children }) => {
                 {/* spacer for fixed-top navbar */}
                 <div style={{ height: 70 }} />
 
-                {/* Main content area: flex-grow so footer stays at bottom */}
+                {/* Main content area */}
                 <main className="container-fluid px-3 flex-grow-1">
                     {children}
                 </main>
 
-                {/* Footer: mt-auto will push it to the bottom inside the flex column */}
+                {/* Footer */}
                 <footer className="bg-dark text-white py-3 mt-auto">
                     <Container>
                         <Row>
