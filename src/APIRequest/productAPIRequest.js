@@ -19,7 +19,6 @@ export async function productList() {
         if(res.status === 200){
             store.dispatch(SetProductList(res.data.data))
         }else{
-            console.log("else")
             store.dispatch(SetProductList([]))
             ErrorToast("No Data Found")
         }
@@ -27,8 +26,6 @@ export async function productList() {
     }catch(error){
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
-    }finally {
-        store.dispatch(HideLoader());
     }
 }
 
@@ -134,7 +131,6 @@ export async function brandList(){
     }
 }
 
-
 export async function categoryList(){
     try{
         store.dispatch(ShowLoader())
@@ -151,3 +147,4 @@ export async function categoryList(){
         store.dispatch(HideLoader())
     }
 }
+

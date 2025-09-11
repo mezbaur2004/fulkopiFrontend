@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import { productDetail } from "../APIRequest/productAPIRequest.js";
 import { useSelector } from "react-redux";
+import {addToCart} from "../APIRequest/cartAPIRequest.js";
+import {addToWish} from "../APIRequest/wishAPIRequest.js";
+import {getToken} from "../helper/sessionHelper.js";
+import {ErrorToast} from "../helper/formHelper.js";
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
@@ -17,12 +21,23 @@ const ProductDetails = () => {
     }, [id]);
 
     // temporary placeholder functions
-    const handleAddToCart = (productId, qty) => {
-        console.log("Add to cart:", productId, qty);
+    const handleAddToCart =async (productId, qty) => {
+        if(getToken()){
+            await addToCart(productId, qty);
+        }else{
+            ErrorToast("Please Log In First");
+            navigate("/login");
+        }
     };
-    const handleBuyNow = (productId, qty) => {
-        console.log("Buy now:", productId, qty);
-    };
+
+    const handleAddToWish=async (productId) => {
+        if(getToken()){
+            await addToWish(productId)
+        }else{
+            ErrorToast("Please Log In First");
+            navigate("/login");
+        }
+    }
 
     // guard for undefined product
     if (!product) {
@@ -44,7 +59,7 @@ const ProductDetails = () => {
                         <a href="/" className="text-decoration-none text-muted">Home</a>
                     </li>
                     <li className="breadcrumb-item">
-                        <a href={`/category/${product.category?.categoryName?.toLowerCase()}`} className="text-decoration-none text-muted">
+                        <a href={`/category/${product.categoryID}`} className="text-decoration-none text-muted">
                             {product.category?.categoryName || "Category"}
                         </a>
                     </li>
@@ -141,23 +156,17 @@ const ProductDetails = () => {
 
                         {/* Quantity + CTA buttons */}
                         <div className="d-flex align-items-center gap-3 mb-3">
-                            <div className="input-group" style={{ width: "100px" }}>
+                            <div className="flex items-center gap-2 border rounded-md w-28 justify-between">
                                 <button
-                                    className="btn btn-outline-secondary"
+                                    className="px-3 py-1 text-lg font-bold text-gray-600 hover:bg-gray-200 rounded-l-md"
                                     type="button"
                                     onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
                                 >
                                     -
                                 </button>
-                                <input
-                                    type="number"
-                                    className="form-control text-center"
-                                    min={1}
-                                    value={quantity}
-                                    onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                                />
+                                <span className="w-full p-3 text-center">{quantity}</span>
                                 <button
-                                    className="btn btn-outline-secondary"
+                                    className="px-3 py-1 text-lg font-bold text-gray-600 hover:bg-gray-200 rounded-r-md"
                                     type="button"
                                     onClick={() => setQuantity((prev) => prev + 1)}
                                 >
@@ -165,19 +174,19 @@ const ProductDetails = () => {
                                 </button>
                             </div>
 
+
                             <button
                                 className="btn btn-warning fw-bold"
                                 onClick={() => handleAddToCart(product._id, quantity)}
                                 disabled={!product.stock}
                             >
-                                Add to Cart
+                                Add to Cart <i className="bi bi-cart" />
                             </button>
                             <button
-                                className="btn btn-outline-dark"
-                                onClick={() => handleBuyNow(product._id, quantity)}
-                                disabled={!product.stock}
+                                className="btn btn-dark"
+                                onClick={() => handleAddToWish(product._id)}
                             >
-                                Buy Now
+                                Add To Wishlist <i className="bi bi-heart" />
                             </button>
                         </div>
 

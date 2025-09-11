@@ -17,7 +17,9 @@ import { useSelector } from "react-redux";
 import { AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
 import { BsCartPlus, BsHeart } from "react-icons/bs";
 import logo from '../../assets/fulkopi.svg';
-import { getUserDetails, removeSessions } from '../../helper/sessionHelper.js';
+import {getToken, getUserDetails, removeSessions} from '../../helper/sessionHelper.js';
+import {getCartList} from "../../APIRequest/cartAPIRequest.js";
+import {getWishList} from "../../APIRequest/wishAPIRequest.js";
 
 /**
  * MasterLayout
@@ -35,6 +37,11 @@ const MasterLayout = ({ children }) => {
 
     // prefill search if URL is /productbykeyword/:keyword
     useEffect(() => {
+        if(getToken()){
+            getCartList()
+            const wishList=getWishList()
+            if (wishList){setWishCount(1)}
+        }
         const match = location.pathname.match(/^\/productbykeyword\/(.+)$/);
         if (match && match[1]) {
             try {
@@ -64,15 +71,8 @@ const MasterLayout = ({ children }) => {
     }
 
     // Redux selectors for cart & wishlist counts (adjust slice names if needed)
-    const cartCount = useSelector((state) => {
-        const items = state.cart?.items ?? state.cartList ?? [];
-        return Array.isArray(items) ? items.length : 0;
-    });
-
-    const wishCount = useSelector((state) => {
-        const items = state.wishlist?.items ?? state.wishList ?? [];
-        return Array.isArray(items) ? items.length : 0;
-    });
+    const cartCount = useSelector((state)=>(state.carts.Total))
+    const [wishCount, setWishCount] = useState(0)
 
     const onLogout = () => {
         removeSessions();
@@ -110,8 +110,8 @@ const MasterLayout = ({ children }) => {
                                         <Nav.Link as={NavLink} to="/wish" className="position-relative mb-2 mb-lg-0">
                                             <BsHeart size={20} />
                                             {wishCount > 0 && (
-                                                <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
-                                                    {wishCount}
+                                                <Badge bg="warning" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                    {"!"}
                                                 </Badge>
                                             )}
                                         </Nav.Link>
@@ -153,7 +153,7 @@ const MasterLayout = ({ children }) => {
                                 ) : (
                                     <>
                                         <Nav.Link as={NavLink} to="/login" className="mb-2 mb-lg-0">Login</Nav.Link>
-                                        <Nav.Link as={NavLink} to="/register" className="mb-2 mb-lg-0 ms-0 ms-lg-2">Register</Nav.Link>
+                                        <Nav.Link as={NavLink} to="/registration" className="mb-2 mb-lg-0 ms-0 ms-lg-2">Register</Nav.Link>
                                     </>
                                 )}
                             </Nav>

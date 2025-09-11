@@ -2,6 +2,10 @@ import React, {useEffect} from 'react';
 import {productList} from "../APIRequest/productAPIRequest.js";
 import {useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
+import {getToken} from "../helper/sessionHelper.js";
+import {addToCart} from "../APIRequest/cartAPIRequest.js";
+import {ErrorToast} from "../helper/formHelper.js";
+import {addToWish} from "../APIRequest/wishAPIRequest.js";
 
 const Products = () => {
 
@@ -14,7 +18,24 @@ const Products = () => {
     }, []);
 
     let ProductList=useSelector((state)=>(state.products.List))
-    console.log(ProductList)
+
+    const handleAddToCart = async (productId,qty) => {
+        if(getToken()){
+            await addToCart(productId, qty);
+        }else{
+            ErrorToast("Please Log In First");
+            navigate("/login");
+        }
+    }
+
+    const handleAddToWish=async (productId) => {
+        if(getToken()){
+            await addToWish(productId);
+        }else{
+            ErrorToast("Please Log In First");
+            navigate("/login");
+        }
+    }
     return (
         <>
         <div className="container mt-4 mb-2">
@@ -43,18 +64,35 @@ const Products = () => {
                                 {product.discount?(
                                     <>
                                         <h4 className="card-title fw-bold text-muted">{product.title}</h4>
+                                        <span className={`badge ${product.stock ? "bg-success" : "bg-danger"}`}>
+                {product.stock ? "In Stock" : "Out of Stock"}
+              </span>
                                         <p className="card-text mb-2 fw-semibold">Offer Price: {product.discountPrice || "N/A"}tk</p>
                                         <p className="card-text text-muted mb-2 text-decoration-line-through ">Price: {product.price || "N/A"}tk</p>
                                     </>
                                 ):(
                                     <>
                                         <h4 className="card-title fw-bold text-muted">{product.title}</h4>
+                                        <span className={`badge ${product.stock ? "bg-success" : "bg-danger"}`}>
+                {product.stock ? "In Stock" : "Out of Stock"}
+              </span>
                                         <p className="card-text mb-2 fw-semibold ">Price: {product.price || "N/A"}tk</p>
                                     </>
                                 )}
                                 <div className="mt-auto d-flex flex-column flex-sm-row gap-2">
-                                    <button className="btn btn-secondary flex-fill">Add to Cart</button>
-                                    <button className="btn btn-secondary flex-fill">Add To Wishlist</button>
+                                    <button
+                                        className="btn btn-warning fw-semibold"
+                                        onClick={() => handleAddToCart(product._id, 1)}
+                                        disabled={!product.stock}
+                                    >
+                                        Add to Cart <i className="bi bi-cart" />
+                                    </button>
+                                    <button
+                                        className="btn btn-dark"
+                                        onClick={() => handleAddToWish(product._id)}
+                                    >
+                                        Add Wishlist <i className="bi bi-heart" />
+                                    </button>
                                 </div>
                                 <button className="btn btn-outline-warning text-dark mt-2 fw-bold"
                                         onClick={() => navigate(`/productdetails/${product._id}`)}

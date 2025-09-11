@@ -15,35 +15,59 @@ import ProductsByBrandPage from "./pages/productsByBrandPage.jsx";
 import ProductsByCategoryPage from "./pages/productsByCategoryPage.jsx";
 import ProductsByKeywordPage from "./pages/productsByKeywordPage.jsx";
 import ProductsByRemarksPage from "./pages/productsByRemarksPage.jsx";
-import LazyLoader from "./components/layout&loaders/lazyLoader.jsx";
+import {getToken} from "./helper/sessionHelper.js";
 
 const App = () => {
-    return (
-        <>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<HomePage/>} />
-                <Route path="/products" element={<ProductsPage/>} />
-                <Route path="/productdetails/:id" element={<ProductDetailsPage/>} />
-                <Route path="/brands" element={<BrandsPage/>} />
-                <Route path="/categories" element={<CategoriesPage/>} />
+    if(getToken()){
+        return (
+            <>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>} />
+                        <Route path="/products" element={<ProductsPage/>} />
+                        <Route path="/productdetails/:id" element={<ProductDetailsPage/>} />
+                        <Route path="/brands" element={<BrandsPage/>} />
+                        <Route path="/categories" element={<CategoriesPage/>} />
+                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
+                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
+                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
+                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
 
-                <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
-                <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
-                <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
-                <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
+                        <Route path="/cart" element={<CartPage/>} />
+                        <Route path="/wish" element={<WishPage/>} />
+                        <Route path="/profile" element={<ProfilePage/>} />
+                    </Routes>
+                </BrowserRouter>
+                <FullScreenLoader/>
+                <Toaster/>
+            </>
+        );
+    }else{
+        return (
+            <>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>} />
+                        <Route path="/products" element={<ProductsPage/>} />
+                        <Route path="/productdetails/:id" element={<ProductDetailsPage/>} />
+                        <Route path="/brands" element={<BrandsPage/>} />
+                        <Route path="/categories" element={<CategoriesPage/>} />
+                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
+                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
+                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
+                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
 
-                <Route path="/cart" element={<CartPage/>} />
-                <Route path="/wish" element={<WishPage/>} />
-                <Route path="/login" element={<LoginPage/>} />
-                <Route path="/register" element={<RegisterPage/>} />
-                <Route path="/profile" element={<ProfilePage/>} />
-            </Routes>
-        </BrowserRouter>
-            <FullScreenLoader/>
-            <Toaster/>
-        </>
-    );
+                        <Route path="/login" element={<LoginPage/>} />
+                        <Route path="/registration" element={<RegisterPage/>} />
+                        <Route path="/profile" element={<ProfilePage/>} />
+                    </Routes>
+                </BrowserRouter>
+                <FullScreenLoader/>
+                <Toaster/>
+            </>
+        );
+    }
+
 };
 
 export default App;
