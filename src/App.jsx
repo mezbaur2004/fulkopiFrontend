@@ -9,6 +9,7 @@ import CartPage from "./pages/cartPage.jsx";
 import WishPage from "./pages/wishPage.jsx";
 import LoginPage from "./pages/loginPage.jsx";
 import RegisterPage from "./pages/registerPage.jsx";
+import CheckoutPage from "./pages/checkoutPage.jsx";
 import ProfilePage from "./pages/profilePage.jsx";
 import {Toaster} from "react-hot-toast";
 import ProductsByBrandPage from "./pages/productsByBrandPage.jsx";
@@ -16,6 +17,9 @@ import ProductsByCategoryPage from "./pages/productsByCategoryPage.jsx";
 import ProductsByKeywordPage from "./pages/productsByKeywordPage.jsx";
 import ProductsByRemarksPage from "./pages/productsByRemarksPage.jsx";
 import {getToken} from "./helper/sessionHelper.js";
+import InvoicePage from "./pages/invoicePage.jsx";
+import InvoiceProductPage from "./pages/invoiceProductPage.jsx";
+
 
 const App = () => {
     if(getToken()){
@@ -35,6 +39,9 @@ const App = () => {
 
                         <Route path="/cart" element={<CartPage/>} />
                         <Route path="/wish" element={<WishPage/>} />
+                        <Route path="/checkout" element={<CheckoutPage/>} />
+                        <Route path="/orders" element={<InvoicePage/>}/>
+                        <Route path="/invoiceproduct/:invoiceID" element={<InvoiceProductPage/>}/>
                         <Route path="/profile" element={<ProfilePage/>} />
                     </Routes>
                 </BrowserRouter>

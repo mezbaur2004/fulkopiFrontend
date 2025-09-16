@@ -33,6 +33,7 @@ export async function addToWish(productId){
         let res=await axios.post(`${url}addwishlist`,postBody,AxiosHeader)
         store.dispatch(HideLoader())
         if(res.status === 200){
+            await getWishList()
             SuccessToast("Product Added Successfully")
         }else{
             ErrorToast("Something Went Wrong")

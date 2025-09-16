@@ -38,9 +38,10 @@ const MasterLayout = ({ children }) => {
     // prefill search if URL is /productbykeyword/:keyword
     useEffect(() => {
         if(getToken()){
-            getCartList()
-            const wishList=getWishList()
-            if (wishList){setWishCount(1)}
+            (async ()=>{
+                await getCartList()
+                await getWishList()
+            })()
         }
         const match = location.pathname.match(/^\/productbykeyword\/(.+)$/);
         if (match && match[1]) {
@@ -72,8 +73,8 @@ const MasterLayout = ({ children }) => {
 
     // Redux selectors for cart & wishlist counts (adjust slice names if needed)
     const cartCount = useSelector((state)=>(state.carts.Total))
-    const [wishCount, setWishCount] = useState(0)
-
+    const wishList = useSelector((state)=>(state.wishes.List))
+    const wishCount=wishList.length;
     const onLogout = () => {
         removeSessions();
         navigate("/login");
