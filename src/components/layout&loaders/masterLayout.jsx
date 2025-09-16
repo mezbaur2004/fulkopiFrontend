@@ -15,7 +15,7 @@ import {
 } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
-import { BsCartPlus, BsHeart } from "react-icons/bs";
+import { BsCartPlus, BsHeart, BsBagCheck } from "react-icons/bs";
 import logo from '../../assets/fulkopi.svg';
 import {getToken, getUserDetails, removeSessions} from '../../helper/sessionHelper.js';
 import {getCartList} from "../../APIRequest/cartAPIRequest.js";
@@ -124,6 +124,9 @@ const MasterLayout = ({ children }) => {
                                                     {cartCount}
                                                 </Badge>
                                             )}
+                                        </Nav.Link>
+                                        <Nav.Link as={NavLink} to="/orders" className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
+                                            <BsBagCheck size={20} />
                                         </Nav.Link>
                                     </>
                                 )}
