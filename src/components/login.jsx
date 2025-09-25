@@ -2,6 +2,7 @@ import React, {useRef} from "react";
 import { Link } from "react-router-dom";
 import { LoginRequest } from "../APIRequest/userAPIRequest.js";
 import { ErrorToast, IsEmail, IsEmpty } from "../helper/formHelper";
+import Google from "./google.jsx";
 
 const Login = () => {
     let emailRef=useRef(null);
@@ -38,9 +39,13 @@ const Login = () => {
                                 <input ref={passRef} placeholder="User Password" className="form-control" type="password" />
                                 <br />
                                 <button onClick={SubmitLogin} className="btn btn-outline-info w-100 animated">Next</button>
-                                <div className="mt-3">
+                                <div className="mt-1">
+                                    <div className="text-center my-2 my-md-0">
+                                        <span className="text-muted small fw-bold">OR</span>
+                                    </div>
                                     <span>
-                                        <Link className="text-center ms-3 h6" to="/Registration">Sign Up</Link>
+                                        {/*<Link className="text-center ms-3 h6" to="/Registration">Sign Up</Link>*/}
+                                        <Google/>
                                     </span>
                                 </div>
                             </div>

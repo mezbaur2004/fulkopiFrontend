@@ -9,16 +9,20 @@ import {ErrorToast} from "../helper/formHelper.js";
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
 
     const product = useSelector((state) => state.products.ProductDetails);
 
     useEffect(() => {
         (async () => {
-            await productDetail(id);
+            await productDetail(slug);
         })();
-    }, [id]);
+    }, [slug]);
+
+    useEffect(() => {
+        if (product) document.title = `${product.title}`;
+    }, [product]);
 
     // temporary placeholder functions
     const handleAddToCart =async (productId, qty) => {

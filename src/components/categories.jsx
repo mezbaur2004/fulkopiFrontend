@@ -10,6 +10,8 @@ const Categories = () => {
         categoryList();
     }, []);
 
+    document.title = `Categories | FULKOPI`;
+
     const categories = useSelector((state) => state.products.CategoryList || []);
 
     return (

@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 import {useNavigate} from "react-router-dom";
 import {ErrorToast, IsEmail, IsEmpty, IsMobile} from "../helper/formHelper.js";
 import {RegistrationRequest} from "../APIRequest/userAPIRequest";
+import Google from "./google.jsx";
 
 const Register = () => {
 
@@ -68,11 +69,31 @@ const Register = () => {
                                 </div>
 
                             </div>
-                            <div className="row m-0  p-0">
-                                <div className="col-md-4 text-start p-2">
-                                    <button onClick={onRegistration} className="btn w-100 mt-2 btn-success">Complete</button>
+                            <div className="row m-0 p-0">
+                                <div className="col-12 d-flex flex-column flex-md-row align-items-center justify-content-start gap-2">
+
+                                    {/* Complete Button */}
+                                    <button
+                                        onClick={onRegistration}
+                                        className="btn btn-success flex-fill"
+                                    >
+                                        Complete
+                                    </button>
+
+                                    {/* OR Divider */}
+                                    <div className="text-center my-2 my-md-0">
+                                        <span className="text-muted small fw-bold">OR</span>
+                                    </div>
+
+                                    {/* Google Button */}
+                                    <div className="flex-fill">
+                                        <Google/>
+                                    </div>
+
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>

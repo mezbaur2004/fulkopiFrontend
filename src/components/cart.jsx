@@ -12,6 +12,8 @@ const Cart = () => {
         })();
     }, []);
 
+    document.title = `Cart | FULKOPI`;
+
     const ProductList = useSelector((state) => state.carts.List || []);
 
     const handleRemoveFromCart = async (_id) => {
@@ -58,7 +60,7 @@ const Cart = () => {
                                     <div className="col-12 col-sm-4 col-md-2">
                                         <div
                                             role="button"
-                                            onClick={() => navigate(`/productdetails/${item.productID}`)}
+                                            onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                             className="w-100"
                                         >
                                             <img
@@ -79,7 +81,7 @@ const Cart = () => {
                                         <h5
                                             className="mb-1 text-muted"
                                             style={{ cursor: "pointer" }}
-                                            onClick={() => navigate(`/productdetails/${item.productID}`)}
+                                            onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                         >
                                             {item.product.title}
                                         </h5>
@@ -134,7 +136,7 @@ const Cart = () => {
 
                                         <button
                                             className="btn btn-warning text-dark w-100"
-                                            onClick={() => navigate(`/productdetails/${item.productID}`)}
+                                            onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                         >
                                             <i className="bi bi-box-seam me-1" /> Details
                                         </button>

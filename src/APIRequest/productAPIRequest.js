@@ -29,10 +29,10 @@ export async function productList() {
     }
 }
 
-export async function productDetail(id) {
+export async function productDetail(slug) {
     try {
         store.dispatch(ShowLoader())
-        let res= await axios.get(`${url}productdetails/${id}`);
+        let res= await axios.get(`${url}productdetails/${slug}`);
         store.dispatch(HideLoader())
         if(res.status === 200){
             store.dispatch(SetProductDetails(res.data.data[0]))

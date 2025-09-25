@@ -12,6 +12,8 @@ const ProductsByKeyword = () => {
         })()
     }, [keyword]);
 
+    document.title = `${keyword}| FULKOPI`;
+
     let ProductList=useSelector((state)=>(state.products.ListByKeyword))
 
     return (

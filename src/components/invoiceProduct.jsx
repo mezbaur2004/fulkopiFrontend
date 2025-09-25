@@ -12,6 +12,8 @@ const InvoiceProduct = () => {
         })();
     }, [invoiceID]);
 
+    document.title = `invoice-products | FULKOPI`;
+
     const invoiceProducts = useSelector(
         (state) => state.invoices.ProductList || []
     );

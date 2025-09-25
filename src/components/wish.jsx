@@ -13,6 +13,8 @@ const Wish = () => {
         })();
     }, []);
 
+    document.title = `Wish | FULKOPI`;
+
     const ProductList = useSelector((state) => state.wishes.List || []);
 
     const handleAddToCart = async (_id, qty) => {
@@ -63,7 +65,7 @@ const Wish = () => {
                                     <div className="col-12 col-sm-4 col-md-2">
                                         <div
                                             role="button"
-                                            onClick={() => navigate(`/productdetails/${item.productID}`)}
+                                            onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                             className="w-100"
                                         >
                                             <img
@@ -84,7 +86,7 @@ const Wish = () => {
                                         <h5
                                             className="mb-1 text-muted"
                                             style={{ cursor: "pointer" }}
-                                            onClick={() => navigate(`/productdetails/${item.productID}`)}
+                                            onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                         >
                                             {item.product.title}
                                         </h5>

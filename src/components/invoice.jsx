@@ -12,6 +12,8 @@ const Invoice = () => {
         })();
     }, []);
 
+    document.title = `Orders | FULKOPI`;
+
     const invoices = useSelector((state) => state.invoices.List || []);
 
     // group by status

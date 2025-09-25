@@ -10,6 +10,8 @@ const Brands = () => {
         brandList();
     }, []);
 
+        document.title = `Brands | FULKOPI`;
+
     const brands = useSelector((state) => state.products.BrandList || []);
 
     return (

@@ -25,7 +25,6 @@ import {getWishList} from "../../APIRequest/wishAPIRequest.js";
  * MasterLayout
  * - Navbar fixed-top
  * - Search moved to after user/cart/wish/logout group (end of navbar)
- * - Clear button removed
  * - Responsive: search stacks in collapse (mobile) and is inline on md+
  */
 

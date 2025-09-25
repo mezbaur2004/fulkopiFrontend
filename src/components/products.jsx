@@ -17,6 +17,8 @@ const Products = () => {
         })()
     }, []);
 
+        document.title = `Products | FULKOPI`;
+
     let ProductList=useSelector((state)=>(state.products.List))
 
     const handleAddToCart = async (productId,qty) => {
@@ -58,7 +60,7 @@ const Products = () => {
                                 className="card-img-top"
                                 alt={product.name}
                                 style={{ cursor: "pointer" }}
-                                onClick={() => navigate(`/productdetails/${product._id}`)}
+                                onClick={() => navigate(`/productdetails/${product.slug}`)}
                             />
                             <div className="card-body d-flex flex-column bg-light">
                                 {product.discount?(
@@ -95,7 +97,7 @@ const Products = () => {
                                     </button>
                                 </div>
                                 <button className="btn btn-outline-warning text-dark mt-2 fw-bold"
-                                        onClick={() => navigate(`/productdetails/${product._id}`)}
+                                        onClick={() => navigate(`/productdetails/${product.slug}`)}
                                 >Product Details</button>
                             </div>
                         </div>

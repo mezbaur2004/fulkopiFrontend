@@ -19,6 +19,9 @@ const Home = () => {
         })();
     }, []);
 
+
+    document.title = `Home | FULKOPI`;
+
     const ProductList = useSelector((state) => state.products.List || []);
 
     // render nothing until products are loaded to avoid init issues
@@ -76,7 +79,7 @@ const Home = () => {
                                     width: "100%",
                                     height: 320
                                 }}
-                                onClick={() => navigate(`/productdetails/${product._id}`)}
+                                onClick={() => navigate(`/productdetails/${product.slug}`)}
                             />
                             <div className="card-body text-center">
                                 <h5 className="card-title">{product.title}</h5>
@@ -97,7 +100,7 @@ const Home = () => {
                                         </p>
                                     </>
                                 )}
-                                <button onClick={() => navigate(`/productdetails/${product._id}`)} className="btn btn-secondary">View Product</button>
+                                <button onClick={() => navigate(`/productdetails/${product.slug}`)} className="btn btn-secondary">View Product</button>
                             </div>
                         </div>
                     </SwiperSlide>
