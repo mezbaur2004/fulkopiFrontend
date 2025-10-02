@@ -3,7 +3,6 @@ import {HideLoader, ShowLoader} from "../redux/state-slice/settings-slice.js";
 import axios from "axios";
 import {ErrorToast, SuccessToast} from "../helper/formHelper.js";
 import {getToken} from "../helper/sessionHelper.js";
-import {SetCartList, SetTotal} from "../redux/state-slice/cart-slice.js";
 import {SetInvoiceList, SetInvoiceProductList} from "../redux/state-slice/invoice-slice.js";
 
 const url=import.meta.env.VITE_BASE_URL;
@@ -17,7 +16,7 @@ export async function createInvoice(cus_name, cus_location, cus_city, cus_phone,
         store.dispatch(HideLoader())
         if(res.status === 200){
             SuccessToast("Redirecting to SSLCommerz Payment Gateway")
-            console.log(res.data.redirectGatewayURL)
+            //console.log(res.data.redirectGatewayURL)
             return res.data.redirectGatewayURL;
         }else{
             ErrorToast("Something Went Wrong")
@@ -33,7 +32,7 @@ export async function invoiceList(){
         store.dispatch(ShowLoader())
         let res=await axios.get(`${url}invoicelist`,AxiosHeader)
         store.dispatch(HideLoader())
-        console.log(res.data.data)
+        //console.log(res.data.data)
         if(res.status === 200){
             store.dispatch(SetInvoiceList(res.data.data))
         }else{

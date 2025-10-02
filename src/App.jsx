@@ -16,13 +16,72 @@ import ProductsByBrandPage from "./pages/productsByBrandPage.jsx";
 import ProductsByCategoryPage from "./pages/productsByCategoryPage.jsx";
 import ProductsByKeywordPage from "./pages/productsByKeywordPage.jsx";
 import ProductsByRemarksPage from "./pages/productsByRemarksPage.jsx";
-import {getToken} from "./helper/sessionHelper.js";
+import {getToken,isAdmin} from "./helper/sessionHelper.js";
 import InvoicePage from "./pages/invoicePage.jsx";
 import InvoiceProductPage from "./pages/invoiceProductPage.jsx";
+import AdminPage from "./pages/admin/AdminPage.jsx";
+import ManageProducts from "./pages/admin/ManageProducts.jsx";
+import ManageBrands from "./pages/admin/ManageBrands.jsx";
+import ManageCategories from "./pages/admin/ManageCategories.jsx";
+import ViewUsers from "./pages/admin/ViewUsers.jsx";
+import ViewInvoices from "./pages/admin/ViewInvoices.jsx";
+import UserRecord from "./pages/admin/UserRecord.jsx";
+import InvoiceProductList from "./pages/admin/InvoiceProductList.jsx";
+import UpdateProducts from "./pages/admin/UpdateProducts.jsx";
+import UpdateBrand from "./pages/admin/UpdateBrand.jsx";
+import UpdateCategory from "./pages/admin/UpdateCategory.jsx";
 
 
 const App = () => {
-    if(getToken()){
+    if(getToken() && isAdmin()){
+        return (
+            <>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>} />
+                        <Route path="/products" element={<ProductsPage/>} />
+                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>} />
+                        <Route path="/brands" element={<BrandsPage/>} />
+                        <Route path="/categories" element={<CategoriesPage/>} />
+                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
+                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
+                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
+                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
+
+
+                        <Route path="/cart" element={<CartPage/>} />
+                        <Route path="/wish" element={<WishPage/>} />
+                        <Route path="/checkout" element={<CheckoutPage/>} />
+                        <Route path="/orders" element={<InvoicePage/>}/>
+                        <Route path="/invoiceproduct/:invoiceID" element={<InvoiceProductPage/>}/>
+                        <Route path="/profile" element={<ProfilePage/>} />
+
+
+                        <Route path="/admin" element={<AdminPage/>} />
+                        <Route path="/admin/products" element={<ManageProducts/>} />
+                        <Route path="/admin/products/update/:id" element={<UpdateProducts/>} />
+
+                        <Route path="/admin/brands" element={<ManageBrands/>} />
+                        <Route path="/admin/brands/update/:id" element={<UpdateBrand/>} />
+
+                        <Route path="/admin/categories" element={<ManageCategories/>} />
+                        <Route path="/admin/categories/update/:id" element={<UpdateCategory/>} />
+
+                        <Route path="/admin/userlist" element={<ViewUsers/>} />
+                        <Route path="/admin/userlist/invoicelist/:id" element={<UserRecord/>} />
+                        <Route path="/admin/userlist/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
+                        <Route path="/admin/invoicelist" element={<ViewInvoices/>} />
+                        <Route path="/admin/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
+
+
+
+                    </Routes>
+                </BrowserRouter>
+                <FullScreenLoader/>
+                <Toaster/>
+            </>
+        );
+    }else if(getToken()){
         return (
             <>
                 <BrowserRouter>

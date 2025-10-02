@@ -1,8 +1,10 @@
+import { jwtDecode } from "jwt-decode";
+
 class SessionHelper {
     // ===== TOKEN =====
     setToken(token) {
         if (!token) return;
-        const expiry = Date.now() + 10 * 24 * 60 * 60 * 1000; // 10 days
+        const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
         const tokenData = { token, expiry };
         localStorage.setItem("token", JSON.stringify(tokenData));
     }
@@ -17,6 +19,23 @@ class SessionHelper {
         }
 
         return tokenData.token;
+    }
+
+    isAdmin(){
+        const tokenData = JSON.parse(localStorage.getItem("token"));
+        if (!tokenData) return null;
+
+        if (Date.now() > tokenData.expiry) {
+            localStorage.removeItem("token");
+            return null;
+        }
+
+        const decoded=jwtDecode(tokenData.token);
+        if(decoded.role==="admin"){
+            return true
+        }else{
+            return false
+        }
     }
 
     // ===== USER DETAILS =====
@@ -38,27 +57,6 @@ class SessionHelper {
 
         return data.userDetails;
     }
-
-    // ===== EMAIL =====
-    setEmail(email) {
-        if (!email) return;
-        localStorage.setItem("Email", email);
-    }
-
-    getEmail() {
-        return localStorage.getItem("Email");
-    }
-
-    // ===== OTP =====
-    setOTP(otp) {
-        if (!otp) return;
-        localStorage.setItem("OTP", otp);
-    }
-
-    getOTP() {
-        return localStorage.getItem("OTP");
-    }
-
     // ===== REMOVE SESSION =====
     removeSessions = () => {
         localStorage.clear();
@@ -67,12 +65,9 @@ class SessionHelper {
 }
 
 export const {
-    setEmail,
-    getEmail,
-    setOTP,
-    getOTP,
     setToken,
     getToken,
+    isAdmin,
     setUserDetails,
     getUserDetails,
     removeSessions

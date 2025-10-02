@@ -2,9 +2,11 @@ import axios from "axios";
 import store from "../redux/store/store.js";
 import {HideLoader, ShowLoader} from "../redux/state-slice/settings-slice";
 import {ErrorToast, SuccessToast} from "../helper/formHelper.js";
-import {setToken, setUserDetails} from "../helper/sessionHelper.js";
+import {getToken, setToken, setUserDetails} from "../helper/sessionHelper.js";
+import {SetUserList} from "../redux/state-slice/user-slice.js";
 
 const url=import.meta.env.VITE_BASE_URL;
+const AxiosHeader={headers:{"token":getToken()}}
 
 export async function LoginRequest(email, password) {
     try {
@@ -64,3 +66,18 @@ export async function RegistrationRequest(email,firstName,lastName,mobile,passwo
         return false;
     }
 }
+
+export async function userDetails(){
+    try{
+        store.dispatch(ShowLoader())
+        let URL=`${url}profiledetails`;
+        let res=await axios.get(URL,AxiosHeader)
+        store.dispatch(HideLoader())
+        if(res.status===200){
+            store.dispatch(SetUserList(res.data.data));
+        }
+    }catch(error){
+
+    }
+}
+

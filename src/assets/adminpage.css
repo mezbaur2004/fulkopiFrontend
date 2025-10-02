@@ -1,0 +1,77 @@
+/* src/pages/AdminDashboard.css */
+
+.admin-dashboard {
+    min-height: 100vh;
+    background-color: #121212; /* dark bg */
+    color: #f0f0f0; /* light text */
+    padding: 2rem;
+    font-family: sans-serif;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.dashboard-button {
+    background-color: #1f2937; /* dark button */
+    color: #f0f0f0;
+    padding: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    text-align: center;
+}
+
+.dashboard-button:hover {
+    background-color: #374151; /* lighter hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+}
+
+
+.homepage-button {
+    background-color: #9b9fa8;
+    color: #ffffff;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto 2rem auto; /* center and spacing */
+    text-align: center;
+}
+
+.homepage-button:hover {
+    background-color: #63666e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+}
