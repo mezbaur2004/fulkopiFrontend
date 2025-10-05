@@ -30,6 +30,7 @@ import InvoiceProductList from "./pages/admin/InvoiceProductList.jsx";
 import UpdateProducts from "./pages/admin/UpdateProducts.jsx";
 import UpdateBrand from "./pages/admin/UpdateBrand.jsx";
 import UpdateCategory from "./pages/admin/UpdateCategory.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 
 const App = () => {
@@ -73,7 +74,7 @@ const App = () => {
                         <Route path="/admin/invoicelist" element={<ViewInvoices/>} />
                         <Route path="/admin/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
 
-
+                        <Route path="*" element={<ErrorPage/>} />
 
                     </Routes>
                 </BrowserRouter>
@@ -102,6 +103,9 @@ const App = () => {
                         <Route path="/orders" element={<InvoicePage/>}/>
                         <Route path="/invoiceproduct/:invoiceID" element={<InvoiceProductPage/>}/>
                         <Route path="/profile" element={<ProfilePage/>} />
+
+                        <Route path="*" element={<ErrorPage/>} />
+
                     </Routes>
                 </BrowserRouter>
                 <FullScreenLoader/>
@@ -126,6 +130,9 @@ const App = () => {
                         <Route path="/login" element={<LoginPage/>} />
                         <Route path="/registration" element={<RegisterPage/>} />
                         <Route path="/profile" element={<ProfilePage/>} />
+
+                        <Route path="*" element={<ErrorPage/>} />
+
                     </Routes>
                 </BrowserRouter>
                 <FullScreenLoader/>
