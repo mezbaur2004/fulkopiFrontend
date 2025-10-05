@@ -17,9 +17,10 @@ import { useSelector } from "react-redux";
 import { AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
 import { BsCartPlus, BsHeart, BsBagCheck } from "react-icons/bs";
 import logo from '../../assets/fulkopi.svg';
-import {getToken, getUserDetails, removeSessions} from '../../helper/sessionHelper.js';
+import {getToken, getUserDetails, isAdmin, removeSessions} from '../../helper/sessionHelper.js';
 import {getCartList} from "../../APIRequest/cartAPIRequest.js";
 import {getWishList} from "../../APIRequest/wishAPIRequest.js";
+import {ErrorToast} from "../../helper/formHelper.js";
 
 /**
  * MasterLayout
@@ -67,7 +68,7 @@ const MasterLayout = ({ children }) => {
     try {
         userDetails = getUserDetails() || {};
     } catch (err) {
-        console.error("Error parsing user details:", err);
+        ErrorToast("something went wrong!")
     }
 
     // Redux selectors for cart & wishlist counts (adjust slice names if needed)
@@ -98,6 +99,9 @@ const MasterLayout = ({ children }) => {
                                 <Nav.Link as={NavLink} to="/products">Products</Nav.Link>
                                 <Nav.Link as={NavLink} to="/brands">Brands</Nav.Link>
                                 <Nav.Link as={NavLink} to="/categories">Categories</Nav.Link>
+                                {isAdmin() && (
+                                    <Nav.Link as={NavLink} to="/admin">Admin</Nav.Link>
+                                )}
                             </Nav>
 
                             {/* spacer pushes the following groups to the right on wide screens */}

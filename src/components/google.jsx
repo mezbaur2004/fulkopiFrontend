@@ -32,7 +32,6 @@ const Google = ({ onLoginSuccess }) => {  // optional callback
             window.location.href = "/";
         } catch (err) {
             store.dispatch(HideLoader());
-            console.error("Login error:", err.response?.data || err.message);
         }
     };
 
@@ -40,7 +39,6 @@ const Google = ({ onLoginSuccess }) => {  // optional callback
         <div>
             <GoogleLogin
                 onSuccess={handleLogin}
-                onError={() => console.log('Login Failed')}
             />
         </div>
     );

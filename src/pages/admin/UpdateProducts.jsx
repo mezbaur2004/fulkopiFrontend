@@ -42,7 +42,6 @@ const UpdateProducts = () => {
         })();
     }, [id]);
 
-    console.log(productDetails);
 
     const handleUpdate = async (e) => {
         e.preventDefault();

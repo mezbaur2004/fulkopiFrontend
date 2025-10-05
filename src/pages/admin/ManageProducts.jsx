@@ -35,7 +35,6 @@ const ManageProducts = () => {
             const data = await readBrand();
             setBrands(data || []);
         } catch (err) {
-            console.error("readBrand failed", err);
             setBrands([]);
         }
     };
@@ -45,7 +44,6 @@ const ManageProducts = () => {
             const data = await readCategory();
             setCategories(data || []);
         } catch (err) {
-            console.error("readCategory failed", err);
             setCategories([]);
         }
     };

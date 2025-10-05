@@ -16,7 +16,6 @@ export async function createInvoice(cus_name, cus_location, cus_city, cus_phone,
         store.dispatch(HideLoader())
         if(res.status === 200){
             SuccessToast("Redirecting to SSLCommerz Payment Gateway")
-            //console.log(res.data.redirectGatewayURL)
             return res.data.redirectGatewayURL;
         }else{
             ErrorToast("Something Went Wrong")
@@ -32,7 +31,6 @@ export async function invoiceList(){
         store.dispatch(ShowLoader())
         let res=await axios.get(`${url}invoicelist`,AxiosHeader)
         store.dispatch(HideLoader())
-        //console.log(res.data.data)
         if(res.status === 200){
             store.dispatch(SetInvoiceList(res.data.data))
         }else{
@@ -49,7 +47,6 @@ export async function invoiceProductList(invoiceID){
         store.dispatch(ShowLoader())
         let res=await axios.get(`${url}invoiceproductlist/${invoiceID}`,AxiosHeader)
         store.dispatch(HideLoader())
-        console.log(res.data.data)
         if(res.status === 200){
             store.dispatch(SetInvoiceProductList(res.data.data))
         }else{

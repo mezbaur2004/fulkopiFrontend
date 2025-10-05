@@ -84,7 +84,6 @@ export async function updateProduct(id, postBody) {
     try {
         store.dispatch(ShowLoader());
         const res = await axios.put(`${url}productupdate/${id}`, postBody, AxiosHeader);
-        console.log(res)
         store.dispatch(HideLoader());
         if (res.status === 200) {
             SuccessToast("Product Updated!");
@@ -126,7 +125,6 @@ export async function createBrand(brandName, brandImg, status) {
         const PostBody = { brandName, brandImg, status };
         const res = await axios.post(`${url}brandcreate`, PostBody, AxiosHeader);
         store.dispatch(HideLoader());
-        console.log(res)
         if (res.status === 200 && res.data.status!=="fail") {
             SuccessToast("New Brand Added!");
             return res.data; // <-- return full data object
@@ -208,7 +206,6 @@ export async function createCategory(categoryName, categoryImg, status) {
         const PostBody = { categoryName, categoryImg, status };
         const res = await axios.post(`${url}categorycreate`, PostBody, AxiosHeader);
         store.dispatch(HideLoader());
-        console.log(res)
         if (res.status === 200 && res.data.status!=="fail") {
             SuccessToast("New Category Added!");
             return res.data; // <-- return full data object

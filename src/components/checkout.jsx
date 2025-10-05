@@ -51,8 +51,6 @@ const Checkout = () => {
                 cus_phone,
                 cus_postcode
             );
-
-            console.log(res)
             if (res) {
                 SuccessToast("Invoice Created Successfully");
                 window.location.href =res; // or navigate to orders/invoice page
@@ -60,7 +58,6 @@ const Checkout = () => {
                 ErrorToast(res?.message || "Failed to create invoice");
             }
         } catch (err) {
-            console.error(err);
             ErrorToast("Something went wrong");
         }
     };

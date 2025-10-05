@@ -37,7 +37,6 @@ export async function productDetail(slug) {
         if(res.status === 200){
             store.dispatch(SetProductDetails(res.data.data[0]))
         }else{
-            console.log("else")
             store.dispatch(SetProductDetails([]))
             ErrorToast("No Data Found")
         }
@@ -74,7 +73,6 @@ export async function productListByRemarks(remarks) {
             store.dispatch(SetListByRemark([]))
         }
     }catch (error) {
-        console.log(error.toString())
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
@@ -91,7 +89,6 @@ export async function productListByBrand(brandID) {
             store.dispatch(SetListByBrand([]))
         }
     }catch (error) {
-        console.log(error.toString())
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
@@ -108,7 +105,6 @@ export async function productListByCategory(categoryID) {
             store.dispatch(SetListByCategory([]))
         }
     }catch (error) {
-        console.log(error.toString())
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
@@ -125,7 +121,6 @@ export async function brandList(){
             store.dispatch(SetBrandList([]))
         }
     }catch (error) {
-        console.log(error.toString())
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
@@ -142,7 +137,6 @@ export async function categoryList(){
             store.dispatch(SetCategoryList([]))
         }
     }catch (error) {
-        console.log(error.toString())
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
