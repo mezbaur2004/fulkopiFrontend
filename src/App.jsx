@@ -31,6 +31,10 @@ import UpdateProducts from "./pages/admin/UpdateProducts.jsx";
 import UpdateBrand from "./pages/admin/UpdateBrand.jsx";
 import UpdateCategory from "./pages/admin/UpdateCategory.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import AdminMasterLayout from "./pages/admin/AdminMasterLayout.jsx";
+import CreateProduct from "./pages/admin/CreateProduct.jsx";
+import CreateBrand from "./pages/admin/CreateBrand.jsx";
+import CreateCategory from "./pages/admin/CreateCategory.jsx";
 
 
 const App = () => {
@@ -59,13 +63,17 @@ const App = () => {
 
 
                         <Route path="/admin" element={<AdminPage/>} />
+
                         <Route path="/admin/products" element={<ManageProducts/>} />
+                        <Route path="/admin/createproduct" element={<CreateProduct/>} />
                         <Route path="/admin/products/update/:id" element={<UpdateProducts/>} />
 
                         <Route path="/admin/brands" element={<ManageBrands/>} />
+                        <Route path="/admin/createbrand" element={<CreateBrand/>} />
                         <Route path="/admin/brands/update/:id" element={<UpdateBrand/>} />
 
                         <Route path="/admin/categories" element={<ManageCategories/>} />
+                        <Route path="/admin/createcategory" element={<CreateCategory/>} />
                         <Route path="/admin/categories/update/:id" element={<UpdateCategory/>} />
 
                         <Route path="/admin/userlist" element={<ViewUsers/>} />
@@ -73,7 +81,7 @@ const App = () => {
                         <Route path="/admin/userlist/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
                         <Route path="/admin/invoicelist" element={<ViewInvoices/>} />
                         <Route path="/admin/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
-
+                        <Route path="/admin/master" element={<AdminMasterLayout/>} />
                         <Route path="*" element={<ErrorPage/>} />
 
                     </Routes>

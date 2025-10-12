@@ -1,59 +1,52 @@
 // src/pages/AdminDashboard.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import AdminMasterLayout from "./AdminMasterLayout.jsx";
+
+const dashboardItems = [
+    { label: "Manage Products", path: "/admin/products", color: "success" },
+    { label: "Manage Brands", path: "/admin/brands", color: "primary" },
+    { label: "Manage Categories", path: "/admin/categories", color: "warning" },
+    { label: "View Users", path: "/admin/userlist", color: "info" },
+    { label: "View Invoices", path: "/admin/invoicelist", color: "secondary" },
+];
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="admin-dashboard">
-            <h1 className="dashboard-title">Admin Dashboard</h1>
+        <AdminMasterLayout>
+            <div className="container py-5">
+                <h1 className="mb-4 text-success">Admin Dashboard</h1>
 
-            {/* Homepage Button */}
-            <button
-                onClick={() => navigate("/")}
-                className="homepage-button"
-            >
-                Go to Homepage
-            </button>
+                {/* Homepage button */}
+                <div className="mb-4">
+                    <button
+                        className="btn btn-outline-success"
+                        onClick={() => navigate("/")}
+                    >
+                        ← Go to Homepage
+                    </button>
+                </div>
 
-            <div className="dashboard-grid">
-                <button
-                    onClick={() => navigate("/admin/products")}
-                    className="dashboard-button"
-                >
-                    Manage Products
-                </button>
-
-                <button
-                    onClick={() => navigate("/admin/brands")}
-                    className="dashboard-button"
-                >
-                    Manage Brands
-                </button>
-
-                <button
-                    onClick={() => navigate("/admin/categories")}
-                    className="dashboard-button"
-                >
-                    Manage Categories
-                </button>
-
-                <button
-                    onClick={() => navigate("/admin/userlist")}
-                    className="dashboard-button"
-                >
-                    View Users
-                </button>
-
-                <button
-                    onClick={() => navigate("/admin/invoicelist")}
-                    className="dashboard-button"
-                >
-                    View Invoices
-                </button>
+                {/* Dashboard grid */}
+                <div className="row g-4">
+                    {dashboardItems.map((item, idx) => (
+                        <div key={idx} className="col-md-4">
+                            <div
+                                className={`card border-${item.color} shadow-sm h-100`}
+                                style={{ cursor: "pointer", transition: "transform 0.2s" }}
+                                onClick={() => navigate(item.path)}
+                            >
+                                <div className={`card-body text-${item.color} d-flex flex-column justify-content-center align-items-center`}>
+                                    <h5 className="card-title">{item.label}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+        </AdminMasterLayout>
     );
 };
 

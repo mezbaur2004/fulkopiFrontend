@@ -2,8 +2,8 @@
 
 .admin-dashboard {
     min-height: 100vh;
-    background-color: #121212; /* dark bg */
-    color: #f0f0f0; /* light text */
+    background-color: rgb(232, 234, 232); /* dark bg */
+    color: #1c1b1b; /* light text */
     padding: 2rem;
     font-family: sans-serif;
 }
@@ -74,4 +74,43 @@
     background-color: #63666e;
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+}
+
+.admin-sidebar-fixed {
+    width: 200px;
+}
+.admin-main-with-sidebar {
+    margin-left: 200px;
+}
+
+.table td, .table th {
+    white-space: nowrap; /* optional for long text */
+}
+
+@media (min-width: 768px) {
+    .admin-main-with-sidebar {
+        margin-left: 240px;
+        width: calc(100% - 240px); /* <- prevent horizontal overflow */
+    }
+}
+
+/* AdminMasterLayout.jsx inline CSS or your CSS file */
+
+/* Mobile sidebar */
+#mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 100vh; /* full height */
+    overflow-y: auto; /* scrollable independently */
+    z-index: 1040;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-right: 3px solid #198754; /* green */
+}
+
+/* Keep menu at top */
+#mobile-sidebar .nav {
+    margin-top: 0; /* remove any spacing pushing it down */
 }

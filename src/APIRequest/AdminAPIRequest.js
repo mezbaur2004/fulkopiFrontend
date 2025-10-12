@@ -86,7 +86,6 @@ export async function updateProduct(id, postBody) {
         const res = await axios.put(`${url}productupdate/${id}`, postBody, AxiosHeader);
         store.dispatch(HideLoader());
         if (res.status === 200) {
-            SuccessToast("Product Updated!");
             return res.data;
         } else {
             ErrorToast("Something Went Wrong");
