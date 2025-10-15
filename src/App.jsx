@@ -16,7 +16,7 @@ import ProductsByBrandPage from "./pages/productsByBrandPage.jsx";
 import ProductsByCategoryPage from "./pages/productsByCategoryPage.jsx";
 import ProductsByKeywordPage from "./pages/productsByKeywordPage.jsx";
 import ProductsByRemarksPage from "./pages/productsByRemarksPage.jsx";
-import {getToken,isAdmin} from "./helper/sessionHelper.js";
+import {getToken, isAdmin} from "./helper/sessionHelper.js";
 import InvoicePage from "./pages/invoicePage.jsx";
 import InvoiceProductPage from "./pages/invoiceProductPage.jsx";
 import AdminPage from "./pages/admin/AdminPage.jsx";
@@ -38,51 +38,52 @@ import CreateCategory from "./pages/admin/CreateCategory.jsx";
 
 
 const App = () => {
-    if(getToken() && isAdmin()){
+    if (getToken() && isAdmin()) {
         return (
             <>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<HomePage/>} />
-                        <Route path="/products" element={<ProductsPage/>} />
-                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>} />
-                        <Route path="/brands" element={<BrandsPage/>} />
-                        <Route path="/categories" element={<CategoriesPage/>} />
-                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
-                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
-                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
-                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/products" element={<ProductsPage/>}/>
+                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>}/>
+                        <Route path="/brands" element={<BrandsPage/>}/>
+                        <Route path="/categories" element={<CategoriesPage/>}/>
+                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>}/>
+                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>}/>
+                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>}/>
+                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>}/>
 
 
-                        <Route path="/cart" element={<CartPage/>} />
-                        <Route path="/wish" element={<WishPage/>} />
-                        <Route path="/checkout" element={<CheckoutPage/>} />
+                        <Route path="/cart" element={<CartPage/>}/>
+                        <Route path="/wish" element={<WishPage/>}/>
+                        <Route path="/checkout" element={<CheckoutPage/>}/>
                         <Route path="/orders" element={<InvoicePage/>}/>
                         <Route path="/invoiceproduct/:invoiceID" element={<InvoiceProductPage/>}/>
-                        <Route path="/profile" element={<ProfilePage/>} />
+                        <Route path="/profile" element={<ProfilePage/>}/>
 
 
-                        <Route path="/admin" element={<AdminPage/>} />
+                        <Route path="/admin" element={<AdminPage/>}/>
 
-                        <Route path="/admin/products" element={<ManageProducts/>} />
-                        <Route path="/admin/createproduct" element={<CreateProduct/>} />
-                        <Route path="/admin/products/update/:id" element={<UpdateProducts/>} />
+                        <Route path="/admin/products" element={<ManageProducts/>}/>
+                        <Route path="/admin/createproduct" element={<CreateProduct/>}/>
+                        <Route path="/admin/products/update/:id" element={<UpdateProducts/>}/>
 
-                        <Route path="/admin/brands" element={<ManageBrands/>} />
-                        <Route path="/admin/createbrand" element={<CreateBrand/>} />
-                        <Route path="/admin/brands/update/:id" element={<UpdateBrand/>} />
+                        <Route path="/admin/brands" element={<ManageBrands/>}/>
+                        <Route path="/admin/createbrand" element={<CreateBrand/>}/>
+                        <Route path="/admin/brands/update/:id" element={<UpdateBrand/>}/>
 
-                        <Route path="/admin/categories" element={<ManageCategories/>} />
-                        <Route path="/admin/createcategory" element={<CreateCategory/>} />
-                        <Route path="/admin/categories/update/:id" element={<UpdateCategory/>} />
+                        <Route path="/admin/categories" element={<ManageCategories/>}/>
+                        <Route path="/admin/createcategory" element={<CreateCategory/>}/>
+                        <Route path="/admin/categories/update/:id" element={<UpdateCategory/>}/>
 
-                        <Route path="/admin/userlist" element={<ViewUsers/>} />
-                        <Route path="/admin/userlist/invoicelist/:id" element={<UserRecord/>} />
-                        <Route path="/admin/userlist/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
-                        <Route path="/admin/invoicelist" element={<ViewInvoices/>} />
-                        <Route path="/admin/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>} />
-                        <Route path="/admin/master" element={<AdminMasterLayout/>} />
-                        <Route path="*" element={<ErrorPage/>} />
+                        <Route path="/admin/userlist" element={<ViewUsers/>}/>
+                        <Route path="/admin/userlist/invoicelist/:id" element={<UserRecord/>}/>
+                        <Route path="/admin/userlist/invoicelist/invoiceproductlist/:id"
+                               element={<InvoiceProductList/>}/>
+                        <Route path="/admin/invoicelist" element={<ViewInvoices/>}/>
+                        <Route path="/admin/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>}/>
+                        <Route path="/admin/master" element={<AdminMasterLayout/>}/>
+                        <Route path="*" element={<ErrorPage/>}/>
 
                     </Routes>
                 </BrowserRouter>
@@ -90,29 +91,29 @@ const App = () => {
                 <Toaster/>
             </>
         );
-    }else if(getToken()){
+    } else if (getToken()) {
         return (
             <>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<HomePage/>} />
-                        <Route path="/products" element={<ProductsPage/>} />
-                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>} />
-                        <Route path="/brands" element={<BrandsPage/>} />
-                        <Route path="/categories" element={<CategoriesPage/>} />
-                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
-                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
-                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
-                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/products" element={<ProductsPage/>}/>
+                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>}/>
+                        <Route path="/brands" element={<BrandsPage/>}/>
+                        <Route path="/categories" element={<CategoriesPage/>}/>
+                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>}/>
+                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>}/>
+                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>}/>
+                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>}/>
 
-                        <Route path="/cart" element={<CartPage/>} />
-                        <Route path="/wish" element={<WishPage/>} />
-                        <Route path="/checkout" element={<CheckoutPage/>} />
+                        <Route path="/cart" element={<CartPage/>}/>
+                        <Route path="/wish" element={<WishPage/>}/>
+                        <Route path="/checkout" element={<CheckoutPage/>}/>
                         <Route path="/orders" element={<InvoicePage/>}/>
                         <Route path="/invoiceproduct/:invoiceID" element={<InvoiceProductPage/>}/>
-                        <Route path="/profile" element={<ProfilePage/>} />
+                        <Route path="/profile" element={<ProfilePage/>}/>
 
-                        <Route path="*" element={<ErrorPage/>} />
+                        <Route path="*" element={<ErrorPage/>}/>
 
                     </Routes>
                 </BrowserRouter>
@@ -120,26 +121,26 @@ const App = () => {
                 <Toaster/>
             </>
         );
-    }else{
+    } else {
         return (
             <>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/" element={<HomePage/>} />
-                        <Route path="/products" element={<ProductsPage/>} />
-                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>} />
-                        <Route path="/brands" element={<BrandsPage/>} />
-                        <Route path="/categories" element={<CategoriesPage/>} />
-                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>} />
-                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>} />
-                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>} />
-                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>} />
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/products" element={<ProductsPage/>}/>
+                        <Route path="/productdetails/:slug" element={<ProductDetailsPage/>}/>
+                        <Route path="/brands" element={<BrandsPage/>}/>
+                        <Route path="/categories" element={<CategoriesPage/>}/>
+                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>}/>
+                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>}/>
+                        <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>}/>
+                        <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>}/>
 
-                        <Route path="/login" element={<LoginPage/>} />
-                        <Route path="/registration" element={<RegisterPage/>} />
-                        <Route path="/profile" element={<ProfilePage/>} />
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/registration" element={<RegisterPage/>}/>
+                        <Route path="/profile" element={<ProfilePage/>}/>
 
-                        <Route path="*" element={<ErrorPage/>} />
+                        <Route path="*" element={<ErrorPage/>}/>
 
                     </Routes>
                 </BrowserRouter>

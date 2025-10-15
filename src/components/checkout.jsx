@@ -1,8 +1,8 @@
-import React, { useRef } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createInvoice } from "../APIRequest/invoiceAPIRequest";
-import { IsEmpty, IsMobile, SuccessToast, ErrorToast } from "../helper/formHelper.js";
+import React, {useRef} from "react";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {createInvoice} from "../APIRequest/invoiceAPIRequest";
+import {ErrorToast, IsEmpty, IsMobile, SuccessToast} from "../helper/formHelper.js";
 
 const Checkout = () => {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ const Checkout = () => {
 
         try {
             // call API with explicit params (no spread)
-            const res=await createInvoice(
+            const res = await createInvoice(
                 cus_name,
                 cus_location,
                 cus_city,
@@ -53,7 +53,7 @@ const Checkout = () => {
             );
             if (res) {
                 SuccessToast("Invoice Created Successfully");
-                window.location.href =res; // or navigate to orders/invoice page
+                window.location.href = res; // or navigate to orders/invoice page
             } else {
                 ErrorToast(res?.message || "Failed to create invoice");
             }
@@ -156,7 +156,7 @@ const Checkout = () => {
                             <span>{deliveryCharge} tk</span>
                         </div>
 
-                        <hr />
+                        <hr/>
 
                         <div className="d-flex justify-content-between fw-bold">
                             <span>Total</span>

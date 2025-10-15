@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { userDetails } from "../APIRequest/userAPIRequest.js";
-import { useSelector } from "react-redux";
+import React, {useEffect} from "react";
+import {userDetails} from "../APIRequest/userAPIRequest.js";
+import {useSelector} from "react-redux";
 
 const Profile = () => {
     useEffect(() => {

@@ -1,12 +1,12 @@
 // src/pages/UpdateCategory.jsx
-import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { adminCategoryDetails, updateCategory } from "../../APIRequest/AdminAPIRequest.js";
+import React, {useEffect, useRef, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {adminCategoryDetails, updateCategory} from "../../APIRequest/AdminAPIRequest.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
-import { IsEmpty, ErrorToast, SuccessToast } from "../../helper/formHelper.js";
+import {ErrorToast, IsEmpty, SuccessToast} from "../../helper/formHelper.js";
 
 const UpdateCategory = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [category, setCategory] = useState(null);
@@ -61,6 +61,8 @@ const UpdateCategory = () => {
     };
 
     if (!category) return <div className="p-3">Loading...</div>;
+
+    document.title = `Admin | Category | Update`;
 
     return (
         <AdminMasterLayout>

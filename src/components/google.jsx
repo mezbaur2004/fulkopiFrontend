@@ -1,15 +1,15 @@
 import React from 'react';
-import { GoogleLogin } from '@react-oauth/google';
+import {GoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
-import { setToken, setUserDetails } from '../helper/sessionHelper.js';
-import { useNavigate } from 'react-router-dom';
+import {setToken, setUserDetails} from '../helper/sessionHelper.js';
+import {useNavigate} from 'react-router-dom';
 import store from "../redux/store/store.js";
 import {HideLoader, ShowLoader} from "../redux/state-slice/settings-slice.js";
 import {SuccessToast} from "../helper/formHelper.js";
 
 const url = import.meta.env.VITE_BASE_URL;
 
-const Google = ({ onLoginSuccess }) => {  // optional callback
+const Google = ({onLoginSuccess}) => {  // optional callback
     const navigate = useNavigate();
 
     const handleLogin = async (credentialResponse) => {
@@ -18,7 +18,7 @@ const Google = ({ onLoginSuccess }) => {  // optional callback
             const googleIdToken = credentialResponse.credential;
 
             // Send Google ID token to backend
-            const { data } = await axios.post(`${url}google`, { token: googleIdToken });
+            const {data} = await axios.post(`${url}google`, {token: googleIdToken});
 
             // Store JWT and user details
             setToken(data.token);

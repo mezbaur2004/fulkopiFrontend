@@ -1,12 +1,12 @@
 @import 'progress.css';
 @import "adminpage.css";
 
-body{
+body {
     background-color: #ffffff;
     color: #a5a5a5;
 }
 
-.abcd{
+.abcd {
     color: #302d2d;
     font-weight: bolder;
 }

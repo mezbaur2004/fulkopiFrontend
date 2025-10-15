@@ -1,18 +1,20 @@
 // src/pages/AdminDashboard.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 
 const dashboardItems = [
-    { label: "Manage Products", path: "/admin/products", color: "success" },
-    { label: "Manage Brands", path: "/admin/brands", color: "primary" },
-    { label: "Manage Categories", path: "/admin/categories", color: "warning" },
-    { label: "View Users", path: "/admin/userlist", color: "info" },
-    { label: "View Invoices", path: "/admin/invoicelist", color: "secondary" },
+    {label: "Manage Products", path: "/admin/products", color: "success"},
+    {label: "Manage Brands", path: "/admin/brands", color: "primary"},
+    {label: "Manage Categories", path: "/admin/categories", color: "warning"},
+    {label: "View Users", path: "/admin/userlist", color: "info"},
+    {label: "View Invoices", path: "/admin/invoicelist", color: "secondary"},
 ];
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
+
+    document.title = `Admin Dashboard`;
 
     return (
         <AdminMasterLayout>
@@ -35,10 +37,11 @@ const AdminDashboard = () => {
                         <div key={idx} className="col-md-4">
                             <div
                                 className={`card border-${item.color} shadow-sm h-100`}
-                                style={{ cursor: "pointer", transition: "transform 0.2s" }}
+                                style={{cursor: "pointer", transition: "transform 0.2s"}}
                                 onClick={() => navigate(item.path)}
                             >
-                                <div className={`card-body text-${item.color} d-flex flex-column justify-content-center align-items-center`}>
+                                <div
+                                    className={`card-body text-${item.color} d-flex flex-column justify-content-center align-items-center`}>
                                     <h5 className="card-title">{item.label}</h5>
                                 </div>
                             </div>

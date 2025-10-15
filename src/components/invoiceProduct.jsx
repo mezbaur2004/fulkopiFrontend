@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { invoiceProductList } from "../APIRequest/invoiceAPIRequest.js";
+import React, {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import {invoiceProductList} from "../APIRequest/invoiceAPIRequest.js";
 
 const InvoiceProduct = () => {
-    const { invoiceID } = useParams();
+    const {invoiceID} = useParams();
 
     useEffect(() => {
         (async () => {
@@ -45,11 +45,11 @@ const InvoiceProduct = () => {
                                     <img
                                         src={item.product?.image}
                                         alt={item.title}
-                                        style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                                        style={{width: "60px", height: "60px", objectFit: "cover"}}
                                     />
                                 </td>
                                 <td>{item.product?.title || item.title}</td>
-                                <td className="text-truncate" style={{ maxWidth: "250px" }}>
+                                <td className="text-truncate" style={{maxWidth: "250px"}}>
                                     {item.product?.des}
                                 </td>
                                 <td>{item.qty}</td>

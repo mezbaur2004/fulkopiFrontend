@@ -6,14 +6,14 @@ import {useNavigate, useParams} from "react-router-dom";
 
 const ProductsByRemarks = () => {
     const navigate = useNavigate();
-    let {remarks}=useParams();
+    let {remarks} = useParams();
     useEffect(() => {
         (async () => {
             await productListByRemarks(remarks);
         })()
     }, [remarks]);
 
-    let ProductList=useSelector((state)=>(state.products.ListByRemark))
+    let ProductList = useSelector((state) => (state.products.ListByRemark))
     return (
         <>
             <div className="container mt-4 mb-2">
@@ -27,7 +27,7 @@ const ProductsByRemarks = () => {
                                         src={product.image || "/placeholder.png"}
                                         className="card-img-top"
                                         alt={product.name}
-                                        style={{ cursor: "pointer" }}
+                                        style={{cursor: "pointer"}}
                                         onClick={() => navigate(`/productdetails/${product._id}`)}
                                     />
                                     <div className="card-body d-flex flex-column bg-light">

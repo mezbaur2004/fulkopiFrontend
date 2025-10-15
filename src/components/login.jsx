@@ -1,11 +1,11 @@
 import React, {useRef} from "react";
-import { LoginRequest } from "../APIRequest/userAPIRequest.js";
-import { ErrorToast, IsEmail, IsEmpty } from "../helper/formHelper";
+import {LoginRequest} from "../APIRequest/userAPIRequest.js";
+import {ErrorToast, IsEmail, IsEmpty} from "../helper/formHelper";
 import Google from "./google.jsx";
 
 const Login = () => {
-    let emailRef=useRef(null);
-    let passRef=useRef(null);
+    let emailRef = useRef(null);
+    let passRef = useRef(null);
 
 
     const SubmitLogin = async () => {
@@ -24,6 +24,8 @@ const Login = () => {
         }
     };
 
+    document.title = `Login`;
+
     return (
         <>
             <div className="container">
@@ -32,12 +34,14 @@ const Login = () => {
                         <div className="card w-90 p-4">
                             <div className="card-body">
                                 <h3>SIGN IN</h3>
-                                <br />
-                                <input ref={emailRef} placeholder="User Email" className="form-control" type="email" />
-                                <br />
-                                <input ref={passRef} placeholder="User Password" className="form-control" type="password" />
-                                <br />
-                                <button onClick={SubmitLogin} className="btn btn-outline-info w-100 animated">Next</button>
+                                <br/>
+                                <input ref={emailRef} placeholder="User Email" className="form-control" type="email"/>
+                                <br/>
+                                <input ref={passRef} placeholder="User Password" className="form-control"
+                                       type="password"/>
+                                <br/>
+                                <button onClick={SubmitLogin} className="btn btn-outline-info w-100 animated">Next
+                                </button>
                                 <div className="mt-1">
                                     <div className="text-center my-2 my-md-0">
                                         <span className="text-muted small fw-bold">OR</span>

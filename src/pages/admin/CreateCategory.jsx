@@ -1,8 +1,8 @@
 // src/pages/CreateCategory.jsx
-import React, { useRef, useState } from "react";
+import React, {useRef, useState} from "react";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
-import { createCategory } from "../../APIRequest/AdminAPIRequest.js";
-import {ErrorToast, IsEmpty, SuccessToast} from "../../helper/formHelper.js";
+import {createCategory} from "../../APIRequest/AdminAPIRequest.js";
+import {ErrorToast, IsEmpty} from "../../helper/formHelper.js";
 
 const CreateCategory = () => {
     const [submitting, setSubmitting] = useState(false);
@@ -41,6 +41,8 @@ const CreateCategory = () => {
 
         setSubmitting(false);
     };
+
+    document.title = `Admin | Category | Category`;
 
     return (
         <AdminMasterLayout>

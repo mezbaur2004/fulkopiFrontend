@@ -1,25 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { createProduct, readBrand, readCategory } from "../../APIRequest/AdminAPIRequest.js";
+import React, {useEffect, useState} from "react";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import * as Yup from "yup";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
+import {createProduct, readBrand, readCategory} from "../../APIRequest/AdminAPIRequest.js";
+import {ErrorToast} from "../../helper/formHelper.js";
 
 const CreateProduct = () => {
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [showDiscountInput, setShowDiscountInput] = useState(false);
     const [submitting, setSubmitting] = useState(false);
-
-    // Refs
-    const titleRef = useRef();
-    const desRef = useRef();
-    const priceRef = useRef();
-    const discountToggleRef = useRef();
-    const discountRef = useRef();
-    const statusRef = useRef();
-    const imageRef = useRef();
-    const stockRef = useRef();
-    const remarksRef = useRef();
-    const brandRef = useRef();
-    const categoryRef = useRef();
 
     useEffect(() => {
         (async () => {
@@ -31,161 +20,203 @@ const CreateProduct = () => {
         })();
     }, []);
 
-    const resetForm = () => {
-        [
-            titleRef,
-            desRef,
-            priceRef,
-            discountToggleRef,
-            discountRef,
-            statusRef,
-            imageRef,
-            stockRef,
-            remarksRef,
-            brandRef,
-            categoryRef,
-        ].forEach((ref) => ref.current && (ref.current.value = ""));
-        setShowDiscountInput(false);
+    const initialValues = {
+        title: "",
+        des: "",
+        price: "",
+        discount: false,
+        discountPrice: "",
+        status: true,
+        stock: true,
+        image: "",
+        remarks: "",
+        brandID: "",
+        categoryID: "",
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const validationSchema = Yup.object().shape({
+        title: Yup.string().required("Title is required"),
+        des: Yup.string().required("Description is required"),
+        price: Yup.number().typeError("Price must be a number").required("Price is required"),
+        discount: Yup.boolean().required("Select discount option"),
+        discountPrice: Yup.number()
+            .nullable()
+            .when("discount", {
+                is: (val) => val === true || val === "true",
+                then: (schema) =>
+                    schema
+                        .typeError("Discount Price must be a number")
+                        .required("Discount Price is required"),
+                otherwise: (schema) => schema.nullable(),
+            }),
+
+        status: Yup.boolean().required("Select status"),
+        stock: Yup.boolean().required("Select stock option"),
+        image: Yup.string().required("Image URL is required"),
+        remarks: Yup.string().required("Remarks is required"),
+        brandID: Yup.string().required("Select brand"),
+        categoryID: Yup.string().required("Select category"),
+    });
+
+    const handleSubmit = async (values, {resetForm}) => {
+        console.log(values);
         setSubmitting(true);
-
         try {
-            const title = titleRef.current.value;
-            const des = desRef.current.value;
-            const price = Number(priceRef.current.value);
-            const discountBool = discountToggleRef.current.value === "true";
-            const discountPrice =
-                discountBool && discountRef.current.value ? Number(discountRef.current.value) : null;
-            const statusBool = statusRef.current.value === "true";
-            const stockBool = stockRef.current.value === "true";
-            const image = imageRef.current.value;
-            const remarks = remarksRef.current.value;
-            const brandID = brandRef.current.value;
-            const categoryID = categoryRef.current.value;
-
             await createProduct(
-                title,
-                des,
-                price,
-                discountBool,
-                discountPrice,
-                statusBool,
-                image,
-                stockBool,
-                remarks,
-                categoryID,
-                brandID
+                values.title,
+                values.des,
+                Number(values.price),
+                values.discount,
+                values.discount ? Number(values.discountPrice) : null,
+                values.status,
+                values.image,
+                values.stock,
+                values.remarks,
+                values.categoryID,
+                values.brandID
             );
-
             resetForm();
         } catch (err) {
             console.error("Create product failed:", err);
+            ErrorToast("Failed to create product");
         } finally {
             setSubmitting(false);
         }
     };
 
+    document.title = "Admin | Product | Create";
+
     return (
         <AdminMasterLayout>
             <div className="container py-4">
                 <h2 className="mb-4 text-success">Create Product</h2>
-                <form onSubmit={handleSubmit} className="row g-4">
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Title</label>
-                        <input ref={titleRef} className="form-control" placeholder="Product Title" required />
-                    </div>
 
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Description</label>
-                        <input ref={desRef} className="form-control" placeholder="Description" />
-                    </div>
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({values, setFieldValue}) => (
+                        <Form className="row g-4">
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Title</label>
+                                <Field name="title" className="form-control" placeholder="Product Title"/>
+                                <ErrorMessage name="title" component="div" className="text-danger"/>
+                            </div>
 
-                    <div className="col-md-4">
-                        <label className="form-label fw-bold">Price</label>
-                        <input ref={priceRef} type="number" className="form-control" placeholder="Price" required />
-                    </div>
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Description</label>
+                                <Field name="des" className="form-control" placeholder="Description"/>
+                                <ErrorMessage name="des" component="div" className="text-danger"/>
+                            </div>
 
-                    <div className="col-md-4">
-                        <label className="form-label fw-bold">Discount</label>
-                        <select
-                            ref={discountToggleRef}
-                            className="form-select text-success"
-                            onChange={(e) => setShowDiscountInput(e.target.value === "true")}
-                        >
-                            <option value="">Select</option>
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>
-                        </select>
-                    </div>
+                            <div className="col-md-4">
+                                <label className="form-label fw-bold">Price</label>
+                                <Field name="price" type="number" className="form-control" placeholder="Price"/>
+                                <ErrorMessage name="price" component="div" className="text-danger"/>
+                            </div>
 
-                    {showDiscountInput && (
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Discount Price</label>
-                            <input ref={discountRef} type="number" className="form-control" placeholder="Discount Price" />
-                        </div>
+                            <div className="col-md-4">
+                                <label className="form-label fw-bold">Discount</label>
+                                <Field
+                                    as="select"
+                                    name="discount"
+                                    className="form-select text-success"
+                                    onChange={(e) => setFieldValue("discount", e.target.value === "true")}
+                                >
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </Field>
+                                <ErrorMessage name="discount" component="div" className="text-danger"/>
+                            </div>
+
+                            {values.discount && (
+                                <div className="col-md-4">
+                                    <label className="form-label fw-bold">Discount Price</label>
+                                    <Field
+                                        name="discountPrice"
+                                        type="number"
+                                        className="form-control"
+                                        placeholder="Discount Price"
+                                    />
+                                    <ErrorMessage name="discountPrice" component="div" className="text-danger"/>
+                                </div>
+                            )}
+
+                            <div className="col-md-4">
+                                <label className="form-label fw-bold">Status</label>
+                                <Field
+                                    as="select"
+                                    name="status"
+                                    className="form-select text-success"
+                                    onChange={(e) => setFieldValue("status", e.target.value === "true")}
+                                >
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+                                </Field>
+                                <ErrorMessage name="status" component="div" className="text-danger"/>
+                            </div>
+
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Image URL</label>
+                                <Field name="image" className="form-control" placeholder="Image URL"/>
+                                <ErrorMessage name="image" component="div" className="text-danger"/>
+                            </div>
+
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Stock</label>
+                                <Field
+                                    as="select"
+                                    name="stock"
+                                    className="form-select text-success"
+                                    onChange={(e) => setFieldValue("stock", e.target.value === "true")}
+                                >
+                                    <option value="true">In Stock</option>
+                                    <option value="false">Out of Stock</option>
+                                </Field>
+                                <ErrorMessage name="stock" component="div" className="text-danger"/>
+                            </div>
+
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Remarks</label>
+                                <Field name="remarks" className="form-control" placeholder="Remarks"/>
+                                <ErrorMessage name="remarks" component="div" className="text-danger"/>
+                            </div>
+
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Brand</label>
+                                <Field as="select" name="brandID" className="form-select text-success">
+                                    <option value="">Select Brand</option>
+                                    {brands.map((b) => (
+                                        <option key={b._id} value={b._id}>
+                                            {b.brandName || b.name || b.slug}
+                                        </option>
+                                    ))}
+                                </Field>
+                                <ErrorMessage name="brandID" component="div" className="text-danger"/>
+                            </div>
+
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Category</label>
+                                <Field as="select" name="categoryID" className="form-select text-success">
+                                    <option value="">Select Category</option>
+                                    {categories.map((c) => (
+                                        <option key={c._id} value={c._id}>
+                                            {c.categoryName || c.name || c.slug}
+                                        </option>
+                                    ))}
+                                </Field>
+                                <ErrorMessage name="categoryID" component="div" className="text-danger"/>
+                            </div>
+
+                            <div className="col-12 mt-3">
+                                <button type="submit" className="btn btn-success" disabled={submitting}>
+                                    {submitting ? "Creating..." : "Create Product"}
+                                </button>
+                            </div>
+                        </Form>
                     )}
-
-                    <div className="col-md-4">
-                        <label className="form-label fw-bold">Status</label>
-                        <select ref={statusRef} className="form-select text-success">
-                            <option value="">Select Status</option>
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
-                        </select>
-                    </div>
-
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Image URL</label>
-                        <input ref={imageRef} className="form-control" placeholder="Image URL" />
-                    </div>
-
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Stock</label>
-                        <select ref={stockRef} className="form-select text-success">
-                            <option value="">Select Stock</option>
-                            <option value="true">In Stock</option>
-                            <option value="false">Out of Stock</option>
-                        </select>
-                    </div>
-
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Remarks</label>
-                        <input ref={remarksRef} className="form-control" placeholder="Remarks" />
-                    </div>
-
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Brand</label>
-                        <select ref={brandRef} className="form-select text-success">
-                            <option value="">Select Brand</option>
-                            {brands.map((b) => (
-                                <option key={b._id} value={b._id}>
-                                    {b.brandName || b.name || b.slug}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-md-6">
-                        <label className="form-label fw-bold">Category</label>
-                        <select ref={categoryRef} className="form-select text-success">
-                            <option value="">Select Category</option>
-                            {categories.map((c) => (
-                                <option key={c._id} value={c._id}>
-                                    {c.categoryName || c.name || c.slug}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-12 mt-3">
-                        <button type="submit" className="btn btn-success" disabled={submitting}>
-                            {submitting ? "Creating..." : "Create Product"}
-                        </button>
-                    </div>
-                </form>
+                </Formik>
             </div>
         </AdminMasterLayout>
     );

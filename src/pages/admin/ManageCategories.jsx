@@ -1,7 +1,7 @@
 // src/pages/ManageCategories.jsx
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { readCategory } from "../../APIRequest/AdminAPIRequest.js";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {readCategory} from "../../APIRequest/AdminAPIRequest.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 
 const ManageCategories = () => {
@@ -17,10 +17,12 @@ const ManageCategories = () => {
         fetchCategories();
     }, []);
 
+    document.title = `Admin | Categories`;
+
     return (
         <AdminMasterLayout>
             <div className="container py-4">
-                <h1 className="mb-4 text-muted">Manage Categories</h1>
+                <h1 className="mb-4 text-success">Manage Categories</h1>
 
                 {/* Category List */}
                 <div className="table-responsive">
@@ -39,7 +41,7 @@ const ManageCategories = () => {
                             const active = Boolean(c.status);
                             return (
                                 <tr key={c._id}>
-                                    <td style={{ width: 80 }}>
+                                    <td style={{width: 80}}>
                                         <button
                                             type="button"
                                             className="btn btn-sm btn-outline-primary"
@@ -51,7 +53,7 @@ const ManageCategories = () => {
                                         </button>
                                     </td>
 
-                                    <td className="text-center" style={{ width: 72 }}>
+                                    <td className="text-center" style={{width: 72}}>
                                         {c.categoryImg ? (
                                             <img
                                                 src={c.categoryImg}
@@ -76,7 +78,17 @@ const ManageCategories = () => {
                                             <span className="badge bg-secondary">Inactive</span>
                                         )}
                                     </td>
-                                    <td>{c.createdAt ? new Date(c.createdAt).toLocaleString() : "—"}</td>
+                                    <td style={{whiteSpace: "nowrap"}}>
+                                        {c.createdAt
+                                            ? new Date(c.createdAt).toLocaleString("en-GB", {
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })
+                                            : "—"}
+                                    </td>
                                 </tr>
                             );
                         })}

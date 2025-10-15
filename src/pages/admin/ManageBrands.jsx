@@ -1,7 +1,7 @@
 // src/pages/ManageBrands.jsx
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { readBrand } from "../../APIRequest/AdminAPIRequest.js";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {readBrand} from "../../APIRequest/AdminAPIRequest.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 
 const ManageBrands = () => {
@@ -16,6 +16,8 @@ const ManageBrands = () => {
     useEffect(() => {
         fetchBrands();
     }, []);
+
+    document.title = `Admin | Brands`;
 
     return (
         <AdminMasterLayout>
@@ -38,7 +40,7 @@ const ManageBrands = () => {
                             const active = Boolean(b.status);
                             return (
                                 <tr key={b._id}>
-                                    <td style={{ width: 80 }}>
+                                    <td style={{width: 80}}>
                                         <button
                                             className="btn btn-sm btn-outline-primary"
                                             onClick={() => navigate(`/admin/brands/update/${b._id}`)}
@@ -47,7 +49,7 @@ const ManageBrands = () => {
                                         </button>
                                     </td>
 
-                                    <td className="text-center" style={{ width: 72 }}>
+                                    <td className="text-center" style={{width: 72}}>
                                         {b.brandImg ? (
                                             <img
                                                 src={b.brandImg}
@@ -72,7 +74,17 @@ const ManageBrands = () => {
                                             <span className="badge bg-secondary">Inactive</span>
                                         )}
                                     </td>
-                                    <td>{b.createdAt ? new Date(b.createdAt).toLocaleString() : "—"}</td>
+                                    <td style={{whiteSpace: "nowrap"}}>
+                                        {b.createdAt
+                                            ? new Date(b.createdAt).toLocaleString("en-GB", {
+                                                year: "numeric",
+                                                month: "short",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })
+                                            : "—"}
+                                    </td>
                                 </tr>
                             );
                         })}

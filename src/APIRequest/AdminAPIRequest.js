@@ -3,12 +3,9 @@ import store from "../redux/store/store.js";
 import {HideLoader, ShowLoader} from "../redux/state-slice/settings-slice";
 import {ErrorToast, SuccessToast} from "../helper/formHelper.js";
 import {getToken} from "../helper/sessionHelper.js";
-import {
-    SetCartList, SetTotal
-} from "../redux/state-slice/cart-slice.js";
 
-const url=import.meta.env.VITE_BASE_URL;
-const AxiosHeader={headers:{"token":getToken()}}
+const url = import.meta.env.VITE_BASE_URL;
+const AxiosHeader = {headers: {"token": getToken()}}
 
 
 //brand---------------------------------------------------------------------
@@ -43,36 +40,36 @@ export async function createProduct(title, des, price, discount, discountPrice, 
 }
 
 
-export async function readProduct(){
-    try{
+export async function readProduct(page = 1, limit = 8) {
+    try {
         store.dispatch(ShowLoader())
-        const res = await axios.get(`${url}adminproductlist`, AxiosHeader);
+        const res = await axios.get(`${url}adminproductlist?page=${page}&limit=${limit}`, AxiosHeader);
         store.dispatch(HideLoader())
-        if (res.status === 200){
-            return res.data.data;
-        }else{
+        if (res.status === 200 && res.data.status === "success") {
+            return res.data;
+        } else {
             ErrorToast("Something Went Wrong");
             return [];
         }
-    }catch(error){
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
         return [];
     }
 }
 
-export async function adminProductDetails(id){
-    try{
+export async function adminProductDetails(id) {
+    try {
         store.dispatch(ShowLoader())
-        const res=await axios.get(`${url}adminproductdetails/${id}`,AxiosHeader)
+        const res = await axios.get(`${url}adminproductdetails/${id}`, AxiosHeader)
         store.dispatch(HideLoader())
-        if (res.status === 200){
+        if (res.status === 200) {
             return res.data.data[0];
-        }else{
+        } else {
             ErrorToast("Something Went Wrong")
             return [];
         }
-    }catch (error){
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
         return [];
@@ -100,18 +97,18 @@ export async function updateProduct(id, postBody) {
 
 //brand---------------------------------------------------------------------
 
-export async function readBrand(){
-    try{
+export async function readBrand() {
+    try {
         store.dispatch(ShowLoader())
         const res = await axios.get(`${url}adminbrandlist`, AxiosHeader);
         store.dispatch(HideLoader())
-        if (res.status === 200){
+        if (res.status === 200) {
             return res.data.data;
-        }else{
+        } else {
             ErrorToast("Something Went Wrong");
             return [];
         }
-    }catch(error){
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
         return [];
@@ -121,10 +118,10 @@ export async function readBrand(){
 export async function createBrand(brandName, brandImg, status) {
     try {
         store.dispatch(ShowLoader());
-        const PostBody = { brandName, brandImg, status };
+        const PostBody = {brandName, brandImg, status};
         const res = await axios.post(`${url}brandcreate`, PostBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200 && res.data.status!=="fail") {
+        if (res.status === 200 && res.data.status !== "fail") {
             SuccessToast("New Brand Added!");
             return res.data; // <-- return full data object
         } else {
@@ -179,19 +176,18 @@ export async function updateBrand(id, postBody) {
 //category---------------------------------------------------------------------
 
 
-
-export async function readCategory(){
-    try{
+export async function readCategory() {
+    try {
         store.dispatch(ShowLoader())
         const res = await axios.get(`${url}admincategorylist`, AxiosHeader);
         store.dispatch(HideLoader())
-        if (res.status === 200){
+        if (res.status === 200) {
             return res.data.data;
-        }else{
+        } else {
             ErrorToast("Something Went Wrong");
             return [];
         }
-    }catch(error){
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
         return [];
@@ -202,10 +198,10 @@ export async function readCategory(){
 export async function createCategory(categoryName, categoryImg, status) {
     try {
         store.dispatch(ShowLoader());
-        const PostBody = { categoryName, categoryImg, status };
+        const PostBody = {categoryName, categoryImg, status};
         const res = await axios.post(`${url}categorycreate`, PostBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200 && res.data.status!=="fail") {
+        if (res.status === 200 && res.data.status !== "fail") {
             SuccessToast("New Category Added!");
             return res.data; // <-- return full data object
         } else {
@@ -260,36 +256,36 @@ export async function updateCategory(id, postBody) {
 
 //users---------------------------------------------------------------------
 
-export async function userlist() {
+export async function userlist(page = 1, limit = 2) {
     try {
         store.dispatch(ShowLoader());
-        const res=await  axios.get(`${url}userlist`, AxiosHeader);
+        const res = await axios.get(`${url}userlist?page=${page}&limit=${limit}`, AxiosHeader);
         store.dispatch(HideLoader());
         if (res.status === 200) {
-            return res.data.data;
-        }else{
+            return res.data;
+        } else {
             ErrorToast("Something Went Wrong");
             return null;
         }
-    }catch(error){
+    } catch (error) {
         ErrorToast("Something Went Wrong");
         store.dispatch(HideLoader());
         return null;
     }
 }
 
-export async function userInvoice(id){
+export async function userInvoice(id) {
     try {
         store.dispatch(ShowLoader());
-        const res=await axios.get(`${url}oneuserinvoicelist/${id}`,AxiosHeader)
+        const res = await axios.get(`${url}oneuserinvoicelist/${id}`, AxiosHeader)
         store.dispatch(HideLoader());
-        if (res.status === 200){
+        if (res.status === 200) {
             return res.data.data;
-        }else{
+        } else {
             ErrorToast("Something Went Wrong");
             return null;
         }
-    }catch(error){
+    } catch (error) {
         ErrorToast("Something Went Wrong");
         store.dispatch(HideLoader());
         return null;
@@ -298,37 +294,37 @@ export async function userInvoice(id){
 
 //invoices---------------------------------------------------------------------
 
-export async function invoiceList() {
-    try{
+export async function invoiceList(page = 1, limit = 8) {
+    try {
         store.dispatch(ShowLoader());
-        const res=await axios.get(`${url}userinvoicelist`,AxiosHeader)
+        const res = await axios.get(`${url}userinvoicelist?page=${page}&limit=${limit}`, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200){
-            return res.data.data;
-        }else{
+        if (res.status === 200) {
+            return res.data;
+        } else {
             ErrorToast("Something Went Wrong");
             return null;
         }
 
-    }catch(error){
+    } catch (error) {
         store.dispatch(HideLoader());
         ErrorToast("Something Went Wrong");
         return null;
     }
 }
 
-export async function invoiceDetails(id){
+export async function invoiceDetails(id) {
     try {
         store.dispatch(ShowLoader());
-        const res=await axios.get(`${url}invoiceproducts/${id}`,AxiosHeader)
+        const res = await axios.get(`${url}invoiceproducts/${id}`, AxiosHeader)
         store.dispatch(HideLoader());
-        if (res.status === 200){
+        if (res.status === 200) {
             return res.data.data;
-        }else{
+        } else {
             ErrorToast("Something Went Wrong");
             return null;
         }
-    }catch (error) {
+    } catch (error) {
         store.dispatch(HideLoader());
         ErrorToast("Something Went Wrong");
         return null;

@@ -1,13 +1,14 @@
-import {Fragment,lazy,Suspense} from "react";
+import {Fragment, lazy, Suspense} from "react";
 import MasterLayout from "../components/layout&loaders/masterLayout.jsx";
 import LazyLoader from "../components/layout&loaders/lazyLoader.jsx"
-const Register=lazy(()=>import("../components/register.jsx"));
+
+const Register = lazy(() => import("../components/register.jsx"));
 
 const RegisterPage = () => {
     return (
         <Fragment>
             <MasterLayout>
-                <Suspense fallback={<LazyLoader />}>
+                <Suspense fallback={<LazyLoader/>}>
                     <Register/>
                 </Suspense>
             </MasterLayout>

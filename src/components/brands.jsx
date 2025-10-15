@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { brandList } from "../APIRequest/productAPIRequest";
+import React, {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {brandList} from "../APIRequest/productAPIRequest";
 import {Link, useNavigate} from "react-router-dom";
 
 const Brands = () => {
@@ -10,7 +10,7 @@ const Brands = () => {
         brandList();
     }, []);
 
-        document.title = `Brands | FULKOPI`;
+    document.title = `Brands | FULKOPI`;
 
     const brands = useSelector((state) => state.products.BrandList || []);
 
@@ -34,7 +34,7 @@ const Brands = () => {
                         <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={brand._id}>
                             <div
                                 className="card h-100 text-center shadow-sm"
-                                style={{ cursor: "pointer" }}
+                                style={{cursor: "pointer"}}
                                 onClick={() =>
                                     navigate(`/brand/${brand._id}`)
                                 }
@@ -43,7 +43,7 @@ const Brands = () => {
                                     src={brand.brandImg || "/placeholder.png"}
                                     className="card-img-top p-2"
                                     alt={brand.brandName}
-                                    style={{ height: "100px", objectFit: "contain" }}
+                                    style={{height: "100px", objectFit: "contain"}}
                                 />
                                 <div className="card-body p-2">
                                     <h6 className="card-title mb-0">{brand.brandName}</h6>

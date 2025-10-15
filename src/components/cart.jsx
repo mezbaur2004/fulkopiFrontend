@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { getCartList, removeFromCart } from "../APIRequest/cartAPIRequest.js";
+import React, {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
+import {getCartList, removeFromCart} from "../APIRequest/cartAPIRequest.js";
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -80,7 +80,7 @@ const Cart = () => {
                                     <div className="col-12 col-sm-8 col-md-8">
                                         <h5
                                             className="mb-1 text-muted"
-                                            style={{ cursor: "pointer" }}
+                                            style={{cursor: "pointer"}}
                                             onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                         >
                                             {item.product.title}
@@ -106,7 +106,8 @@ const Cart = () => {
                                                 <div className="fw-semibold">
                                                     {pricePerItem || "N/A"} tk
                                                     {item.product.discount && (
-                                                        <small className="text-decoration-line-through text-danger ms-2">
+                                                        <small
+                                                            className="text-decoration-line-through text-danger ms-2">
                                                             {item.product.price} tk
                                                         </small>
                                                     )}
@@ -126,19 +127,20 @@ const Cart = () => {
                                     </div>
 
                                     {/* Actions column: on mobile buttons stack full-width, on md+ align to end */}
-                                    <div className="col-12 col-md-2 d-flex flex-column align-items-stretch align-items-md-end gap-2">
+                                    <div
+                                        className="col-12 col-md-2 d-flex flex-column align-items-stretch align-items-md-end gap-2">
                                         <button
                                             className="btn btn-danger w-100"
                                             onClick={() => handleRemoveFromCart(item._id)}
                                         >
-                                            <i className="bi bi-trash me-1" /> Remove
+                                            <i className="bi bi-trash me-1"/> Remove
                                         </button>
 
                                         <button
                                             className="btn btn-warning text-dark w-100"
                                             onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                         >
-                                            <i className="bi bi-box-seam me-1" /> Details
+                                            <i className="bi bi-box-seam me-1"/> Details
                                         </button>
                                     </div>
                                 </div>

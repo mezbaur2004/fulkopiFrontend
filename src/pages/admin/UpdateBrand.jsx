@@ -1,12 +1,12 @@
 // src/pages/UpdateBrand.jsx
-import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { adminBrandDetails, updateBrand } from "../../APIRequest/AdminAPIRequest.js";
-import { ErrorToast, SuccessToast } from "../../helper/formHelper.js";
+import React, {useEffect, useRef, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {adminBrandDetails, updateBrand} from "../../APIRequest/AdminAPIRequest.js";
+import {ErrorToast} from "../../helper/formHelper.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 
 const UpdateBrand = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [brand, setBrand] = useState(null);
@@ -55,6 +55,8 @@ const UpdateBrand = () => {
 
     if (!brand) return <div className="p-3">Loading...</div>;
 
+    document.title = `Admin | Brand | Update`;
+
     return (
         <AdminMasterLayout>
             <div className="container py-4">
@@ -63,12 +65,12 @@ const UpdateBrand = () => {
                 <form onSubmit={handleUpdate} className="row g-3">
                     <div className="col-md-6">
                         <label className="form-label fw-bold">Brand Name</label>
-                        <input ref={brandNameRef} defaultValue={brand.brandName} className="form-control" />
+                        <input ref={brandNameRef} defaultValue={brand.brandName} className="form-control"/>
                     </div>
 
                     <div className="col-md-6">
                         <label className="form-label fw-bold">Brand Image URL</label>
-                        <input ref={brandImgRef} defaultValue={brand.brandImg} className="form-control" />
+                        <input ref={brandImgRef} defaultValue={brand.brandImg} className="form-control"/>
                     </div>
 
                     <div className="col-md-6">

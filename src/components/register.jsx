@@ -6,8 +6,8 @@ import Google from "./google.jsx";
 
 const Register = () => {
 
-    let emailRef,firstNameRef,lastNameRef,mobileRef,passwordRef,photoRef=useRef();
-    let navigate=useNavigate();
+    let emailRef, firstNameRef, lastNameRef, mobileRef, passwordRef, photoRef = useRef();
+    let navigate = useNavigate();
 
     const onRegistration = async () => {
         let email = emailRef.value;
@@ -34,6 +34,8 @@ const Register = () => {
         }
     }
 
+    document.title = `Registration`;
+
     return (
         <div className="container">
             <div className="row d-flex justify-content-center">
@@ -45,32 +47,39 @@ const Register = () => {
                             <div className="row m-0 p-0">
                                 <div className="col-md-4 text-start p-2">
                                     <label>Email Address</label>
-                                    <input ref={(input)=>emailRef=input}  placeholder="User Email" className="form-control" type="email"/>
+                                    <input ref={(input) => emailRef = input} placeholder="User Email"
+                                           className="form-control" type="email"/>
                                 </div>
                                 <div className="col-md-4 text-start p-2">
                                     <label>First Name</label>
-                                    <input ref={(input)=>firstNameRef=input} placeholder="First Name" className="form-control" type="text"/>
+                                    <input ref={(input) => firstNameRef = input} placeholder="First Name"
+                                           className="form-control" type="text"/>
                                 </div>
                                 <div className="col-md-4 text-start p-2">
                                     <label>Last Name</label>
-                                    <input ref={(input)=>lastNameRef=input} placeholder="Last Name" className="form-control" type="text"/>
+                                    <input ref={(input) => lastNameRef = input} placeholder="Last Name"
+                                           className="form-control" type="text"/>
                                 </div>
                                 <div className="col-md-4 text-start p-2">
                                     <label>Mobile Number</label>
-                                    <input ref={(input)=>mobileRef=input} placeholder="Mobile" className="form-control" type="tel"/>
+                                    <input ref={(input) => mobileRef = input} placeholder="Mobile"
+                                           className="form-control" type="tel"/>
                                 </div>
                                 <div className="col-md-4 text-start p-2">
                                     <label>Password</label>
-                                    <input ref={(input)=>passwordRef=input} placeholder="User Password" className="form-control" type="password"/>
+                                    <input ref={(input) => passwordRef = input} placeholder="User Password"
+                                           className="form-control" type="password"/>
                                 </div>
                                 <div className="col-md-4 text-start p-2">
                                     <label>Photo</label>
-                                    <input ref={(input)=>photoRef=input} placeholder="User photo link" className="form-control" type="password"/>
+                                    <input ref={(input) => photoRef = input} placeholder="User photo link"
+                                           className="form-control" type="password"/>
                                 </div>
 
                             </div>
                             <div className="row m-0 p-0">
-                                <div className="col-12 d-flex flex-column flex-md-row align-items-center justify-content-start gap-2">
+                                <div
+                                    className="col-12 d-flex flex-column flex-md-row align-items-center justify-content-start gap-2">
 
                                     {/* Complete Button */}
                                     <button

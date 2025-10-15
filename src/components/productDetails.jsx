@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import { productDetail } from "../APIRequest/productAPIRequest.js";
-import { useSelector } from "react-redux";
+import {productDetail} from "../APIRequest/productAPIRequest.js";
+import {useSelector} from "react-redux";
 import {addToCart} from "../APIRequest/cartAPIRequest.js";
 import {addToWish} from "../APIRequest/wishAPIRequest.js";
 import {getToken} from "../helper/sessionHelper.js";
@@ -9,7 +9,7 @@ import {ErrorToast} from "../helper/formHelper.js";
 
 const ProductDetails = () => {
     const [quantity, setQuantity] = useState(1);
-    const { slug } = useParams();
+    const {slug} = useParams();
     const navigate = useNavigate();
 
     const product = useSelector((state) => state.products.ProductDetails);
@@ -25,19 +25,19 @@ const ProductDetails = () => {
     }, [product]);
 
     // temporary placeholder functions
-    const handleAddToCart =async (productId, qty) => {
-        if(getToken()){
+    const handleAddToCart = async (productId, qty) => {
+        if (getToken()) {
             await addToCart(productId, qty);
-        }else{
+        } else {
             ErrorToast("Please Log In First");
             navigate("/login");
         }
     };
 
-    const handleAddToWish=async (productId) => {
-        if(getToken()){
+    const handleAddToWish = async (productId) => {
+        if (getToken()) {
             await addToWish(productId)
-        }else{
+        } else {
             ErrorToast("Please Log In First");
             navigate("/login");
         }
@@ -81,7 +81,7 @@ const ProductDetails = () => {
                             src={product.image || "/placeholder.png"}
                             alt={product.title}
                             className="w-100 rounded"
-                            style={{ objectFit: "cover", height: 420 }}
+                            style={{objectFit: "cover", height: 420}}
                         />
                         <div className="mt-3 d-flex gap-2 align-items-center">
                             {product.category?.categoryImg && (
@@ -89,7 +89,7 @@ const ProductDetails = () => {
                                     src={product.category.categoryImg}
                                     alt={product.category.categoryName}
                                     className="rounded"
-                                    style={{ width: 48, height: 48, objectFit: "cover" }}
+                                    style={{width: 48, height: 48, objectFit: "cover"}}
                                 />
                             )}
                             <div>
@@ -109,7 +109,7 @@ const ProductDetails = () => {
                                             src={product.brand.brandImg}
                                             alt={product.brand.brandName}
                                             className="rounded-circle"
-                                            style={{ width: 48, height: 48, objectFit: "cover", marginRight: 8 }}
+                                            style={{width: 48, height: 48, objectFit: "cover", marginRight: 8}}
                                         />
                                     )}
                                     <a
@@ -184,13 +184,13 @@ const ProductDetails = () => {
                                 onClick={() => handleAddToCart(product._id, quantity)}
                                 disabled={!product.stock}
                             >
-                                Add to Cart <i className="bi bi-cart" />
+                                Add to Cart <i className="bi bi-cart"/>
                             </button>
                             <button
                                 className="btn btn-dark"
                                 onClick={() => handleAddToWish(product._id)}
                             >
-                                Add To Wishlist <i className="bi bi-heart" />
+                                Add To Wishlist <i className="bi bi-heart"/>
                             </button>
                         </div>
 
@@ -198,14 +198,16 @@ const ProductDetails = () => {
                         <dl className="row mt-2 mb-0">
                             <dt className="col-sm-4">Brand</dt>
                             <dd className="col-sm-8">
-                                <a href={`/brand/${product.brandID}`} className="text-decoration-none text-muted fw-semibold">
+                                <a href={`/brand/${product.brandID}`}
+                                   className="text-decoration-none text-muted fw-semibold">
                                     {product.brand?.brandName || "N/A"}
                                 </a>
                             </dd>
 
                             <dt className="col-sm-4">Category</dt>
                             <dd className="col-sm-8">
-                                <a href={`/category/${product.categoryID}`} className="text-decoration-none text-muted fw-semibold">
+                                <a href={`/category/${product.categoryID}`}
+                                   className="text-decoration-none text-muted fw-semibold">
                                     {product.category?.categoryName || "N/A"}
                                 </a>
                             </dd>

@@ -1,17 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import {
-    adminProductDetails,
-    updateProduct,
-    readBrand,
-    readCategory
-} from "../../APIRequest/AdminAPIRequest.js";
-import { useParams, useNavigate } from "react-router-dom";
-import AdminHeaderComponent from "./AdminHeaderComponent.jsx";
+import React, {useEffect, useRef, useState} from "react";
+import {adminProductDetails, readBrand, readCategory, updateProduct} from "../../APIRequest/AdminAPIRequest.js";
+import {useNavigate, useParams} from "react-router-dom";
 import {ErrorToast, SuccessToast} from "../../helper/formHelper.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 
 const UpdateProducts = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
 
     const [productDetails, setProductDetails] = useState(null);
@@ -71,7 +65,7 @@ const UpdateProducts = () => {
         };
 
         const res = await updateProduct(id, body);
-        if (res?.status==="failed") {
+        if (res?.status === "failed") {
             ErrorToast("All required field must be provided");
         }
         if (res?.status === "success") {
@@ -84,6 +78,8 @@ const UpdateProducts = () => {
         return <div className="p-3">Loading...</div>;
     }
 
+    document.title = `Admin | Product | Update`;
+
     return (
         <>
             <AdminMasterLayout>
@@ -93,12 +89,12 @@ const UpdateProducts = () => {
                         {/* Title & Description */}
                         <div className="col-md-6">
                             <label className="form-label fw-bold">Title</label>
-                            <input ref={titleRef} defaultValue={productDetails.title} className="form-control" />
+                            <input ref={titleRef} defaultValue={productDetails.title} className="form-control"/>
                         </div>
 
                         <div className="col-md-6">
                             <label className="form-label fw-bold">Description</label>
-                            <input ref={desRef} defaultValue={productDetails.des} className="form-control" />
+                            <input ref={desRef} defaultValue={productDetails.des} className="form-control"/>
                         </div>
 
                         {/* Price, Discount, Discount Price */}
@@ -161,13 +157,13 @@ const UpdateProducts = () => {
 
                         <div className="col-md-4">
                             <label className="form-label fw-bold">Remarks</label>
-                            <input ref={remarksRef} defaultValue={productDetails.remarks} className="form-control" />
+                            <input ref={remarksRef} defaultValue={productDetails.remarks} className="form-control"/>
                         </div>
 
                         {/* Image URL */}
                         <div className="col-md-6">
                             <label className="form-label fw-bold">Image URL</label>
-                            <input ref={imageRef} defaultValue={productDetails.image} className="form-control" />
+                            <input ref={imageRef} defaultValue={productDetails.image} className="form-control"/>
                         </div>
 
                         {/* Category & Brand */}

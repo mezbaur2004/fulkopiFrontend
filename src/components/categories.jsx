@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { categoryList } from "../APIRequest/productAPIRequest";
+import React, {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {categoryList} from "../APIRequest/productAPIRequest";
 import {Link, useNavigate} from "react-router-dom";
 
 const Categories = () => {
@@ -34,7 +34,7 @@ const Categories = () => {
                         <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={category._id}>
                             <div
                                 className="card h-100 text-center shadow-sm"
-                                style={{ cursor: "pointer" }}
+                                style={{cursor: "pointer"}}
                                 onClick={() =>
                                     navigate(`/category/${category._id}`)
                                 }
@@ -43,7 +43,7 @@ const Categories = () => {
                                     src={category.categoryImg || "/placeholder.png"}
                                     className="card-img-top p-2"
                                     alt={category.categoryName}
-                                    style={{ height: "100px", objectFit: "contain" }}
+                                    style={{height: "100px", objectFit: "contain"}}
                                 />
                                 <div className="card-body p-2">
                                     <h6 className="card-title mb-0">{category.categoryName}</h6>

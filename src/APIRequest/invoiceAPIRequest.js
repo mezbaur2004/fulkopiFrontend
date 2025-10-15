@@ -5,54 +5,54 @@ import {ErrorToast, SuccessToast} from "../helper/formHelper.js";
 import {getToken} from "../helper/sessionHelper.js";
 import {SetInvoiceList, SetInvoiceProductList} from "../redux/state-slice/invoice-slice.js";
 
-const url=import.meta.env.VITE_BASE_URL;
-const AxiosHeader={headers:{"token":getToken()}}
+const url = import.meta.env.VITE_BASE_URL;
+const AxiosHeader = {headers: {"token": getToken()}}
 
 export async function createInvoice(cus_name, cus_location, cus_city, cus_phone, cus_postcode) {
-    try{
+    try {
         store.dispatch(ShowLoader())
-        let postBody={cus_name, cus_location, cus_city, cus_phone, cus_postcode};
-        let res=await axios.post(`${url}createinvoice`,postBody,AxiosHeader)
+        let postBody = {cus_name, cus_location, cus_city, cus_phone, cus_postcode};
+        let res = await axios.post(`${url}createinvoice`, postBody, AxiosHeader)
         store.dispatch(HideLoader())
-        if(res.status === 200){
+        if (res.status === 200) {
             SuccessToast("Redirecting to SSLCommerz Payment Gateway")
             return res.data.redirectGatewayURL;
-        }else{
+        } else {
             ErrorToast("Something Went Wrong")
         }
-    }catch (error){
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
 }
 
-export async function invoiceList(){
-    try{
+export async function invoiceList() {
+    try {
         store.dispatch(ShowLoader())
-        let res=await axios.get(`${url}invoicelist`,AxiosHeader)
+        let res = await axios.get(`${url}invoicelist`, AxiosHeader)
         store.dispatch(HideLoader())
-        if(res.status === 200){
+        if (res.status === 200) {
             store.dispatch(SetInvoiceList(res.data.data))
-        }else{
+        } else {
             store.dispatch(SetInvoiceList([]))
         }
-    }catch (error) {
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }
 }
 
-export async function invoiceProductList(invoiceID){
-    try{
+export async function invoiceProductList(invoiceID) {
+    try {
         store.dispatch(ShowLoader())
-        let res=await axios.get(`${url}invoiceproductlist/${invoiceID}`,AxiosHeader)
+        let res = await axios.get(`${url}invoiceproductlist/${invoiceID}`, AxiosHeader)
         store.dispatch(HideLoader())
-        if(res.status === 200){
+        if (res.status === 200) {
             store.dispatch(SetInvoiceProductList(res.data.data))
-        }else{
+        } else {
             store.dispatch(SetInvoiceProductList([]))
         }
-    }catch (error) {
+    } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
     }

@@ -1,4 +1,5 @@
 import React from 'react';
+
 const LazyLoader = () => {
     return (
         <div className="LoadingOverlay">

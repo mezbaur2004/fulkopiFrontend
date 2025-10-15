@@ -1,11 +1,11 @@
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 class SessionHelper {
     // ===== TOKEN =====
     setToken(token) {
         if (!token) return;
         const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
-        const tokenData = { token, expiry };
+        const tokenData = {token, expiry};
         localStorage.setItem("token", JSON.stringify(tokenData));
     }
 
@@ -21,7 +21,7 @@ class SessionHelper {
         return tokenData.token;
     }
 
-    isAdmin(){
+    isAdmin() {
         const tokenData = JSON.parse(localStorage.getItem("token"));
         if (!tokenData) return null;
 
@@ -30,10 +30,10 @@ class SessionHelper {
             return null;
         }
 
-        const decoded=jwtDecode(tokenData.token);
-        if(decoded.role==="admin"){
+        const decoded = jwtDecode(tokenData.token);
+        if (decoded.role === "admin") {
             return true
-        }else{
+        } else {
             return false
         }
     }
@@ -42,7 +42,7 @@ class SessionHelper {
     setUserDetails(userDetails) {
         if (!userDetails) return;
         const expiry = Date.now() + 10 * 24 * 60 * 60 * 1000; // 10 days
-        const data = { userDetails, expiry };
+        const data = {userDetails, expiry};
         localStorage.setItem("UserDetails", JSON.stringify(data));
     }
 
@@ -57,6 +57,7 @@ class SessionHelper {
 
         return data.userDetails;
     }
+
     // ===== REMOVE SESSION =====
     removeSessions = () => {
         localStorage.clear();

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import React, {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
 import {getWishList, removeFromWish} from "../APIRequest/wishAPIRequest.js";
 import {addToCart} from "../APIRequest/cartAPIRequest.js";
 
@@ -85,7 +85,7 @@ const Wish = () => {
                                     <div className="col-12 col-sm-8 col-md-8">
                                         <h5
                                             className="mb-1 text-muted"
-                                            style={{ cursor: "pointer" }}
+                                            style={{cursor: "pointer"}}
                                             onClick={() => navigate(`/productdetails/${item.product.slug}`)}
                                         >
                                             {item.product.title}
@@ -113,7 +113,8 @@ const Wish = () => {
                                                 <div className="fw-semibold">
                                                     {pricePerItem || "N/A"} tk
                                                     {item.product.discount && (
-                                                        <small className="text-decoration-line-through text-danger ms-2">
+                                                        <small
+                                                            className="text-decoration-line-through text-danger ms-2">
                                                             {item.product.price} tk
                                                         </small>
                                                     )}
@@ -123,20 +124,21 @@ const Wish = () => {
                                     </div>
 
                                     {/* Actions column: on mobile buttons stack full-width, on md+ align to end */}
-                                    <div className="col-12 col-md-2 d-flex flex-column align-items-stretch align-items-md-end gap-2">
+                                    <div
+                                        className="col-12 col-md-2 d-flex flex-column align-items-stretch align-items-md-end gap-2">
                                         <button
                                             className="btn btn-dark w-100"
                                             onClick={() => handleAddToCart(item.productID, 1)}
                                             disabled={!item.product.stock}
                                         >
-                                            <i className="bi bi-cart me-1" /> Add To Cart
+                                            <i className="bi bi-cart me-1"/> Add To Cart
                                         </button>
 
                                         <button
                                             className="btn btn-danger w-100"
                                             onClick={() => handleRemoveFromWish(item._id)}
                                         >
-                                            <i className="bi bi-trash me-1" /> Remove
+                                            <i className="bi bi-trash me-1"/> Remove
                                         </button>
                                     </div>
                                 </div>
@@ -145,14 +147,14 @@ const Wish = () => {
                     })}
                 </div>
             )}
-                <div className="mt-3">
-                    <button
-                        className="btn btn-success w-100 fw-bold py-2"
-                        onClick={() => navigate("/cart")}
-                    >
-                        View Cart
-                    </button>
-                </div>
+            <div className="mt-3">
+                <button
+                    className="btn btn-success w-100 fw-bold py-2"
+                    onClick={() => navigate("/cart")}
+                >
+                    View Cart
+                </button>
+            </div>
         </div>
     );
 };

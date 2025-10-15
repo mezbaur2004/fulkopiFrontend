@@ -1,7 +1,7 @@
 // src/pages/CreateBrand.jsx
-import React, { useRef, useState } from "react";
-import { createBrand } from "../../APIRequest/AdminAPIRequest.js";
-import { ErrorToast, SuccessToast } from "../../helper/formHelper.js";
+import React, {useRef, useState} from "react";
+import {createBrand} from "../../APIRequest/AdminAPIRequest.js";
+import {ErrorToast} from "../../helper/formHelper.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 
 const CreateBrand = () => {
@@ -38,6 +38,8 @@ const CreateBrand = () => {
         }
     };
 
+    document.title = `Admin | Brand | Create`;
+
     return (
         <AdminMasterLayout>
             <div className="container py-4">
@@ -45,11 +47,11 @@ const CreateBrand = () => {
 
                 <form onSubmit={handleSubmit} className="row g-3">
                     <div className="col-md-6">
-                        <input ref={brandNameRef} placeholder="Brand Name" className="form-control" required />
+                        <input ref={brandNameRef} placeholder="Brand Name" className="form-control" required/>
                     </div>
 
                     <div className="col-md-6">
-                        <input ref={brandImgRef} placeholder="Brand Image URL" className="form-control" />
+                        <input ref={brandImgRef} placeholder="Brand Image URL" className="form-control"/>
                     </div>
 
                     <div className="col-md-6">

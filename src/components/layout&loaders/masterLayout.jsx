@@ -1,21 +1,10 @@
 // src/components/MasterLayout.jsx
-import React, { Fragment, useEffect, useState } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import {
-    Navbar,
-    Container,
-    Nav,
-    NavDropdown,
-    Badge,
-    Image,
-    Row,
-    Col,
-    Form,
-    Button,
-} from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
-import { BsCartPlus, BsHeart, BsBagCheck } from "react-icons/bs";
+import React, {Fragment, useEffect, useState} from "react";
+import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import {Badge, Button, Col, Container, Form, Image, Nav, Navbar, NavDropdown, Row,} from "react-bootstrap";
+import {useSelector} from "react-redux";
+import {AiOutlineLogout, AiOutlineUser} from "react-icons/ai";
+import {BsBagCheck, BsCartPlus, BsHeart} from "react-icons/bs";
 import logo from '../../assets/fulkopi.svg';
 import {getToken, getUserDetails, isAdmin, removeSessions} from '../../helper/sessionHelper.js';
 import {getCartList} from "../../APIRequest/cartAPIRequest.js";
@@ -29,7 +18,7 @@ import {ErrorToast} from "../../helper/formHelper.js";
  * - Responsive: search stacks in collapse (mobile) and is inline on md+
  */
 
-const MasterLayout = ({ children }) => {
+const MasterLayout = ({children}) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -37,8 +26,8 @@ const MasterLayout = ({ children }) => {
 
     // prefill search if URL is /productbykeyword/:keyword
     useEffect(() => {
-        if(getToken()){
-            (async ()=>{
+        if (getToken()) {
+            (async () => {
                 await getCartList()
                 await getWishList()
             })()
@@ -72,9 +61,9 @@ const MasterLayout = ({ children }) => {
     }
 
     // Redux selectors for cart & wishlist counts (adjust slice names if needed)
-    const cartCount = useSelector((state)=>(state.carts.Total))
-    const wishList = useSelector((state)=>(state.wishes.List))
-    const wishCount=wishList.length;
+    const cartCount = useSelector((state) => (state.carts.Total))
+    const wishList = useSelector((state) => (state.wishes.List))
+    const wishCount = wishList.length;
     const onLogout = () => {
         removeSessions();
         navigate("/login");
@@ -87,11 +76,11 @@ const MasterLayout = ({ children }) => {
                 <Navbar expand="lg" bg="dark" variant="dark" fixed="top" className="px-3">
                     <Container fluid>
                         <Navbar.Brand as={NavLink} to="/" className="d-flex align-items-center">
-                            <Image src={logo} alt="Logo" height={36} className="me-2" />
+                            <Image src={logo} alt="Logo" height={36} className="me-2"/>
                             <span className="fw-bold">Fulkopi</span>
                         </Navbar.Brand>
 
-                        <Navbar.Toggle aria-controls="main-nav" />
+                        <Navbar.Toggle aria-controls="main-nav"/>
                         <Navbar.Collapse id="main-nav">
                             {/* Left nav links */}
                             <Nav className="me-auto">
@@ -105,31 +94,36 @@ const MasterLayout = ({ children }) => {
                             </Nav>
 
                             {/* spacer pushes the following groups to the right on wide screens */}
-                            <div className="flex-grow-1" />
+                            <div className="flex-grow-1"/>
 
                             {/* Right-side links (user / cart / wishlist) */}
-                            <Nav className="d-flex flex-column flex-lg-row align-items-start align-lg-items-center me-lg-2">
+                            <Nav
+                                className="d-flex flex-column flex-lg-row align-items-start align-lg-items-center me-lg-2">
                                 {userDetails?.email && (
                                     <>
                                         <Nav.Link as={NavLink} to="/wish" className="position-relative mb-2 mb-lg-0">
-                                            <BsHeart size={20} />
+                                            <BsHeart size={20}/>
                                             {wishCount > 0 && (
-                                                <Badge bg="warning" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                <Badge bg="warning" pill className="position-absolute"
+                                                       style={{top: 0, right: 0, transform: 'translate(50%,-25%)'}}>
                                                     {"!"}
                                                 </Badge>
                                             )}
                                         </Nav.Link>
 
-                                        <Nav.Link as={NavLink} to="/cart" className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
-                                            <BsCartPlus size={20} />
+                                        <Nav.Link as={NavLink} to="/cart"
+                                                  className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
+                                            <BsCartPlus size={20}/>
                                             {cartCount > 0 && (
-                                                <Badge bg="danger" pill className="position-absolute" style={{ top: 0, right: 0, transform: 'translate(50%,-25%)' }}>
+                                                <Badge bg="danger" pill className="position-absolute"
+                                                       style={{top: 0, right: 0, transform: 'translate(50%,-25%)'}}>
                                                     {cartCount}
                                                 </Badge>
                                             )}
                                         </Nav.Link>
-                                        <Nav.Link as={NavLink} to="/orders" className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
-                                            <BsBagCheck size={20} />
+                                        <Nav.Link as={NavLink} to="/orders"
+                                                  className="position-relative mb-2 mb-lg-0 ms-0 ms-lg-2">
+                                            <BsBagCheck size={20}/>
                                         </Nav.Link>
                                     </>
                                 )}
@@ -139,11 +133,13 @@ const MasterLayout = ({ children }) => {
                                         title={
                                             <span className="d-inline-flex align-items-center">
                         {userDetails.photo ? (
-                            <img src={userDetails.photo} alt="user" className="rounded-circle" style={{ width: 28, height: 28, objectFit: 'cover' }} />
+                            <img src={userDetails.photo} alt="user" className="rounded-circle"
+                                 style={{width: 28, height: 28, objectFit: 'cover'}}/>
                         ) : (
-                            <AiOutlineUser size={20} />
+                            <AiOutlineUser size={20}/>
                         )}
-                                                <span className="ms-2 d-none d-lg-inline">{userDetails.firstName || userDetails.email}</span>
+                                                <span
+                                                    className="ms-2 d-none d-lg-inline">{userDetails.firstName || userDetails.email}</span>
                       </span>
                                         }
                                         id="user-nav-dropdown"
@@ -151,16 +147,17 @@ const MasterLayout = ({ children }) => {
                                         className="mb-2 mb-lg-0"
                                     >
                                         <NavDropdown.Item as={NavLink} to="/profile">Profile</NavDropdown.Item>
-                                        <NavDropdown.Divider />
+                                        <NavDropdown.Divider/>
                                         <NavDropdown.Item onClick={onLogout} className="text-danger">
-                                            <AiOutlineLogout className="me-2" />
+                                            <AiOutlineLogout className="me-2"/>
                                             Logout
                                         </NavDropdown.Item>
                                     </NavDropdown>
                                 ) : (
                                     <>
                                         <Nav.Link as={NavLink} to="/login" className="mb-2 mb-lg-0">Login</Nav.Link>
-                                        <Nav.Link as={NavLink} to="/registration" className="mb-2 mb-lg-0 ms-0 ms-lg-2">Register</Nav.Link>
+                                        <Nav.Link as={NavLink} to="/registration"
+                                                  className="mb-2 mb-lg-0 ms-0 ms-lg-2">Register</Nav.Link>
                                     </>
                                 )}
                             </Nav>
@@ -170,7 +167,7 @@ const MasterLayout = ({ children }) => {
                                 onSubmit={onSearchSubmit}
                                 className="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center my-2 my-lg-0"
                                 role="search"
-                                style={{ minWidth: 160, maxWidth: 520 }}
+                                style={{minWidth: 160, maxWidth: 520}}
                             >
                                 <Form.Control
                                     type="search"
@@ -179,7 +176,7 @@ const MasterLayout = ({ children }) => {
                                     value={keyword}
                                     onChange={(e) => setKeyword(e.target.value)}
                                     className="mb-2 mb-lg-0"
-                                    style={{ minWidth: 0, flex: "1 1 auto" }}
+                                    style={{minWidth: 0, flex: "1 1 auto"}}
                                 />
                                 <div className="d-flex ms-lg-2">
                                     <Button variant="warning" type="submit" className="fw-semibold">
@@ -193,7 +190,7 @@ const MasterLayout = ({ children }) => {
                 </Navbar>
 
                 {/* spacer for fixed-top navbar */}
-                <div style={{ height: 70 }} />
+                <div style={{height: 70}}/>
 
                 {/* Main content area */}
                 <main className="container-fluid px-3 flex-grow-1">

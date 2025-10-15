@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, {useState} from "react";
+import {NavLink} from "react-router-dom";
 
-export default function AdminMasterLayout({ children }) {
+export default function AdminMasterLayout({children}) {
     const [mobileOpen, setMobileOpen] = useState(false);
 
-    const SidebarLink = ({ to, children, end = false }) => (
+    const SidebarLink = ({to, children, end = false}) => (
         <NavLink
             to={to}
             end={end}
-            className={({ isActive }) =>
+            className={({isActive}) =>
                 "nav-link d-block py-2 px-3 rounded mb-1" +
                 (isActive ? " bg-success text-white fw-bold" : " text-dark")
             }
@@ -52,11 +52,17 @@ export default function AdminMasterLayout({ children }) {
                         <SidebarLink to="/admin/categories">Manage Categories</SidebarLink>
                         <SidebarLink to="/admin/createcategory">Create Category</SidebarLink>
                     </li>
+                    <li className="nav-item mt-3">
+                        <strong className="small text-success">Users & Invoices</strong>
+                        <SidebarLink to="/admin/userlist">View Users</SidebarLink>
+                        <SidebarLink to="/admin/invoicelist">View Invoices</SidebarLink>
+                    </li>
                 </ul>
             </nav>
 
             {/* Mobile toggle */}
-            <div className="d-md-none w-100 p-2 border-bottom d-flex justify-content-between align-items-center bg-light border-success border-3">
+            <div
+                className="d-md-none w-100 p-2 border-bottom d-flex justify-content-between align-items-center bg-light border-success border-3">
                 <h6 className="mb-0 text-success">Admin</h6>
                 <button
                     className="btn btn-sm btn-outline-success"
@@ -106,6 +112,7 @@ export default function AdminMasterLayout({ children }) {
                         <SidebarLink to="/admin/categories">Manage Categories</SidebarLink>
                         <SidebarLink to="/admin/createcategory">Create Category</SidebarLink>
                     </li>
+
                 </ul>
             </div>
 

@@ -8,9 +8,9 @@ import userReducer from "../state-slice/user-slice.js";
 
 export default configureStore({
     reducer: {
-        settings:settingsReducer,
-        products:productReducer,
-        carts:cartReducer,
+        settings: settingsReducer,
+        products: productReducer,
+        carts: cartReducer,
         wishes: wishReducer,
         invoices: invoiceReducer,
         users: userReducer,
