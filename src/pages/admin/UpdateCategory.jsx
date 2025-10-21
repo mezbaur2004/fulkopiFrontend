@@ -3,7 +3,8 @@ import React, {useEffect, useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {adminCategoryDetails, updateCategory} from "../../APIRequest/AdminAPIRequest.js";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
-import {ErrorToast, IsEmpty, SuccessToast} from "../../helper/formHelper.js";
+import * as Yup from "yup";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 
 const UpdateCategory = () => {
     const {id} = useParams();
@@ -11,11 +12,17 @@ const UpdateCategory = () => {
 
     const [category, setCategory] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const initialValues = {
+        categoryName: category?.categoryName,
+        status: true,
+        categoryImg: category?.categoryImg
+    }
 
-    const categoryNameRef = useRef();
-    const categoryImgRef = useRef();
-    const statusRef = useRef();
-
+    const validationSchema = Yup.object().shape({
+        categoryName: Yup.string().required("Please enter the category name"),
+        status: Yup.boolean().required("Please enter the status"),
+        categoryImg: Yup.string().required("Please enter the category image link"),
+    })
     useEffect(() => {
         (async () => {
             const data = await adminCategoryDetails(id);
@@ -23,39 +30,22 @@ const UpdateCategory = () => {
         })();
     }, [id]);
 
-    const handleUpdate = async (e) => {
-        e.preventDefault();
-
-        // Validation using IsEmpty
-        if (IsEmpty(categoryNameRef.current.value)) {
-            ErrorToast("Category Name is required");
-            return;
-        }
-        if (IsEmpty(categoryImgRef.current.value)) {
-            ErrorToast("Category Image is required");
-            return;
-        }
-
+    const handleUpdate = async (values, {resetForm}) => {
         setSubmitting(true);
-
-        const body = {
-            categoryName: categoryNameRef.current.value,
-            categoryImg: categoryImgRef.current.value,
-            status: statusRef.current.value === "true",
-        };
-
-        try {
-            const res = await updateCategory(id, body);
-            if (res?.status === "success") {
-                SuccessToast("Category updated successfully!");
+        try{
+            const res=await updateCategory(
+                id,
+                values.categoryName,
+                values.status,
+                values.categoryImg
+                );
+            if (res.status === "success") {
                 navigate("/admin/categories");
-            } else {
-                ErrorToast("Failed to update category");
+                resetForm();
             }
-        } catch (err) {
-            console.error(err);
-            ErrorToast("An error occurred");
-        } finally {
+        }catch(err){
+            console.error("Category Update Failed",err);
+        }finally {
             setSubmitting(false);
         }
     };
@@ -69,42 +59,40 @@ const UpdateCategory = () => {
             <div className="container py-4">
                 <h1 className="mb-4 text-muted">Update Category</h1>
 
-                <form onSubmit={handleUpdate} className="row g-3">
-                    <div className="col-md-6">
-                        <input
-                            ref={categoryNameRef}
-                            defaultValue={category.categoryName}
-                            placeholder="Category Name"
-                            className="form-control"
-                        />
-                    </div>
-
-                    <div className="col-md-6">
-                        <input
-                            ref={categoryImgRef}
-                            defaultValue={category.categoryImg}
-                            placeholder="Category Image URL"
-                            className="form-control"
-                        />
-                    </div>
-
-                    <div className="col-md-6">
-                        <select
-                            ref={statusRef}
-                            defaultValue={category.status ? "true" : "false"}
-                            className="form-select text-success"
-                        >
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>
-                        </select>
-                    </div>
-
-                    <div className="col-12">
-                        <button type="submit" className="btn btn-success mt-3" disabled={submitting}>
-                            {submitting ? "Updating..." : "Update Category"}
-                        </button>
-                    </div>
-                </form>
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={handleUpdate}>
+                    {({setFieldValue}) => (
+                        <Form className="row g-4">
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Category Name</label>
+                                <Field name="categoryName" className="form-control"/>
+                                <ErrorMessage name="categoryName" component="div" className="text-danger"/>
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Status</label>
+                                <Field as="select" name="status" className="form-select text-success"
+                                       onChange={(e) => setFieldValue("status", e.target.value === "true")}>
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+                                </Field>
+                                <ErrorMessage name="status" component="div" className="text-danger"/>
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label fw-bold">Image URL</label>
+                                <Field name="categoryImg" className="form-control"
+                                       placeholder="https://example.com/image.jpg"/>
+                                <ErrorMessage name="categoryImg" component="div" className="text-danger"/>
+                            </div>
+                            <div className="col-12 mt-3">
+                                <button type="submit" className="btn btn-success" disabled={submitting}>
+                                    {submitting ? "Creating..." : "Update Category"}
+                                </button>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
             </div>
         </AdminMasterLayout>
     );

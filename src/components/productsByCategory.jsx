@@ -9,7 +9,7 @@ import {addToWish} from "../APIRequest/wishAPIRequest.js";
 
 const ProductsByCategory = () => {
     const navigate = useNavigate();
-    const {categoryID} = useParams();
+    const {slug} = useParams();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const ProductsByCategory = () => {
     const fetchProducts = async (pageNumber = 1) => {
         try {
             setLoading(true);
-            const paginationData = await productListByCategory(categoryID, pageNumber, 4);
+            const paginationData = await productListByCategory(slug, pageNumber, 4);
             if (paginationData?.totalPages) {
                 setTotalPages(paginationData.totalPages);
                 setPage(paginationData.page);
@@ -33,7 +33,7 @@ const ProductsByCategory = () => {
 
     useEffect(() => {
         fetchProducts(page);
-    }, [categoryID, page]);
+    }, [slug, page]);
 
     document.title = `Category | ${
         ProductList && ProductList.length > 0

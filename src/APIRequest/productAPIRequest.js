@@ -86,10 +86,10 @@ export async function productListByRemarks(remarks) {
     }
 }
 
-export async function productListByBrand(brandID, page = 1, limit = 4) {
+export async function productListByBrand(slug, page = 1, limit = 4) {
     try {
         store.dispatch(ShowLoader())
-        let res = await axios.get(`${url}listbybrand/${brandID}?page=${page}&limit=${limit}`);
+        let res = await axios.get(`${url}listbybrand/${slug}?page=${page}&limit=${limit}`);
         store.dispatch(HideLoader())
         if (res.status === 200 && res.data.status === "success") {
             store.dispatch(SetListByBrand(res.data.data));
@@ -106,10 +106,10 @@ export async function productListByBrand(brandID, page = 1, limit = 4) {
     }
 }
 
-export async function productListByCategory(categoryID, page = 1, limit = 4) {
+export async function productListByCategory(slug, page = 1, limit = 4) {
     try {
         store.dispatch(ShowLoader())
-        let res = await axios.get(`${url}listbycategory/${categoryID}?page=${page}&limit=${limit}`);
+        let res = await axios.get(`${url}listbycategory/${slug}?page=${page}&limit=${limit}`);
         store.dispatch(HideLoader())
         if (res.status === 200 && res.data.status === "success") {
             store.dispatch(SetListByCategory(res.data.data))

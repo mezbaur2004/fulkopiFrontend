@@ -31,12 +31,12 @@ const Categories = () => {
             {categories && categories.length > 0 ? (
                 <div className="row g-3">
                     {categories.map((category) => (
-                        <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={category._id}>
+                        <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={category.slug}>
                             <div
                                 className="card h-100 text-center shadow-sm"
                                 style={{cursor: "pointer"}}
                                 onClick={() =>
-                                    navigate(`/category/${category._id}`)
+                                    navigate(`/category/${category.slug}`)
                                 }
                             >
                                 <img

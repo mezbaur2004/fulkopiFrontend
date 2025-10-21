@@ -20,14 +20,20 @@ export async function LoginRequest(email, password) {
             SuccessToast("Login Success");
             store.dispatch(HideLoader());
             return true;
-        } else {
+        } else{
             ErrorToast(res.data.message || "Invalid Email or Password");
             store.dispatch(HideLoader());
             return false;
         }
     } catch (error) {
         store.dispatch(HideLoader());
-        ErrorToast("Something went wrong. Please try again.");
+        if(error.response && error.response.status ===429){
+            ErrorToast("Too many attempts, try again in 1 hour");
+        } else if (error.response) {
+            ErrorToast(error.response.data.message || "Invalid Email or Password");
+        } else {
+            ErrorToast("Something went wrong. Please try again.");
+        }
         return false;
     }
 }

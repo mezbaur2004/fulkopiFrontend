@@ -1,45 +1,43 @@
 // src/pages/CreateCategory.jsx
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
 import {createCategory} from "../../APIRequest/AdminAPIRequest.js";
-import {ErrorToast, IsEmpty} from "../../helper/formHelper.js";
+import {ErrorMessage, Field, Form, Formik} from "formik";
+import * as Yup from "yup";
+import {useNavigate} from "react-router-dom";
 
 const CreateCategory = () => {
+    const navigate = useNavigate();
     const [submitting, setSubmitting] = useState(false);
+    const initialValues = {
+        categoryName: "",
+        status: true,
+        categoryImg: ""
+    }
 
-    // refs
-    const categoryNameRef = useRef();
-    const categoryImgRef = useRef();
-    const statusRef = useRef();
+    const validationSchema = Yup.object().shape({
+        categoryName: Yup.string().required("Please enter the category name"),
+        status: Yup.boolean().required("Please enter the status"),
+        categoryImg: Yup.string().required("Please enter the category image link"),
+    })
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (values, {resetForm}) => {
         setSubmitting(true);
-
-        const categoryName = categoryNameRef.current?.value || "";
-        const categoryImg = categoryImgRef.current?.value || "";
-        const status = statusRef.current?.value === "true";
-
-        // Validation using IsEmpty
-        if (IsEmpty(categoryNameRef.current.value)) {
-            ErrorToast("Category Name is required");
+        try {
+            const res = await createCategory(
+                values.categoryName,
+                values.status,
+                values.categoryImg,
+            );
+            if(res.status ==="success") {
+                navigate("/admin/categories");
+                resetForm();
+            }
+        } catch (err) {
+            console.error("Create cat failed", err);
+        } finally {
             setSubmitting(false);
-            return;
         }
-        if (IsEmpty(categoryImgRef.current.value)) {
-            ErrorToast("Category Image is required");
-            setSubmitting(false);
-            return;
-        }
-
-        const res = await createCategory(categoryName, categoryImg, status);
-        if (res?.status === "success") {
-            categoryNameRef.current.value = "";
-            categoryImgRef.current.value = "";
-            statusRef.current.value = "";
-        }
-
-        setSubmitting(false);
     };
 
     document.title = `Admin | Category | Category`;
@@ -49,34 +47,40 @@ const CreateCategory = () => {
             <div className="container py-4">
                 <h1 className="mb-4 text-success">Create Category</h1>
 
-                <form onSubmit={handleSubmit} className="mb-5">
-                    <div className="row g-3">
+                <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >{({setFieldValue}) => (
+                    <Form className="row g-4">
                         <div className="col-md-6">
-                            <input
-                                ref={categoryNameRef}
-                                placeholder="Category Name"
-                                className="form-control"
-                            />
+                            <label className="form-label fw-bold">Category Name</label>
+                            <Field name="categoryName" className="form-control"/>
+                            <ErrorMessage name="categoryName" component="div" className="text-danger"/>
                         </div>
                         <div className="col-md-6">
-                            <input
-                                ref={categoryImgRef}
-                                placeholder="Category Image URL"
-                                className="form-control"
-                            />
-                        </div>
-                        <div className="col-md-6">
-                            <select ref={statusRef} className="form-select text-success">
+                            <label className="form-label fw-bold">Status</label>
+                            <Field as="select" name="status" className="form-select text-success"
+                                   onChange={(e) => setFieldValue("status", e.target.value === "true")}>
                                 <option value="true">Active</option>
                                 <option value="false">Inactive</option>
-                            </select>
+                            </Field>
+                            <ErrorMessage name="status" component="div" className="text-danger"/>
                         </div>
-                    </div>
-
-                    <button type="submit" className="btn btn-success mt-3" disabled={submitting}>
-                        {submitting ? "Creating..." : "Create Category"}
-                    </button>
-                </form>
+                        <div className="col-md-6">
+                            <label className="form-label fw-bold">Image URL</label>
+                            <Field name="categoryImg" className="form-control"
+                                   placeholder="https://example.com/image.jpg"/>
+                            <ErrorMessage name="categoryImg" component="div" className="text-danger"/>
+                        </div>
+                        <div className="col-12 mt-3">
+                            <button type="submit" className="btn btn-success" disabled={submitting}>
+                                {submitting ? "Creating..." : "Create Category"}
+                            </button>
+                        </div>
+                    </Form>
+                )}
+                </Formik>
             </div>
         </AdminMasterLayout>
     );

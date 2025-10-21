@@ -31,12 +31,12 @@ const Brands = () => {
             {brands && brands.length > 0 ? (
                 <div className="row g-3">
                     {brands.map((brand) => (
-                        <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={brand._id}>
+                        <div className="col-6 col-sm-4 col-md-3 col-lg-2" key={brand.slug}>
                             <div
                                 className="card h-100 text-center shadow-sm"
                                 style={{cursor: "pointer"}}
                                 onClick={() =>
-                                    navigate(`/brand/${brand._id}`)
+                                    navigate(`/brand/${brand.slug}`)
                                 }
                             >
                                 <img

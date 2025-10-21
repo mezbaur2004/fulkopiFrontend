@@ -48,8 +48,8 @@ const App = () => {
                         <Route path="/productdetails/:slug" element={<ProductDetailsPage/>}/>
                         <Route path="/brands" element={<BrandsPage/>}/>
                         <Route path="/categories" element={<CategoriesPage/>}/>
-                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>}/>
-                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>}/>
+                        <Route path="/brand/:slug" element={<ProductsByBrandPage/>}/>
+                        <Route path="/category/:slug" element={<ProductsByCategoryPage/>}/>
                         <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>}/>
                         <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>}/>
 
@@ -78,8 +78,7 @@ const App = () => {
 
                         <Route path="/admin/userlist" element={<ViewUsers/>}/>
                         <Route path="/admin/userlist/invoicelist/:id" element={<UserRecord/>}/>
-                        <Route path="/admin/userlist/invoicelist/invoiceproductlist/:id"
-                               element={<InvoiceProductList/>}/>
+                        <Route path="/admin/userlist/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>}/>
                         <Route path="/admin/invoicelist" element={<ViewInvoices/>}/>
                         <Route path="/admin/invoicelist/invoiceproductlist/:id" element={<InvoiceProductList/>}/>
                         <Route path="/admin/master" element={<AdminMasterLayout/>}/>
@@ -101,8 +100,8 @@ const App = () => {
                         <Route path="/productdetails/:slug" element={<ProductDetailsPage/>}/>
                         <Route path="/brands" element={<BrandsPage/>}/>
                         <Route path="/categories" element={<CategoriesPage/>}/>
-                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>}/>
-                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>}/>
+                        <Route path="/brand/:slug" element={<ProductsByBrandPage/>}/>
+                        <Route path="/category/:slug" element={<ProductsByCategoryPage/>}/>
                         <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>}/>
                         <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>}/>
 
@@ -131,8 +130,8 @@ const App = () => {
                         <Route path="/productdetails/:slug" element={<ProductDetailsPage/>}/>
                         <Route path="/brands" element={<BrandsPage/>}/>
                         <Route path="/categories" element={<CategoriesPage/>}/>
-                        <Route path="/brand/:brandID" element={<ProductsByBrandPage/>}/>
-                        <Route path="/category/:categoryID" element={<ProductsByCategoryPage/>}/>
+                        <Route path="/brand/:slug" element={<ProductsByBrandPage/>}/>
+                        <Route path="/category/:slug" element={<ProductsByCategoryPage/>}/>
                         <Route path="/productbykeyword/:keyword" element={<ProductsByKeywordPage/>}/>
                         <Route path="/productbyremarks/:remarks" element={<ProductsByRemarksPage/>}/>
 

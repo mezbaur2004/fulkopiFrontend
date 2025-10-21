@@ -9,7 +9,7 @@ import {getToken} from "../helper/sessionHelper.js";
 
 const ProductsByBrand = () => {
     const navigate = useNavigate();
-    const {brandID} = useParams();
+    const {slug} = useParams();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const ProductsByBrand = () => {
     const fetchProducts = async (pageNumber = 1) => {
         try {
             setLoading(true);
-            const paginationData = await productListByBrand(brandID, pageNumber, 4);
+            const paginationData = await productListByBrand(slug, pageNumber, 4);
             if (paginationData?.totalPages) {
                 setTotalPages(paginationData.totalPages);
                 setPage(paginationData.page);
@@ -33,7 +33,7 @@ const ProductsByBrand = () => {
 
     useEffect(() => {
         fetchProducts(page);
-    }, [brandID, page]);
+    }, [slug, page]);
 
     document.title = `Brand | ${
         ProductList && ProductList.length > 0

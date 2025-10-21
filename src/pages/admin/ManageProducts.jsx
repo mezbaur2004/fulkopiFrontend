@@ -212,7 +212,7 @@ const ManageProducts = () => {
                                                     wordWrap: "break-word",
                                                     maxWidth: "200px"
                                                 }}>
-                                                    {p.title || "—"}
+                                                    {p.category?.categoryName || "—"}
                                                 </td>
 
                                                 <td style={{whiteSpace: "nowrap"}}>

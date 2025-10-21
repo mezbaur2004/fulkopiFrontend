@@ -1,33 +1,25 @@
-import React, {useEffect, useRef, useState} from "react";
-import {adminProductDetails, readBrand, readCategory, updateProduct} from "../../APIRequest/AdminAPIRequest.js";
-import {useNavigate, useParams} from "react-router-dom";
-import {ErrorToast, SuccessToast} from "../../helper/formHelper.js";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import AdminMasterLayout from "./AdminMasterLayout.jsx";
+import { adminProductDetails, readBrand, readCategory, updateProduct } from "../../APIRequest/AdminAPIRequest.js";
+import { ErrorToast } from "../../helper/formHelper.js";
 
 const UpdateProducts = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
 
-    const [productDetails, setProductDetails] = useState(null);
     const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [productDetails, setProductDetails] = useState(null);
 
-    // Controlled state for selects
-    const [selectedCategory, setSelectedCategory] = useState("");
-    const [selectedBrand, setSelectedBrand] = useState("");
+    const [brandQuery, setBrandQuery] = useState("");
+    const [selectedBrand, setSelectedBrand] = useState(null);
 
-    // refs for other inputs
-    const titleRef = useRef();
-    const desRef = useRef();
-    const priceRef = useRef();
-    const discountRef = useRef();
-    const discountPriceRef = useRef();
-    const statusRef = useRef();
-    const imageRef = useRef();
-    const stockRef = useRef();
-    const remarksRef = useRef();
+    const [categoryQuery, setCategoryQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
-    // Fetch product details, brands, and categories
     useEffect(() => {
         (async () => {
             const data = await adminProductDetails(id);
@@ -39,174 +31,268 @@ const UpdateProducts = () => {
             const catList = await readCategory();
             setCategories(catList || []);
 
-            // Set default select values after data is loaded
             if (data) {
-                setSelectedCategory(data.categoryID || (data.category?.[0]?._id || ""));
-                setSelectedBrand(data.brandID || (data.brand?._id || ""));
+                setSelectedBrand(data.brandID || (data.brandID || null));
+                setSelectedCategory(data.categoryID || (data.categoryID || null));
             }
         })();
     }, [id]);
 
-    const handleUpdate = async (e) => {
-        e.preventDefault();
+    if (!productDetails) return <div className="p-3">Loading...</div>;
 
-        const body = {
-            title: titleRef.current.value,
-            des: desRef.current.value,
-            price: parseFloat(priceRef.current.value),
-            discount: discountRef.current.value === "true",
-            discountPrice: parseFloat(discountPriceRef.current.value) || null,
-            status: statusRef.current.value === "true",
-            image: imageRef.current.value,
-            stock: stockRef.current.value === "true",
-            remarks: remarksRef.current.value,
-            categoryID: selectedCategory,
-            brandID: selectedBrand,
-        };
+    const initialValues = {
+        title: productDetails.title || "",
+        des: productDetails.des || "",
+        price: productDetails.price || "",
+        discount: productDetails.discount || false,
+        discountPrice: productDetails.discountPrice || "",
+        status: productDetails.status || true,
+        stock: productDetails.stock || true,
+        image: productDetails.image || "",
+        remarks: productDetails.remarks || "",
+        brandID: selectedBrand || "",
+        categoryID: selectedCategory || "",
+    };
 
-        const res = await updateProduct(id, body);
-        if (res?.status === "failed") {
-            ErrorToast("All required field must be provided");
-        }
-        if (res?.status === "success") {
-            SuccessToast("Product Updated!");
-            navigate("/admin/products");
+    const validationSchema = Yup.object().shape({
+        title: Yup.string().required("Title is required"),
+        des: Yup.string().required("Description is required"),
+        price: Yup.number().typeError("Price must be a number").required("Price is required"),
+        discount: Yup.boolean().required("Select discount option"),
+        discountPrice: Yup.number()
+            .nullable()
+            .when("discount", {
+                is: (val) => val === true || val === "true",
+                then: (schema) => schema.typeError("Discount Price must be a number").required("Discount Price is required"),
+                otherwise: (schema) => schema.nullable(),
+            }),
+        status: Yup.boolean().required("Select status"),
+        stock: Yup.boolean().required("Select stock option"),
+        image: Yup.string().required("Image URL is required"),
+        remarks: Yup.string().required("Remarks is required"),
+        brandID: Yup.string().required("Select brand"),
+        categoryID: Yup.string().required("Select category"),
+    });
+
+    const getFiltered = (list, query, keyName) => {
+        if (!query?.trim()) return list.slice(0, 3);
+        return list.filter((x) => (x[keyName]|| x.slug || "").toLowerCase().includes(query.toLowerCase())).slice(0, 50);
+    };
+
+    const handleSubmit = async (values) => {
+        try {
+            const res = await updateProduct(id, {
+                ...values,
+                price: Number(values.price),
+                discountPrice: values.discount ? Number(values.discountPrice) : null,
+            });
+            if (res?.status === "success") {
+                navigate("/admin/products");
+            } else {
+                ErrorToast("Failed to update product");
+            }
+        } catch (err) {
+            console.error(err);
+            ErrorToast("Failed to update product");
         }
     };
 
-    if (!productDetails) {
-        return <div className="p-3">Loading...</div>;
-    }
-
     document.title = `Admin | Product | Update`;
 
+    const optionBaseClass = "p-2 mb-1 rounded border";
+    const selectedClass = "bg-success text-white";
+    const normalClass = "bg-light";
+
     return (
-        <>
-            <AdminMasterLayout>
-                <div className="container-fluid py-4">
-                    <h2 className="mb-4 text-success">Update Product</h2>
-                    <form onSubmit={handleUpdate} className="row g-4">
-                        {/* Title & Description */}
-                        <div className="col-md-6">
-                            <label className="form-label fw-bold">Title</label>
-                            <input ref={titleRef} defaultValue={productDetails.title} className="form-control"/>
-                        </div>
+        <AdminMasterLayout>
+            <div className="container py-4">
+                <h2 className="mb-4 text-success">Update Product</h2>
 
-                        <div className="col-md-6">
-                            <label className="form-label fw-bold">Description</label>
-                            <input ref={desRef} defaultValue={productDetails.des} className="form-control"/>
-                        </div>
+                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+                    {({ values, setFieldValue }) => {
+                        const filteredBrands = getFiltered(brands, brandQuery, "brandName");
+                        const filteredCategories = getFiltered(categories, categoryQuery, "categoryName");
 
-                        {/* Price, Discount, Discount Price */}
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Price</label>
-                            <input
-                                ref={priceRef}
-                                type="number"
-                                defaultValue={productDetails.price}
-                                className="form-control"
-                            />
-                        </div>
+                        return (
+                            <Form className="row g-4" autoComplete="off">
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Title</label>
+                                    <Field name="title" className="form-control" />
+                                    <ErrorMessage name="title" component="div" className="text-danger" />
+                                </div>
 
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Discount</label>
-                            <select
-                                ref={discountRef}
-                                defaultValue={productDetails.discount ? "true" : "false"}
-                                className="form-select text-success"
-                            >
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                            </select>
-                        </div>
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Description</label>
+                                    <Field name="des" className="form-control" />
+                                    <ErrorMessage name="des" component="div" className="text-danger" />
+                                </div>
 
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Discount Price</label>
-                            <input
-                                ref={discountPriceRef}
-                                type="number"
-                                defaultValue={productDetails.discountPrice || ""}
-                                className="form-control"
-                            />
-                        </div>
+                                <div className="col-md-4">
+                                    <label className="form-label fw-bold">Price</label>
+                                    <Field name="price" type="number" className="form-control" />
+                                    <ErrorMessage name="price" component="div" className="text-danger" />
+                                </div>
 
-                        {/* Status, Stock, Remarks */}
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Status</label>
-                            <select
-                                ref={statusRef}
-                                defaultValue={productDetails.status ? "true" : "false"}
-                                className="form-select text-success"
-                            >
-                                <option value="true">Active</option>
-                                <option value="false">Inactive</option>
-                            </select>
-                        </div>
+                                <div className="col-md-4">
+                                    <label className="form-label fw-bold">Discount</label>
+                                    <Field
+                                        as="select"
+                                        name="discount"
+                                        className="form-select text-success"
+                                        onChange={(e) => setFieldValue("discount", e.target.value === "true")}
+                                        value={values.discount === true ? "true" : values.discount === false ? "false" : ""}
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </Field>
+                                    <ErrorMessage name="discount" component="div" className="text-danger" />
+                                </div>
 
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Stock</label>
-                            <select
-                                ref={stockRef}
-                                defaultValue={productDetails.stock ? "true" : "false"}
-                                className="form-select text-success"
-                            >
-                                <option value="true">In Stock</option>
-                                <option value="false">Out of Stock</option>
-                            </select>
-                        </div>
+                                {values.discount && (
+                                    <div className="col-md-4">
+                                        <label className="form-label fw-bold">Discount Price</label>
+                                        <Field name="discountPrice" type="number" className="form-control" />
+                                        <ErrorMessage name="discountPrice" component="div" className="text-danger" />
+                                    </div>
+                                )}
 
-                        <div className="col-md-4">
-                            <label className="form-label fw-bold">Remarks</label>
-                            <input ref={remarksRef} defaultValue={productDetails.remarks} className="form-control"/>
-                        </div>
+                                <div className="col-md-4">
+                                    <label className="form-label fw-bold">Status</label>
+                                    <Field
+                                        as="select"
+                                        name="status"
+                                        className="form-select text-success"
+                                        onChange={(e) => setFieldValue("status", e.target.value === "true")}
+                                        value={values.status === true ? "true" : values.status === false ? "false" : ""}
+                                    >
+                                        <option value="true">Active</option>
+                                        <option value="false">Inactive</option>
+                                    </Field>
+                                    <ErrorMessage name="status" component="div" className="text-danger" />
+                                </div>
 
-                        {/* Image URL */}
-                        <div className="col-md-6">
-                            <label className="form-label fw-bold">Image URL</label>
-                            <input ref={imageRef} defaultValue={productDetails.image} className="form-control"/>
-                        </div>
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Image URL</label>
+                                    <Field name="image" className="form-control" />
+                                    <ErrorMessage name="image" component="div" className="text-danger" />
+                                </div>
 
-                        {/* Category & Brand */}
-                        <div className="col-md-6">
-                            <label className="form-label fw-bold">Category</label>
-                            <select
-                                value={selectedCategory}
-                                onChange={(e) => setSelectedCategory(e.target.value)}
-                                className="form-select text-success"
-                            >
-                                {categories.map((cat) => (
-                                    <option key={cat._id} value={cat._id}>
-                                        {cat.categoryName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Stock</label>
+                                    <Field
+                                        as="select"
+                                        name="stock"
+                                        className="form-select text-success"
+                                        onChange={(e) => setFieldValue("stock", e.target.value === "true")}
+                                        value={values.stock === true ? "true" : values.stock === false ? "false" : ""}
+                                    >
+                                        <option value="true">In Stock</option>
+                                        <option value="false">Out of Stock</option>
+                                    </Field>
+                                    <ErrorMessage name="stock" component="div" className="text-danger" />
+                                </div>
 
-                        <div className="col-md-6">
-                            <label className="form-label fw-bold">Brand</label>
-                            <select
-                                value={selectedBrand}
-                                onChange={(e) => setSelectedBrand(e.target.value)}
-                                className="form-select text-success"
-                            >
-                                {brands.map((b) => (
-                                    <option key={b._id} value={b._id}>
-                                        {b.brandName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Remarks</label>
+                                    <Field name="remarks" className="form-control" />
+                                    <ErrorMessage name="remarks" component="div" className="text-danger" />
+                                </div>
 
-                        {/* Submit button */}
-                        <div className="col-12 mt-3">
-                            <button type="submit" className="btn btn-success">
-                                Update Product
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </AdminMasterLayout>
-        </>
+                                {/* Brand */}
+                                <div className="col-md-3">
+                                    <label className="form-label fw-bold">Brand</label>
+                                    <input
+                                        type="text"
+                                        className="form-control mb-2"
+                                        placeholder="Search brand..."
+                                        value={(selectedBrand && brands.find((b) => b._id === selectedBrand)?.brandName) || brandQuery}
+                                        onChange={(e) => {
+                                            setBrandQuery(e.target.value);
+                                            setSelectedBrand(null);
+                                            setFieldValue("brandID", "");
+                                        }}
+                                    />
+                                    <div className="border p-2" style={{ maxHeight: "160px", overflowY: "auto" }}>
+                                        {filteredBrands.length === 0 ? (
+                                            <div className="text-muted text-center">No brands found</div>
+                                        ) : (
+                                            filteredBrands.map((b) => {
+                                                const isSelected = selectedBrand === b._id;
+                                                return (
+                                                    <div
+                                                        key={b._id}
+                                                        onClick={() => {
+                                                            setSelectedBrand(b._id);
+                                                            setBrandQuery("");
+                                                            setFieldValue("brandID", b._id);
+                                                        }}
+                                                        className={`${optionBaseClass} ${isSelected ? selectedClass : normalClass}`}
+                                                        style={{ cursor: "pointer" }}
+                                                    >
+                                                        {b.brandName || b.name || b.slug}
+                                                    </div>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                    <ErrorMessage name="brandID" component="div" className="text-danger" />
+                                </div>
+
+                                {/* Category */}
+                                <div className="col-md-3">
+                                    <label className="form-label fw-bold">Category</label>
+                                    <input
+                                        type="text"
+                                        className="form-control mb-2"
+                                        placeholder="Search category..."
+                                        value={
+                                            (selectedCategory && categories.find((c) => c._id === selectedCategory)?.categoryName) ||
+                                            categoryQuery
+                                        }
+                                        onChange={(e) => {
+                                            setCategoryQuery(e.target.value);
+                                            setSelectedCategory(null);
+                                            setFieldValue("categoryID", "");
+                                        }}
+                                    />
+                                    <div className="border p-2" style={{ maxHeight: "160px", overflowY: "auto" }}>
+                                        {filteredCategories.length === 0 ? (
+                                            <div className="text-muted text-center">No categories found</div>
+                                        ) : (
+                                            filteredCategories.map((c) => {
+                                                const isSelected = selectedCategory === c._id;
+                                                return (
+                                                    <div
+                                                        key={c._id}
+                                                        onClick={() => {
+                                                            setSelectedCategory(c._id);
+                                                            setCategoryQuery("");
+                                                            setFieldValue("categoryID", c._id);
+                                                        }}
+                                                        className={`${optionBaseClass} ${isSelected ? selectedClass : normalClass}`}
+                                                        style={{ cursor: "pointer" }}
+                                                    >
+                                                        {c.categoryName || c.name || c.slug}
+                                                    </div>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                    <ErrorMessage name="categoryID" component="div" className="text-danger" />
+                                </div>
+
+                                <div className="col-12 mt-3">
+                                    <button type="submit" className="btn btn-success">
+                                        Update Product
+                                    </button>
+                                </div>
+                            </Form>
+                        );
+                    }}
+                </Formik>
+            </div>
+        </AdminMasterLayout>
     );
 };
 

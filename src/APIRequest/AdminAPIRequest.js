@@ -28,8 +28,12 @@ export async function createProduct(title, des, price, discount, discountPrice, 
         };
         let res = await axios.post(`${url}productcreate`, postBody, AxiosHeader)
         store.dispatch(HideLoader())
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.status === "success") {
             SuccessToast("New Product Added!")
+            return res.data;
+        }else if (res.status === 200 && res.data.status === "fail"){
+            ErrorToast("Product Already Exists!")
+            return res.data;
         } else {
             ErrorToast("Something Went Wrong")
         }
@@ -82,9 +86,12 @@ export async function updateProduct(id, postBody) {
         store.dispatch(ShowLoader());
         const res = await axios.put(`${url}productupdate/${id}`, postBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.status === "success") {
+            SuccessToast("Product Updated!")
             return res.data;
-        } else {
+        } else if(res.status === 200 && res.data.status === "fail"){
+            ErrorToast("Same Product Name Exists");
+        }else{
             ErrorToast("Something Went Wrong");
             return null;
         }
@@ -115,16 +122,18 @@ export async function readBrand() {
     }
 }
 
-export async function createBrand(brandName, brandImg, status) {
+export async function createBrand(brandName, status, brandImg) {
     try {
         store.dispatch(ShowLoader());
-        const PostBody = {brandName, brandImg, status};
+        const PostBody = {brandName, status, brandImg};
         const res = await axios.post(`${url}brandcreate`, PostBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200 && res.data.status !== "fail") {
+        if (res.status === 200 && res.data.status === "success") {
             SuccessToast("New Brand Added!");
-            return res.data; // <-- return full data object
-        } else {
+            return res.data;
+        } else if(res.status === 200 && res.data.status === "fail"){
+            ErrorToast("Brand Already Exists!")
+        }else{
             ErrorToast("Something Went Wrong");
             return null;
         }
@@ -153,15 +162,18 @@ export async function adminBrandDetails(id) {
     }
 }
 
-export async function updateBrand(id, postBody) {
+export async function updateBrand(id, brandName,status, brandImg) {
     try {
         store.dispatch(ShowLoader());
+        const postBody = {brandName, status, brandImg};
         const res = await axios.put(`${url}brandupdate/${id}`, postBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.status === "success") {
             SuccessToast("Brand Updated!");
-            return res.data; // contains status and possibly updated brand
-        } else {
+            return res.data;
+        } else if(res.status === 200 && res.data.status === "fail"){
+            ErrorToast("Same Brand Name Exists!");
+        }else{
             ErrorToast("Something Went Wrong");
             return null;
         }
@@ -195,16 +207,19 @@ export async function readCategory() {
 }
 
 
-export async function createCategory(categoryName, categoryImg, status) {
+export async function createCategory(categoryName, status, categoryImg) {
     try {
         store.dispatch(ShowLoader());
-        const PostBody = {categoryName, categoryImg, status};
+        const PostBody = {categoryName, status, categoryImg};
         const res = await axios.post(`${url}categorycreate`, PostBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200 && res.data.status !== "fail") {
+        if (res.status === 200 && res.data.status === "success") {
             SuccessToast("New Category Added!");
             return res.data; // <-- return full data object
-        } else {
+        } else if(res.status === 200 && res.data.status === "fail"){
+            ErrorToast("Category Already Exists!")
+            return res.data
+        }else{
             ErrorToast("Something Went Wrong");
             return null;
         }
@@ -234,15 +249,18 @@ export async function adminCategoryDetails(id) {
     }
 }
 
-export async function updateCategory(id, postBody) {
+export async function updateCategory(id, categoryName, status, categoryImg) {
     try {
         store.dispatch(ShowLoader());
+        const postBody = {categoryName, status, categoryImg};
         const res = await axios.put(`${url}categoryupdate/${id}`, postBody, AxiosHeader);
         store.dispatch(HideLoader());
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.status === "success") {
             SuccessToast("Category Updated!");
             return res.data; // contains status and updated category
-        } else {
+        } else if(res.status===200 && res.data.status==="fail") {
+            ErrorToast("Same Category Name Exists!");
+        }else{
             ErrorToast("Something Went Wrong");
             return null;
         }

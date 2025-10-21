@@ -95,7 +95,7 @@ const ProductDetails = () => {
                             <div>
                                 <div className="small text-muted">Category</div>
                                 <a
-                                    href={`/category/${product.categoryID}`}
+                                    href={`/category/${product?.category?.slug}`}
                                     className="text-decoration-none text-dark fw-semibold"
                                 >
                                     {product.category?.categoryName || "N/A"}
@@ -113,7 +113,7 @@ const ProductDetails = () => {
                                         />
                                     )}
                                     <a
-                                        href={`/brand/${product.brandID}`}
+                                        href={`/brand/${product?.brand?.slug}`}
                                         className="text-decoration-none text-dark fw-semibold"
                                     >
                                         {product.brand?.brandName || "N/A"}
@@ -198,7 +198,7 @@ const ProductDetails = () => {
                         <dl className="row mt-2 mb-0">
                             <dt className="col-sm-4">Brand</dt>
                             <dd className="col-sm-8">
-                                <a href={`/brand/${product.brandID}`}
+                                <a href={`/brand/${product?.brand?.slug}`}
                                    className="text-decoration-none text-muted fw-semibold">
                                     {product.brand?.brandName || "N/A"}
                                 </a>
@@ -206,7 +206,7 @@ const ProductDetails = () => {
 
                             <dt className="col-sm-4">Category</dt>
                             <dd className="col-sm-8">
-                                <a href={`/category/${product.categoryID}`}
+                                <a href={`/category/${product?.category?.slug}`}
                                    className="text-decoration-none text-muted fw-semibold">
                                     {product.category?.categoryName || "N/A"}
                                 </a>
