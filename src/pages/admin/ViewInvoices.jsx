@@ -24,7 +24,6 @@ const ViewInvoices = () => {
                 setPage(fullData.pagination.page);
             }
         } catch (err) {
-            console.log(err);
             ErrorToast("Could not load invoices");
         } finally {
             setLoading(false);

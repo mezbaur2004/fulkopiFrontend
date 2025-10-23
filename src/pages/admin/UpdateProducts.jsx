@@ -96,7 +96,7 @@ const UpdateProducts = () => {
                 ErrorToast("Failed to update product");
             }
         } catch (err) {
-            console.error(err);
+
             ErrorToast("Failed to update product");
         }
     };

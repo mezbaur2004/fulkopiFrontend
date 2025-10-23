@@ -34,7 +34,7 @@ const CreateBrand = () => {
                 resetForm();
             }
         } catch (err) {
-            console.error("Create brand failed", err);
+
         } finally {
             setSubmitting(false);
         }

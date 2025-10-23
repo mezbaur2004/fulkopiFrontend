@@ -22,7 +22,7 @@ const ManageBrands = () => {
             setTotalPages(paginationData.totalPages || 1);
             setPage(paginationData.page || 1);
         } catch (error) {
-            console.error(error);
+
             setBrands([]);
             setTotalPages(1);
         } finally {

@@ -27,7 +27,7 @@ const CreateProduct = () => {
                 const catList = await readCategory();
                 setCategories(catList.data || []);
             } catch (err) {
-                console.error("Failed to load brands/categories", err);
+
             }
         })();
     }, []);
@@ -106,7 +106,7 @@ const CreateProduct = () => {
             }
             ErrorToast("Failed to create product");
         } catch (err) {
-            console.error(err);
+
             ErrorToast("Failed to create product");
         } finally {
             setSubmitting(false);

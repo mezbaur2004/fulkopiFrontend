@@ -34,7 +34,7 @@ const CreateCategory = () => {
                 resetForm();
             }
         } catch (err) {
-            console.error("Create cat failed", err);
+
         } finally {
             setSubmitting(false);
         }

@@ -22,7 +22,7 @@ const ViewUsers = () => {
                 setPage(fullData.pagination.page);
             }
         } catch (err) {
-            console.log(err);
+
         } finally {
             setLoading(false);
         }

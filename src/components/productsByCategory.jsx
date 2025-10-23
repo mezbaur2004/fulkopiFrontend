@@ -25,7 +25,7 @@ const ProductsByCategory = () => {
                 setPage(paginationData.page);
             }
         } catch (err) {
-            console.error(err);
+
         } finally {
             setLoading(false);
         }
@@ -137,7 +137,7 @@ const ProductsByCategory = () => {
                     <p className="text-center">Loading...</p>
                 ) : ProductList.length > 0 ? (
                     ProductList.map((product, index) => (
-                        <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
+                        <div className="col-12 col-sm-6 col-md-6 col-lg-3" key={index}>
                             <div
                                 className="card h-100 shadow-sm border-0 position-relative"
                                 style={{

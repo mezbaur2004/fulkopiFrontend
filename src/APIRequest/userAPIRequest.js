@@ -68,7 +68,6 @@ export async function RegistrationRequest(email, firstName, lastName, mobile, pa
     } catch (e) {
         store.dispatch(HideLoader());
         ErrorToast("Server error, please try again");
-        console.error(e);
         return false;
     }
 }

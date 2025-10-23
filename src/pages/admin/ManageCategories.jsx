@@ -22,7 +22,7 @@ const ManageCategories = () => {
             setTotalPages(paginationData.totalPages || 1);
             setPage(paginationData.page || 1);
         } catch (error) {
-            console.error(error);
+
             setCategories([]);
             setTotalPages(1);
         } finally {

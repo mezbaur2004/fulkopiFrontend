@@ -20,7 +20,7 @@ const Categories = () => {
                 setPage(paginationData.page);
             }
         } catch (err) {
-            console.error(err);
+
         } finally {
             setLoading(false);
         }

@@ -23,7 +23,7 @@ const ManageProducts = () => {
                 setProducts([]);
             }
         } catch (error) {
-            console.error(error);
+
         } finally {
             setLoading(false);
         }

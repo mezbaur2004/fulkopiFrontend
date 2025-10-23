@@ -44,7 +44,7 @@ const UpdateBrand = () => {
                 resetForm();
             }
         } catch (err) {
-            console.error("Brand Update Failed",err);
+
         } finally {
             setSubmitting(false);
         }

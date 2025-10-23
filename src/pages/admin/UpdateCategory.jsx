@@ -44,7 +44,7 @@ const UpdateCategory = () => {
                 resetForm();
             }
         }catch(err){
-            console.error("Category Update Failed",err);
+
         }finally {
             setSubmitting(false);
         }
