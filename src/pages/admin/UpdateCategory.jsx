@@ -14,7 +14,7 @@ const UpdateCategory = () => {
     const [submitting, setSubmitting] = useState(false);
     const initialValues = {
         categoryName: category?.categoryName,
-        status: true,
+        status: category?.status,
         categoryImg: category?.categoryImg
     }
 

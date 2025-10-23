@@ -14,7 +14,7 @@ const UpdateBrand = () => {
     const [submitting, setSubmitting] = useState(false);
     const initialValues = {
         brandName: brand?.brandName,
-        status: true,
+        status: brand?.status,
         brandImg: brand?.brandImg
     }
 
