@@ -32,8 +32,8 @@ const UpdateProducts = () => {
             setCategories(catList.data || []);
 
             if (data) {
-                setSelectedBrand(data.brandID || (data.brandID || null));
-                setSelectedCategory(data.categoryID || (data.categoryID || null));
+                setSelectedBrand(data.brandID?String(data.brandID):"");
+                setSelectedCategory(data.categoryID?String(data.categoryID):"");
             }
         })();
     }, [id]);
@@ -112,7 +112,7 @@ const UpdateProducts = () => {
             <div className="container py-4">
                 <h2 className="mb-4 text-success">Update Product</h2>
 
-                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
+                <Formik initialValues={initialValues} enableReinitialize={true} validationSchema={validationSchema} onSubmit={handleSubmit}>
                     {({ values, setFieldValue }) => {
                         const filteredBrands = getFiltered(brands, brandQuery, "brandName");
                         const filteredCategories = getFiltered(categories, categoryQuery, "categoryName");
