@@ -26,10 +26,10 @@ const UpdateProducts = () => {
             setProductDetails(data);
 
             const brandList = await readBrand();
-            setBrands(brandList || []);
+            setBrands(brandList.data || []);
 
             const catList = await readCategory();
-            setCategories(catList || []);
+            setCategories(catList.data || []);
 
             if (data) {
                 setSelectedBrand(data.brandID || (data.brandID || null));
@@ -74,10 +74,14 @@ const UpdateProducts = () => {
         categoryID: Yup.string().required("Select category"),
     });
 
-    const getFiltered = (list, query, keyName) => {
+    const getFiltered = (list = [], query, keyName) => {
+        if (!Array.isArray(list)) return [];
         if (!query?.trim()) return list.slice(0, 3);
-        return list.filter((x) => (x[keyName]|| x.slug || "").toLowerCase().includes(query.toLowerCase())).slice(0, 50);
+        return list
+            .filter((x) => (x[keyName] || x.slug || "").toLowerCase().includes(query.toLowerCase()))
+            .slice(0, 50);
     };
+
 
     const handleSubmit = async (values) => {
         try {
@@ -142,7 +146,6 @@ const UpdateProducts = () => {
                                         onChange={(e) => setFieldValue("discount", e.target.value === "true")}
                                         value={values.discount === true ? "true" : values.discount === false ? "false" : ""}
                                     >
-                                        <option value="">Select</option>
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
                                     </Field>

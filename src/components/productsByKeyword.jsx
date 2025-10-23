@@ -1,80 +1,214 @@
-import React, {useEffect} from 'react';
-import {productListByKeyword} from "../APIRequest/productAPIRequest.js";
-import {useSelector} from "react-redux";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { productListByKeyword } from "../APIRequest/productAPIRequest.js";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { getToken } from "../helper/sessionHelper.js";
+import { addToCart } from "../APIRequest/cartAPIRequest.js";
+import { addToWish } from "../APIRequest/wishAPIRequest.js";
+import { ErrorToast } from "../helper/formHelper.js";
 
 const ProductsByKeyword = () => {
     const navigate = useNavigate();
-    let {keyword} = useParams();
+    const { keyword } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [loading, setLoading] = useState(false);
+    const ProductList = useSelector((state) => state.products.ListByKeyword || []);
+
+    const fetchProducts = async (pageNumber = 1) => {
+        setLoading(true);
+        try {
+            const paginationData = await productListByKeyword(keyword, pageNumber, 8);
+            if (paginationData?.totalPages) {
+                setTotalPages(paginationData.totalPages);
+                setPage(paginationData.page);
+            }
+        } catch (err) {
+            console.error("productListByKeyword failed:", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        (async () => {
-            await productListByKeyword(keyword);
-        })()
-    }, [keyword]);
+        const currentPage = Number(searchParams.get("page")) || 1;
+        if (currentPage !== page) {
+            setPage(currentPage);
+            return;
+        }
+        fetchProducts(currentPage);
+    }, [keyword, page, searchParams]);
 
-    document.title = `${keyword}| FULKOPI`;
+    document.title = `${keyword} | FULKOPI`;
 
-    let ProductList = useSelector((state) => (state.products.ListByKeyword))
+    const handleAddToCart = async (productId, qty) => {
+        if (getToken()) {
+            await addToCart(productId, qty);
+        } else {
+            ErrorToast("Please Log In First");
+            navigate("/login");
+        }
+    };
+
+    const handleAddToWish = async (productId) => {
+        if (getToken()) {
+            await addToWish(productId);
+        } else {
+            ErrorToast("Please Log In First");
+            navigate("/login");
+        }
+    };
+
+    const renderPagination = () => {
+        if (totalPages <= 1) return null;
+        const pages = [];
+        const maxVisible = 5;
+        let start = Math.max(1, page - Math.floor(maxVisible / 2));
+        let end = Math.min(totalPages, start + maxVisible - 1);
+        if (end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+
+        for (let i = start; i <= end; i++) {
+            pages.push(
+                <button
+                    key={i}
+                    className={`btn ${i === page ? "btn-success" : "btn-outline-success"}`}
+                    onClick={() => {
+                        setPage(i);
+                        setSearchParams(i === 1 ? {} : { page: i });
+                    }}
+                >
+                    {i}
+                </button>
+            );
+        }
+
+        return (
+            <div className="d-flex justify-content-center align-items-center gap-2 mt-4 flex-wrap">
+                <button
+                    className="btn btn-outline-success"
+                    disabled={page === 1}
+                    onClick={() => {
+                        const prev = Math.max(1, page - 1);
+                        setPage(prev);
+                        setSearchParams(prev === 1 ? {} : { page: prev });
+                    }}
+                >
+                    « Prev
+                </button>
+
+                {pages}
+
+                <button
+                    className="btn btn-outline-success"
+                    disabled={page === totalPages}
+                    onClick={() => {
+                        const next = Math.min(totalPages, page + 1);
+                        setPage(next);
+                        setSearchParams(next === 1 ? {} : { page: next });
+                    }}
+                >
+                    Next »
+                </button>
+            </div>
+        );
+    };
 
     return (
-        <>
-            <div className="container mt-4 mb-2">
-                <div className="row g-3">
-                    <div className="text-muted"><h4>Search result of "{keyword}"</h4></div>
-                    {ProductList && ProductList.length > 0 ? (
-                        ProductList.map((product, index) => (
-                            <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
-                                <div className="card h-100 shadow-sm">
-                                    <img
-                                        src={product.image || "/placeholder.png"}
-                                        className="card-img-top"
-                                        alt={product.name}
-                                        style={{cursor: "pointer"}}
-                                        onClick={() => navigate(`/productdetails/${product._id}`)}
-                                    />
-                                    <div className="card-body d-flex flex-column bg-light">
-                                        {product.discount ? (
-                                            <>
-                                                <h4 className="card-title fw-bold text-muted">{product.title}</h4>
-                                                <p className="card-text mb-2 fw-semibold">
-                                                    Offer Price: {product.discountPrice || "N/A"}tk
-                                                </p>
-                                                <p className="card-text text-muted mb-2 text-decoration-line-through">
-                                                    Price: {product.price || "N/A"}tk
-                                                </p>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <h4 className="card-title fw-bold text-muted">{product.title}</h4>
-                                                <p className="card-text mb-2 fw-semibold">
-                                                    Price: {product.price || "N/A"}tk
-                                                </p>
-                                            </>
-                                        )}
+        <div className="container mt-4 mb-5">
+            <div className="row g-4">
+                <div className="col-12">
+                    <h4 className="mb-3 text-muted">Search results for “{keyword}”</h4>
+                </div>
 
-                                        <div className="mt-auto d-flex flex-column flex-sm-row gap-2">
-                                            <button className="btn btn-secondary flex-fill">Add to Cart</button>
-                                            <button className="btn btn-secondary flex-fill">Add To Wishlist</button>
-                                        </div>
+                {loading ? (
+                    <p className="text-center">Loading...</p>
+                ) : ProductList.length > 0 ? (
+                    ProductList.map((product, index) => (
+                        <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={product._id || index}>
+                            <div
+                                className="card h-100 shadow-sm border-0 position-relative"
+                                style={{
+                                    borderRadius: "15px",
+                                    background: "linear-gradient(180deg, #fff, #f9f9f9)",
+                                }}
+                            >
+                                {product.discount && (
+                                    <span
+                                        className="position-absolute top-0 start-0 m-2 px-2 py-1 rounded text-white fw-semibold"
+                                        style={{ background: "#ff6b6b", fontSize: "0.85rem" }}
+                                    >
+                                        -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
+                                    </span>
+                                )}
 
+                                <img
+                                    src={product.image || "/placeholder.png"}
+                                    className="card-img-top"
+                                    alt={product.title}
+                                    style={{
+                                        cursor: "pointer",
+                                        borderTopLeftRadius: "15px",
+                                        borderTopRightRadius: "15px",
+                                        height: "200px",
+                                        objectFit: "contain",
+                                        padding: "10px",
+                                        backgroundColor: "#f5f5f5",
+                                    }}
+                                    onClick={() => navigate(`/productdetails/${product.slug || product._id}`)}
+                                />
+
+                                <div className="card-body d-flex flex-column">
+                                    <h5 className="fw-bold text-dark text-truncate">{product.title}</h5>
+
+                                    <span className={`badge w-fit mb-2 ${product.stock ? "bg-success" : "bg-danger"}`}>
+                                        {product.stock ? "In Stock" : "Out of Stock"}
+                                    </span>
+
+                                    {product.discount ? (
+                                        <p className="fw-semibold mb-1 text-success">
+                                            ৳{product.discountPrice}
+                                            <span className="text-muted ms-2 text-decoration-line-through">
+                                                ৳{product.price}
+                                            </span>
+                                        </p>
+                                    ) : (
+                                        <p className="fw-semibold text-success mb-1">৳{product.price}</p>
+                                    )}
+
+                                    <div className="mt-auto d-flex justify-content-between gap-2">
                                         <button
-                                            className="btn btn-outline-warning text-dark mt-2 fw-bold"
-                                            onClick={() => navigate(`/productdetails/${product._id}`)}
+                                            className="btn btn-sm btn-warning flex-grow-1 fw-semibold"
+                                            onClick={() => handleAddToCart(product._id, 1)}
+                                            disabled={!product.stock}
                                         >
-                                            Product Details
+                                            <i className="bi bi-cart me-1"></i> Add to Cart
+                                        </button>
+                                        <button
+                                            className="btn btn-sm btn-outline-dark flex-grow-1 fw-semibold"
+                                            onClick={() => handleAddToWish(product._id)}
+                                        >
+                                            <i className="bi bi-heart me-1"></i> Wishlist
                                         </button>
                                     </div>
+
+                                    <button
+                                        className="btn btn-sm btn-outline-secondary mt-3 fw-semibold"
+                                        onClick={() => navigate(`/productdetails/${product.slug || product._id}`)}
+                                    >
+                                        View Details →
+                                    </button>
                                 </div>
                             </div>
-                        ))
-                    ) : (
-
-                        <h1 className="text-danger mt-5 pt-5">No products Found😓</h1>
-                    )}
-
-                </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className="text-center text-muted">No products found for “{keyword}”</p>
+                )}
             </div>
-        </>
+
+            {totalPages > 1 && renderPagination()}
+        </div>
     );
 };
 

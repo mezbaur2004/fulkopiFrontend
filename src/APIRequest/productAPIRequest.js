@@ -54,37 +54,47 @@ export async function productDetail(slug) {
     }
 }
 
-export async function productListByKeyword(keyword) {
+export async function productListByKeyword(keyword, page = 1, limit = 8) {
     try {
-        store.dispatch(ShowLoader())
-        let res = await axios.get(`${url}listbykeyword/${keyword}`);
-        store.dispatch(HideLoader())
+        store.dispatch(ShowLoader());
+        const res = await axios.get(`${url}listbykeyword/${encodeURIComponent(keyword)}?page=${page}&limit=${limit}`);
+        store.dispatch(HideLoader());
         if (res.status === 200) {
-            store.dispatch(SetListByKeyword(res.data.data))
+            store.dispatch(SetListByKeyword(res.data.data));
+            return res.data.pagination
         } else {
-            store.dispatch(SetListByKeyword([]))
+            store.dispatch(SetListByKeyword([]));
+            return null;
         }
     } catch (error) {
-        ErrorToast("Something Went Wrong")
-        store.dispatch(HideLoader())
+        ErrorToast("Something Went Wrong");
+        store.dispatch(HideLoader());
+        return null;
     }
 }
 
-export async function productListByRemarks(remarks) {
+
+export async function productListByRemarks(remarks, page = 1, limit = 8) {
     try {
-        store.dispatch(ShowLoader())
-        let res = await axios.get(`${url}listbyremark/${remarks}`);
-        store.dispatch(HideLoader())
+        store.dispatch(ShowLoader());
+        const res = await axios.get(
+            `${url}listbyremark/${encodeURIComponent(remarks)}?page=${page}&limit=${limit}`
+        );
+        store.dispatch(HideLoader());
         if (res.status === 200) {
-            store.dispatch(SetListByRemark(res.data.data))
+            store.dispatch(SetListByRemark(res.data.data));
+            return res.data.pagination;
         } else {
-            store.dispatch(SetListByRemark([]))
+            store.dispatch(SetListByRemark([]));
+            return null;
         }
     } catch (error) {
-        ErrorToast("Something Went Wrong")
-        store.dispatch(HideLoader())
+        ErrorToast("Something Went Wrong");
+        store.dispatch(HideLoader());
+        return null;
     }
 }
+
 
 export async function productListByBrand(slug, page = 1, limit = 4) {
     try {
@@ -126,35 +136,41 @@ export async function productListByCategory(slug, page = 1, limit = 4) {
     }
 }
 
-export async function brandList() {
+export async function brandList(page=1,limit=4) {
     try {
         store.dispatch(ShowLoader())
-        let res = await axios.get(`${url}brandlist`)
+        let res = await axios.get(`${url}brandlist?page=${page}&limit=${limit}`)
         store.dispatch(HideLoader())
         if (res.status === 200) {
             store.dispatch(SetBrandList(res.data.data))
+            return res.data.pagination;
         } else {
             store.dispatch(SetBrandList([]))
+            return null;
         }
     } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
+        return null;
     }
 }
 
-export async function categoryList() {
+export async function categoryList(page=1, limit=4) {
     try {
         store.dispatch(ShowLoader())
-        let res = await axios.get(`${url}categorylist`)
+        let res = await axios.get(`${url}categorylist?page=${page}&limit=${limit}`)
         store.dispatch(HideLoader())
         if (res.status === 200) {
             store.dispatch(SetCategoryList(res.data.data))
+            return res.data.pagination;
         } else {
             store.dispatch(SetCategoryList([]))
+            return null;
         }
     } catch (error) {
         ErrorToast("Something Went Wrong")
         store.dispatch(HideLoader())
+        return null;
     }
 }
 

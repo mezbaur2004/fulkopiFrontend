@@ -16,9 +16,9 @@ const ManageProducts = () => {
             setLoading(true);
             const fullData = await readProduct(pageNumber, limit);
             if (fullData?.data) {
-                setProducts(fullData.data);
-                setTotalPages(fullData.pagination?.totalPages || 1);
-                setPage(fullData.pagination?.page || 1);
+                setProducts(fullData?.data);
+                setTotalPages(fullData?.pagination?.totalPages || 1);
+                setPage(fullData?.pagination?.page || 1);
             } else {
                 setProducts([]);
             }

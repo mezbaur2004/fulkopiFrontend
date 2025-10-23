@@ -84,7 +84,8 @@ export async function userDetails() {
             store.dispatch(SetUserList(res.data.data));
         }
     } catch (error) {
-
+        store.dispatch(HideLoader());
+        ErrorToast("Something went wrong");
     }
 }
 

@@ -104,13 +104,13 @@ export async function updateProduct(id, postBody) {
 
 //brand---------------------------------------------------------------------
 
-export async function readBrand() {
+export async function readBrand(page=1,limit=8) {
     try {
         store.dispatch(ShowLoader())
-        const res = await axios.get(`${url}adminbrandlist`, AxiosHeader);
+        const res = await axios.get(`${url}adminbrandlist?page=${page}&limit=${limit}`, AxiosHeader);
         store.dispatch(HideLoader())
         if (res.status === 200) {
-            return res.data.data;
+            return res.data;
         } else {
             ErrorToast("Something Went Wrong");
             return [];
@@ -150,7 +150,7 @@ export async function adminBrandDetails(id) {
         const res = await axios.get(`${url}adminbranddetails/${id}`, AxiosHeader);
         store.dispatch(HideLoader());
         if (res.status === 200) {
-            return res.data.data; // <-- this is an object, not an array
+            return res.data.data;
         } else {
             ErrorToast("Something Went Wrong");
             return null;
@@ -188,13 +188,13 @@ export async function updateBrand(id, brandName,status, brandImg) {
 //category---------------------------------------------------------------------
 
 
-export async function readCategory() {
+export async function readCategory(page=1, limit=8) {
     try {
         store.dispatch(ShowLoader())
-        const res = await axios.get(`${url}admincategorylist`, AxiosHeader);
+        const res = await axios.get(`${url}admincategorylist?page=${page}&limit=${limit}`, AxiosHeader);
         store.dispatch(HideLoader())
         if (res.status === 200) {
-            return res.data.data;
+            return res.data;
         } else {
             ErrorToast("Something Went Wrong");
             return [];

@@ -1,18 +1,19 @@
-import React, {useEffect, useState} from "react";
-import {productList} from "../APIRequest/productAPIRequest.js";
-import {useSelector} from "react-redux";
-import {Link, useNavigate} from "react-router-dom";
-import {getToken} from "../helper/sessionHelper.js";
-import {addToCart} from "../APIRequest/cartAPIRequest.js";
-import {ErrorToast} from "../helper/formHelper.js";
-import {addToWish} from "../APIRequest/wishAPIRequest.js";
+import React, { useEffect, useState } from "react";
+import { productList } from "../APIRequest/productAPIRequest.js";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { getToken } from "../helper/sessionHelper.js";
+import { addToCart } from "../APIRequest/cartAPIRequest.js";
+import { ErrorToast } from "../helper/formHelper.js";
+import { addToWish } from "../APIRequest/wishAPIRequest.js";
 
 const Products = () => {
     const navigate = useNavigate();
-    const [page, setPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+
     const [totalPages, setTotalPages] = useState(1);
     const [loading, setLoading] = useState(false);
-
     const ProductList = useSelector((state) => state.products.List);
 
     const fetchProducts = async (pageNumber = 1) => {
@@ -31,8 +32,13 @@ const Products = () => {
     };
 
     useEffect(() => {
-        fetchProducts(page);
-    }, [page]);
+        const currentPage=Number(searchParams.get("page"))||1;
+        if (currentPage !== page) {
+            setPage(currentPage);
+            return;
+        }
+        fetchProducts(currentPage);
+    }, [page,searchParams]);
 
     document.title = `Products | Page ${page}`;
 
@@ -54,14 +60,11 @@ const Products = () => {
         }
     };
 
-    // Pagination range helper
     const renderPagination = () => {
         const pages = [];
-        const maxVisible = 5; // show max 5 pages around current
+        const maxVisible = 5;
         let start = Math.max(1, page - Math.floor(maxVisible / 2));
         let end = Math.min(totalPages, start + maxVisible - 1);
-
-        // Adjust start if we are near the end
         if (end - start < maxVisible - 1) {
             start = Math.max(1, end - maxVisible + 1);
         }
@@ -71,7 +74,10 @@ const Products = () => {
                 <button
                     key={i}
                     className={`btn ${i === page ? "btn-success" : "btn-outline-success"}`}
-                    onClick={() => setPage(i)}
+                    onClick={() => {
+                        setPage(i);
+                        setSearchParams({ page: i });
+                    }}
                 >
                     {i}
                 </button>
@@ -81,19 +87,23 @@ const Products = () => {
         return (
             <div className="d-flex justify-content-center align-items-center gap-2 mt-4 flex-wrap">
                 <button
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-success"
                     disabled={page === 1}
-                    onClick={() => setPage(page - 1)}
+                    onClick={() => {
+                        setPage(page - 1)
+                        setSearchParams({ page: page - 1 });
+                    }}
                 >
                     « Prev
                 </button>
-
                 {pages}
-
                 <button
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-success"
                     disabled={page === totalPages}
-                    onClick={() => setPage(page + 1)}
+                    onClick={() => {
+                        setPage(page + 1)
+                        setSearchParams({ page: page + 1 });
+                    }}
                 >
                     Next »
                 </button>
@@ -102,7 +112,7 @@ const Products = () => {
     };
 
     return (
-        <div className="container mt-4 mb-2">
+        <div className="container mt-4 mb-5">
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb bg-transparent px-0">
                     <li className="breadcrumb-item">
@@ -114,60 +124,91 @@ const Products = () => {
                 </ol>
             </nav>
 
-            <div className="row g-3">
+            <div className="row g-4">
                 {loading ? (
                     <p className="text-center">Loading...</p>
                 ) : ProductList.length > 0 ? (
                     ProductList.map((product, index) => (
                         <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={index}>
-                            <div className="card h-100 shadow-sm">
+                            <div
+                                className="card h-100 shadow-sm border-0 position-relative"
+                                style={{
+                                    borderRadius: "15px",
+                                    background: "linear-gradient(180deg, #fff, #f9f9f9)",
+                                    transition: "all 0.3s ease",
+                                }}
+                            >
+                                {product.discount && (
+                                    <span
+                                        className="position-absolute top-0 start-0 m-2 px-2 py-1 rounded text-white fw-semibold"
+                                        style={{ background: "#ff6b6b", fontSize: "0.85rem" }}
+                                    >
+                                        -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
+                                    </span>
+                                )}
                                 <img
                                     src={product.image || "/placeholder.png"}
                                     className="card-img-top"
-                                    alt={product.name}
-                                    style={{cursor: "pointer"}}
+                                    alt={product.title}
+                                    style={{
+                                        cursor: "pointer",
+                                        borderTopLeftRadius: "15px",
+                                        borderTopRightRadius: "15px",
+                                        height: "200px",
+                                        objectFit: "contain",
+                                        padding: "10px",
+                                        backgroundColor: "#f5f5f5",
+                                    }}
                                     onClick={() => navigate(`/productdetails/${product.slug}`)}
                                 />
-                                <div className="card-body d-flex flex-column bg-light">
-                                    <h4 className="card-title fw-bold text-muted">{product.title}</h4>
-                                    <span className={`badge ${product.stock ? "bg-success" : "bg-danger"}`}>
+                                <div className="card-body d-flex flex-column">
+                                    <h5 className="fw-bold text-dark text-truncate">
+                                        {product.title}
+                                    </h5>
+                                    <span
+                                        className={`badge w-fit mb-2 ${
+                                            product.stock ? "bg-success" : "bg-danger"
+                                        }`}
+                                    >
                                         {product.stock ? "In Stock" : "Out of Stock"}
                                     </span>
+
                                     {product.discount ? (
-                                        <>
-                                            <p className="card-text mb-2 fw-semibold">
-                                                Offer Price: {product.discountPrice || "N/A"}tk
+                                        <div>
+                                            <p className="fw-semibold mb-1 text-success">
+                                                ৳{product.discountPrice}
+                                                <span className="text-muted ms-2 text-decoration-line-through">
+                                                    ৳{product.price}
+                                                </span>
                                             </p>
-                                            <p className="card-text text-muted mb-2 text-decoration-line-through">
-                                                Price: {product.price || "N/A"}tk
-                                            </p>
-                                        </>
+                                        </div>
                                     ) : (
-                                        <p className="card-text mb-2 fw-semibold">
-                                            Price: {product.price || "N/A"}tk
+                                        <p className="fw-semibold text-success mb-1">
+                                            ৳{product.price}
                                         </p>
                                     )}
 
-                                    <div className="mt-auto d-flex flex-column flex-sm-row gap-2">
+                                    <div className="mt-auto d-flex justify-content-between gap-2">
                                         <button
-                                            className="btn btn-warning fw-semibold"
+                                            className="btn btn-sm btn-warning flex-grow-1 fw-semibold"
                                             onClick={() => handleAddToCart(product._id, 1)}
                                             disabled={!product.stock}
                                         >
-                                            Add to Cart <i className="bi bi-cart"/>
+                                            <i className="bi bi-cart me-1"></i> Add to Cart
                                         </button>
                                         <button
-                                            className="btn btn-dark"
+                                            className="btn btn-sm btn-outline-dark flex-grow-1 fw-semibold"
                                             onClick={() => handleAddToWish(product._id)}
                                         >
-                                            Add Wishlist <i className="bi bi-heart"/>
+                                            <i className="bi bi-heart me-1"></i> Wishlist
                                         </button>
                                     </div>
+
                                     <button
-                                        className="btn btn-outline-warning text-dark mt-2 fw-bold"
+                                        className="btn btn-sm btn-outline-secondary mt-3 fw-semibold"
                                         onClick={() => navigate(`/productdetails/${product.slug}`)}
                                     >
-                                        Product Details
+                                        View Details →
                                     </button>
                                 </div>
                             </div>
@@ -178,7 +219,6 @@ const Products = () => {
                 )}
             </div>
 
-            {/* Numbered Pagination */}
             {totalPages > 1 && renderPagination()}
         </div>
     );

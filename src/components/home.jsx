@@ -1,4 +1,3 @@
-// Home.jsx
 import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {productList} from "../APIRequest/productAPIRequest.js";
@@ -9,6 +8,10 @@ import {A11y, Autoplay, Navigation, Pagination} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import {addToCart} from "../APIRequest/cartAPIRequest.js";
+import {ErrorToast} from "../helper/formHelper.js";
+import {addToWish} from "../APIRequest/wishAPIRequest.js";
+import {getToken} from "../helper/sessionHelper.js";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -19,12 +22,10 @@ const Home = () => {
         })();
     }, []);
 
-
     document.title = `Home | FULKOPI`;
 
     const ProductList = useSelector((state) => state.products.List || []);
 
-    // render nothing until products are loaded to avoid init issues
     if (!ProductList.length) {
         return (
             <div className="container mt-4 text-center">
@@ -58,8 +59,8 @@ const Home = () => {
                     loop={true}
                     grabCursor={true}
                     autoplay={{
-                        delay: 1500,       // 2.5 seconds between slides
-                        disableOnInteraction: false, // keeps autoplay after user swipes
+                        delay: 1500,
+                        disableOnInteraction: false,
                     }}
                     allowTouchMove={true}
                     simulateTouch={true}
@@ -68,46 +69,110 @@ const Home = () => {
 
                     {ProductList.map((product, index) => (
                         <SwiperSlide key={product._id || index}>
-                            <div className="card h-100 shadow-sm">
+                            <div
+                                className="card h-100 shadow-sm border-0 position-relative"
+                                style={{
+                                    borderRadius: "12px",
+                                    background: "linear-gradient(180deg, #fff, #f9f9f9)",
+                                    overflow: "hidden"
+                                }}
+                            >
+                                {/* Discount badge */}
+                                {product.discount && product.discountPrice && (
+                                    <span
+                                        className="position-absolute top-0 start-0 m-2 px-2 py-1 rounded text-white fw-semibold"
+                                        style={{ background: "#ff6b6b", fontSize: "0.85rem", zIndex: 2 }}
+                                    >
+        -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}% OFF
+      </span>
+                                )}
+
+                                {/* Image */}
                                 <img
                                     src={product.image || "/placeholder.png"}
                                     className="card-img-top"
                                     alt={product.title}
                                     style={{
                                         cursor: "pointer",
-                                        objectFit: "cover",
-                                        width: "100%",
-                                        height: 320
+                                        borderTopLeftRadius: "12px",
+                                        borderTopRightRadius: "12px",
+                                        height: 320,
+                                        objectFit: "contain",
+                                        padding: "12px",
+                                        backgroundColor: "#f5f5f5",
                                     }}
                                     onClick={() => navigate(`/productdetails/${product.slug}`)}
                                 />
-                                <div className="card-body text-center">
-                                    <h5 className="card-title">{product.title}</h5>
-                                    {product.discount ? (
-                                        <div className="d-flex justify-content-evenly align-items-center mb-2">
-                                            <p className="card-text fw-semibold mb-0">
-                                                Offer Price: {product.discountPrice || "N/A"}tk
+
+                                {/* Body */}
+                                <div className="card-body d-flex flex-column text-center">
+                                    <h5 className="card-title fw-bold text-dark text-truncate mb-2">{product.title}</h5>
+
+                                    <div className="mb-2">
+        <span className={`badge ${product.stock ? "bg-success" : "bg-danger"}`}>
+          {product.stock ? "In Stock" : "Out of Stock"}
+        </span>
+                                    </div>
+
+                                    {product.discount && product.discountPrice ? (
+                                        <div className="d-flex justify-content-center align-items-center gap-2 mb-2">
+                                            <p className="fw-semibold text-success mb-0" style={{ fontSize: '1.05rem' }}>
+                                                ৳{product.discountPrice}
                                             </p>
-                                            <p className="card-text text-muted text-decoration-line-through mb-0">
-                                                Price: {product.price || "N/A"}tk
+                                            <p className="text-muted text-decoration-line-through mb-0" style={{ fontSize: '0.9rem' }}>
+                                                ৳{product.price}
                                             </p>
                                         </div>
-
                                     ) : (
-                                        <>
-                                            <p className="card-text mb-2 fw-semibold">
-                                                Price: {product.price || "N/A"}tk
-                                            </p>
-                                        </>
+                                        <p className="fw-semibold text-success mb-2" style={{ fontSize: '1.05rem' }}>
+                                            ৳{product.price}
+                                        </p>
                                     )}
-                                    <button onClick={() => navigate(`/productdetails/${product.slug}`)}
-                                            className="btn btn-secondary">View Product
+
+                                    <div className="mt-auto d-flex gap-2 flex-column flex-sm-row">
+                                        <button
+                                            className="btn btn-warning flex-fill"
+                                            disabled={!product.stock}
+                                            onClick={async () => {
+                                                if (getToken()) {
+                                                    await addToCart(product._id, 1);
+                                                } else {
+                                                    ErrorToast("Please Log In First");
+                                                    navigate("/login");
+                                                }
+                                            }}
+                                        >
+                                            <i className="bi bi-cart me-1"></i> Add to Cart
+                                        </button>
+
+                                        <button
+                                            className="btn btn-outline-dark flex-fill"
+                                            onClick={async () => {
+                                                if (getToken()) {
+                                                    await addToWish(product._id);
+                                                } else {
+                                                    ErrorToast("Please Log In First");
+                                                    navigate("/login");
+                                                }
+                                            }}
+                                        >
+                                            <i className="bi bi-heart me-1"></i> Wishlist
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        className="btn btn-outline-secondary mt-2"
+                                        onClick={() => navigate(`/productdetails/${product.slug}`)}
+                                    >
+                                        View Product
                                     </button>
                                 </div>
                             </div>
                         </SwiperSlide>
+
                     ))}
                 </Swiper>
+
                 <div className="text-center my-4">
                     <button
                         className="btn btn-warning fw-bold text-muted px-4 py-2"
@@ -116,19 +181,17 @@ const Home = () => {
                         View All Products
                     </button>
                 </div>
-
             </div>
 
+            {/* ===== Remaining home page content (unchanged) ===== */}
             <div className="container my-5">
                 <h3 className="mb-4 text-center text-muted fw-bold">How It Works?</h3>
 
                 <div className="d-flex flex-column align-items-center gap-4">
-                    {/* Step 1 */}
                     <div className="card shadow-lg border-0 w-100" style={{maxWidth: "70%"}}>
                         <div className="card-body text-center bg-dark text-light rounded-3 p-4">
                             <i className="bi bi-search text-warning display-4 d-none d-md-inline"></i>
                             <i className="bi bi-search text-warning fs-1 d-md-none"></i>
-
                             <h4 className="mt-3 fw-bold">1. Browse Products</h4>
                             <p className="text-light small">
                                 Explore thousands of items across categories and find what you need.
@@ -136,12 +199,10 @@ const Home = () => {
                         </div>
                     </div>
 
-                    {/* Step 2 */}
                     <div className="card shadow-lg border-0 w-100" style={{maxWidth: "70%"}}>
                         <div className="card-body text-center bg-dark text-light rounded-3 p-4">
                             <i className="bi bi-cart-check text-warning display-4 d-none d-md-inline"></i>
                             <i className="bi bi-cart-check text-warning fs-1 d-md-none"></i>
-
                             <h4 className="mt-3 fw-bold">2. Place Order</h4>
                             <p className="text-light small">
                                 Add items to your cart and checkout securely in just a few clicks.
@@ -149,12 +210,10 @@ const Home = () => {
                         </div>
                     </div>
 
-                    {/* Step 3 */}
                     <div className="card shadow-lg border-0 w-100" style={{maxWidth: "70%"}}>
                         <div className="card-body text-center bg-dark text-light rounded-3 p-4">
                             <i className="bi bi-box-seam text-warning display-4 d-none d-md-inline"></i>
                             <i className="bi bi-box-seam text-warning fs-1 d-md-none"></i>
-
                             <h4 className="mt-3 fw-bold">3. Fast Delivery</h4>
                             <p className="text-light small">
                                 Sit back and relax while we deliver straight to your doorstep.
@@ -164,98 +223,66 @@ const Home = () => {
                 </div>
             </div>
 
-
             <div className="container my-5">
                 <div className="card shadow-lg border-0 w-100">
-                    <div className="card-body text-center bg-warning text-dark rounded-3 p-5">
-                        <h3 className="fw-bold mb-3">Exclusive Deals & Offers</h3>
-                        <p className="fs-5 mb-4">
-                            Get the best prices on your favorite products. Limited time only!
-                        </p>
-                        <p className="text-dark small">
-                            Don’t miss out on our hot deals — fresh offers added every week.
-                        </p>
-                        <button
-                            className="btn btn-dark fw-bold px-4 py-2 mt-3"
-                            onClick={() => navigate("/products")}
-                        >
-                            Grab Deals
+                    <div className="card-body text-center bg-warning text-dark rounded-3 p-5"><h3
+                        className="fw-bold mb-3">Exclusive Deals & Offers</h3> <p className="fs-5 mb-4"> Get the best
+                        prices on your favorite products. Limited time only! </p> <p className="text-dark small"> Don’t
+                        miss out on our hot deals — fresh offers added every week. </p>
+                        <button className="btn btn-dark fw-bold px-4 py-2 mt-3"
+                                onClick={() => navigate("/products")}> Grab Deals
                         </button>
                     </div>
                 </div>
             </div>
-
             <div className="container my-5">
                 <div className="card shadow-lg border-0 w-100">
-                    <div className="card-body text-center bg-dark text-light rounded-3 p-5">
-                        <h3 className="fw-bold mb-3">We Deliver To</h3>
-                        <p className="fs-5 mb-4">
-                            Dhaka · Chittagong · Rangpur · Rajshahi · Khulna · Sylhet
-                        </p>
-                        <p className="text-light small">
-                            Fast and reliable delivery to major cities in Bangladesh.
-                        </p>
-                        <button
-                            className="btn btn-warning fw-bold px-4 py-2 mt-3"
-                            onClick={() => navigate("/products")}
-                        >
-                            Shop Now
+                    <div className="card-body text-center bg-dark text-light rounded-3 p-5"><h3
+                        className="fw-bold mb-3">We Deliver To</h3> <p className="fs-5 mb-4"> Dhaka · Chittagong ·
+                        Rangpur · Rajshahi · Khulna · Sylhet </p> <p className="text-light small"> Fast and reliable
+                        delivery to major cities in Bangladesh. </p>
+                        <button className="btn btn-warning fw-bold px-4 py-2 mt-3"
+                                onClick={() => navigate("/products")}> Shop Now
                         </button>
                     </div>
                 </div>
             </div>
-
-
-            <div className="container my-5">
-                <h3 className="mb-4 text-center text-dark text-muted fw-bold">Why Shop With Us?</h3>
-
-                <div className="row g-4 text-center">
-                    {/* Secure Payment */}
+            <div className="container my-5"><h3 className="mb-4 text-center text-dark text-muted fw-bold">Why Shop With
+                Us?</h3>
+                <div className="row g-4 text-center"> {/* Secure Payment */}
                     <div className="col-6 col-md-3">
                         <div className="card h-100 shadow-sm border-0">
-                            <div className="card-body">
-                                <i className="bi bi-shield-lock fs-1 text-warning"></i>
-                                <h6 className="mt-3 fw-semibold">Secure Payment</h6>
-                                <p className="text-muted small">SSLCommerz safe checkout</p>
-                            </div>
+                            <div className="card-body"><i className="bi bi-shield-lock fs-1 text-warning"></i> <h6
+                                className="mt-3 fw-semibold">Secure Payment</h6> <p
+                                className="text-muted small">SSLCommerz safe checkout</p></div>
                         </div>
                     </div>
-
                     {/* Fast Delivery */}
                     <div className="col-6 col-md-3">
                         <div className="card h-100 shadow-sm border-0">
-                            <div className="card-body">
-                                <i className="bi bi-truck fs-1 text-warning"></i>
-                                <h6 className="mt-3 fw-semibold">Fast Delivery</h6>
-                                <p className="text-muted small">Get products within 2-3 days</p>
-                            </div>
+                            <div className="card-body"><i className="bi bi-truck fs-1 text-warning"></i> <h6
+                                className="mt-3 fw-semibold">Fast Delivery</h6> <p className="text-muted small">Get
+                                products within 2-3 days</p></div>
                         </div>
                     </div>
-
                     {/* Cash on Delivery */}
                     <div className="col-6 col-md-3">
                         <div className="card h-100 shadow-sm border-0">
-                            <div className="card-body">
-                                <i className="bi bi-cash-coin fs-1 text-warning"></i>
-                                <h6 className="mt-3 fw-semibold">Cash on Delivery</h6>
-                                <p className="text-muted small">Pay after receiving your order</p>
-                            </div>
+                            <div className="card-body"><i className="bi bi-cash-coin fs-1 text-warning"></i> <h6
+                                className="mt-3 fw-semibold">Cash on Delivery</h6> <p className="text-muted small">Pay
+                                after receiving your order</p></div>
                         </div>
                     </div>
-
                     {/* Support */}
                     <div className="col-6 col-md-3">
                         <div className="card h-100 shadow-sm border-0">
-                            <div className="card-body">
-                                <i className="bi bi-headset fs-1 text-warning"></i>
-                                <h6 className="mt-3 fw-semibold">24/7 Support</h6>
-                                <p className="text-muted small">Always here to help you</p>
-                            </div>
+                            <div className="card-body"><i className="bi bi-headset fs-1 text-warning"></i> <h6
+                                className="mt-3 fw-semibold">24/7 Support</h6> <p className="text-muted small">Always
+                                here to help you</p></div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </>
     );
 };

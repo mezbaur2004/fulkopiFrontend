@@ -23,9 +23,9 @@ const CreateProduct = () => {
         (async () => {
             try {
                 const brandList = await readBrand();
-                setBrands(brandList || []);
+                setBrands(brandList.data || []);
                 const catList = await readCategory();
-                setCategories(catList || []);
+                setCategories(catList.data || []);
             } catch (err) {
                 console.error("Failed to load brands/categories", err);
             }
@@ -155,7 +155,6 @@ const CreateProduct = () => {
                                     value={values.discount === true ? "true" : values.discount === false ? "false" : ""}
                                     onChange={(e) => setFieldValue("discount", e.target.value === "true")}
                                 >
-                                    <option value="">Select</option>
                                     <option value="true">Yes</option>
                                     <option value="false">No</option>
                                 </Field>
