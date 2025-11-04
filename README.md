@@ -2,6 +2,11 @@
 
 Live Demo: [https://fulkopi-frontend.vercel.app/](https://fulkopi-frontend.vercel.app/)
 
+> ⚠️ Admin Dashboard Access:
+> - Username: `mezbaur2004@gmail.com`
+> - Password: `abc123`  
+    > **Note:** Backend is hosted on Render, so the initial load may take ~15 seconds.
+
 This is the frontend for **Fulkopi**, a MERN‑stack e‑commerce app featuring Google OAuth, custom login, SSLCommerz payment integration, and a clean architecture that works directly with the backend.
 
 > ⚠️ Note: This project prioritizes **robust data flow, backend integration, and full-stack logic** over UI/UX polish. All critical flows — login, product management, and checkout — are fully functional and tested.
@@ -12,6 +17,9 @@ This is the frontend for **Fulkopi**, a MERN‑stack e‑commerce app featuring 
 - **Formik** & **Yup** for robust form handling & validation
 - Login via **Google OAuth** + traditional email/password
 - **Payment checkout** via SSLCommerz
+- **Admin Dashboard** with product management
+    - Brand and Category dropdown with search box for easy product addition
+    - Full control of products, orders, and inventory
 - Connects with backend API to manage products, cart, and orders
 - Deployable on **Vercel** or locally, just update endpoints & environment variables
 
@@ -39,8 +47,6 @@ cd fulkopiFrontend
 
 ```
 npm install
-# or
-yarn
 ```
 
 3. Start the development server:
@@ -49,7 +55,7 @@ yarn
 npm run dev
 ```
 
-The app opens at `http://localhost:5173` by default. You can log in, browse products, and test checkout with the connected backend.
+The app opens at `http://localhost:5173` by default. You can log in, browse products, test checkout, or log into the **admin dashboard** to manage products.
 
 ## 📁 Project Structure
 
@@ -61,7 +67,7 @@ fulkopiFrontend/
 │  ├─ assets/          # Images, icons, and static assets
 │  ├─ components/      # Reusable UI components
 │  ├─ helper/          # Utility functions and helpers
-│  ├─ pages/           # Screens: Home, Login, Checkout, etc.
+│  ├─ pages/           # Screens: Home, Login, Checkout, Admin Dashboard, etc.
 │  ├─ redux/           # State management (actions, reducers, store)
 │  ├─ App.jsx          # Main app component
 │  └─ main.jsx         # Entry point for React/Vite
@@ -79,8 +85,9 @@ fulkopiFrontend/
 - Open the live demo or run locally
 - Login via Google or custom email/password
 - Browse products → add items to cart → proceed to checkout via SSLCommerz
-- Verify that API calls work and payment flow completes
+- **Admin Dashboard:** Login with admin credentials above → manage products and inventory
+- Verify that API calls work and payment/admin flows complete
 
 ## 🧑‍💻 Author
 
-**Mezbaur Rafi** – [GitHub](https://github.com/mezbaur2004)
+**Mezbaur Are Rafi** – [GitHub](https://github.com/mezbaur2004)
