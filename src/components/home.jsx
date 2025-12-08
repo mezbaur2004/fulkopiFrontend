@@ -29,7 +29,7 @@ const Home = () => {
     if (!ProductList.length) {
         return (
             <div className="container mt-4 text-center">
-                <div className="p-4 bg-dark text-light rounded shadow-sm">Loading products…</div>
+                <div className="p-4 bg-dark text-light rounded shadow-sm">Preparing content… Please wait while the backend wakes from cold start (Render free tier).</div>
             </div>
         );
     }
