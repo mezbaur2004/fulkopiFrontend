@@ -14,7 +14,9 @@ import {
 } from "../redux/state-slice/product-slice.js";
 
 const url = import.meta.env.VITE_BASE_URL;
-
+if(!url){
+    throw new Error("URL is missing");
+}
 export async function productList(page = 1, limit = 80) {
     try {
         store.dispatch(ShowLoader());

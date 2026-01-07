@@ -2,7 +2,6 @@ import React from 'react';
 import {GoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 import {setToken, setUserDetails} from '../helper/sessionHelper.js';
-import {useNavigate} from 'react-router-dom';
 import store from "../redux/store/store.js";
 import {HideLoader, ShowLoader} from "../redux/state-slice/settings-slice.js";
 import {SuccessToast} from "../helper/formHelper.js";
@@ -10,7 +9,6 @@ import {SuccessToast} from "../helper/formHelper.js";
 const url = import.meta.env.VITE_BASE_URL;
 
 const Google = ({onLoginSuccess}) => {  // optional callback
-    const navigate = useNavigate();
 
     const handleLogin = async (credentialResponse) => {
         try {

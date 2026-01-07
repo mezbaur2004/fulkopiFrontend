@@ -4,21 +4,27 @@ class SessionHelper {
     // ===== TOKEN =====
     setToken(token) {
         if (!token) return;
-        const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
+        const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000;
         const tokenData = {token, expiry};
         localStorage.setItem("token", JSON.stringify(tokenData));
     }
 
     getToken() {
-        const tokenData = JSON.parse(localStorage.getItem("token"));
-        if (!tokenData) return null;
+        try{
+            const rawToken = localStorage.getItem("token");
+            if(!rawToken) return null;
 
-        if (Date.now() > tokenData.expiry) {
+            const {token,expiry}=JSON.parse(rawToken);
+            if(!token||!expiry||Date.now()>expiry){
+                localStorage.removeItem("token");
+                localStorage.removeItem("UserDetails");
+            }
+            return token;
+
+        }catch(e){
             localStorage.removeItem("token");
             return null;
         }
-
-        return tokenData.token;
     }
 
     isAdmin() {
@@ -30,18 +36,14 @@ class SessionHelper {
             return null;
         }
 
-        const decoded = jwtDecode(tokenData.token);
-        if (decoded.role === "admin") {
-            return true
-        } else {
-            return false
-        }
+        const {role} = jwtDecode(tokenData.token);
+        return role==="admin";
     }
 
     // ===== USER DETAILS =====
     setUserDetails(userDetails) {
         if (!userDetails) return;
-        const expiry = Date.now() + 10 * 24 * 60 * 60 * 1000; // 10 days
+        const expiry = Date.now() + 30 * 24 * 60 * 60 * 1000;
         const data = {userDetails, expiry};
         localStorage.setItem("UserDetails", JSON.stringify(data));
     }

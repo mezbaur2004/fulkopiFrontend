@@ -1,7 +1,8 @@
 import {toast} from "react-hot-toast";
 
-let EmailRegx = /\S+@\S+\.\S+/;
-let MobileRegx = /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/;
+let EmailRegex = /\S+@\S+\.\S+/;
+const MobileRegex = /^(?:\+88|0088)?01[3456789]\d{8}$/;
+
 
 class FormHelper {
     IsEmpty(value) {
@@ -9,11 +10,11 @@ class FormHelper {
     }
 
     IsMobile(value) {
-        return MobileRegx.test(value);
+        return MobileRegex.test(value);
     }
 
     IsEmail(value) {
-        return EmailRegx.test(value);
+        return EmailRegex.test(value);
     }
 
     ErrorToast(msg) {

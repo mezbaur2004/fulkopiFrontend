@@ -6,6 +6,9 @@ import {getToken, setToken, setUserDetails} from "../helper/sessionHelper.js";
 import {SetUserList} from "../redux/state-slice/user-slice.js";
 
 const url = import.meta.env.VITE_BASE_URL;
+if(!url){
+    throw new Error("URL is missing");
+}
 const AxiosHeader = {headers: {"token": getToken()}}
 
 export async function LoginRequest(email, password) {

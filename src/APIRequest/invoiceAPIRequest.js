@@ -6,6 +6,9 @@ import {getToken} from "../helper/sessionHelper.js";
 import {SetInvoiceList, SetInvoiceProductList} from "../redux/state-slice/invoice-slice.js";
 
 const url = import.meta.env.VITE_BASE_URL;
+if(!url){
+    throw new Error("URL is missing");
+}
 const AxiosHeader = {headers: {"token": getToken()}}
 
 export async function createInvoice(cus_name, cus_location, cus_city, cus_phone, cus_postcode) {
@@ -13,10 +16,11 @@ export async function createInvoice(cus_name, cus_location, cus_city, cus_phone,
         store.dispatch(ShowLoader())
         let postBody = {cus_name, cus_location, cus_city, cus_phone, cus_postcode};
         let res = await axios.post(`${url}createinvoice`, postBody, AxiosHeader)
+        const {redirectGatewayURL}=res.data;
         store.dispatch(HideLoader())
         if (res.status === 200) {
             SuccessToast("Redirecting to SSLCommerz Payment Gateway")
-            return res.data.redirectGatewayURL;
+            return redirectGatewayURL
         } else {
             ErrorToast("Something Went Wrong")
         }

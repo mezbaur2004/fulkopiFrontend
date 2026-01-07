@@ -7,21 +7,18 @@ import "./assets/style.css"
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 import {GoogleOAuthProvider} from "@react-oauth/google";
+import {StrictMode} from "react";
 
-
+const clientId=import.meta.env.VITE_GOOGLE_CLIENT_ID;
+if (!clientId) {
+    throw new Error("VITE_GOOGLE_CLIENT_ID is missing");
+}
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>
-        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <StrictMode>
+        <GoogleOAuthProvider clientId={clientId}>
             <App/>
         </GoogleOAuthProvider>
+        </StrictMode>
     </Provider>
 )
-
-
-// createRoot(document.getElementById('root')).render(
-//     <StrictMode>
-//         <Provider store={store}>
-//             <App />
-//         </Provider>
-//     </StrictMode>,
-// )

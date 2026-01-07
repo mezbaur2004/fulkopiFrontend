@@ -47,7 +47,6 @@ const Login = () => {
                                         <span className="text-muted small fw-bold">OR</span>
                                     </div>
                                     <span>
-                                        {/*<Link className="text-center ms-3 h6" to="/Registration">Sign Up</Link>*/}
                                         <Google/>
                                     </span>
                                 </div>

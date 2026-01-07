@@ -6,6 +6,9 @@ import {getToken} from "../helper/sessionHelper.js";
 import {SetWishList} from "../redux/state-slice/wish-slice.js";
 
 const url = import.meta.env.VITE_BASE_URL;
+if(!url){
+    throw new Error("URL is missing");
+}
 const AxiosHeader = {headers: {"token": getToken()}}
 
 export async function getWishList() {

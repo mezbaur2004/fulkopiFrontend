@@ -5,6 +5,9 @@ import {ErrorToast, SuccessToast} from "../helper/formHelper.js";
 import {getToken} from "../helper/sessionHelper.js";
 
 const url = import.meta.env.VITE_BASE_URL;
+if(!url){
+    throw new Error("URL is missing");
+}
 const AxiosHeader = {headers: {"token": getToken()}}
 
 
