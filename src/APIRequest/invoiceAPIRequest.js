@@ -16,11 +16,11 @@ export async function createInvoice(cus_name, cus_location, cus_city, cus_phone,
         store.dispatch(ShowLoader())
         let postBody = {cus_name, cus_location, cus_city, cus_phone, cus_postcode};
         let res = await axios.post(`${url}createinvoice`, postBody, AxiosHeader)
-        const {redirectGatewayURL}=res.data;
+        const {GatewayPageURL}=res.data;
         store.dispatch(HideLoader())
         if (res.status === 200) {
             SuccessToast("Redirecting to SSLCommerz Payment Gateway")
-            return redirectGatewayURL
+            return GatewayPageURL
         } else {
             ErrorToast("Something Went Wrong")
         }
