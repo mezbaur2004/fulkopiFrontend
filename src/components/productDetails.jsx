@@ -63,7 +63,7 @@ const ProductDetails = () => {
                         <a href="/" className="text-decoration-none text-muted">Home</a>
                     </li>
                     <li className="breadcrumb-item">
-                        <a href={`/category/${product.category.slug}`} className="text-decoration-none text-muted">
+                        <a href={`/category/${product?.category?.slug}`} className="text-decoration-none text-muted">
                             {product.category?.categoryName || "Category"}
                         </a>
                     </li>
