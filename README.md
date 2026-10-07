@@ -2,7 +2,7 @@
 
 Live Demo: [https://fulkopi-frontend.vercel.app/](https://fulkopi-frontend.vercel.app/)
 
-> **Demo account:** [to be added: a dedicated demo login for the live app]
+> **Try it:** register an account on the live app to shop and check out. The admin dashboard needs an admin account and is available on request.
     > **Note:** Backend is hosted on Render, so the initial load may take ~15 seconds.
 
 This is the frontend for **Fulkopi**, a MERN‑stack e‑commerce app featuring Google OAuth, custom login, SSLCommerz payment integration, and a clean architecture that works directly with the backend.
